@@ -1,0 +1,178 @@
+<div class="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 lg:p-8 font-sans" style="    background: rgba(0, 0, 255, 0.1);">
+    
+    <!-- Main Card Container -->
+    <div class="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+        
+        <!-- Left Side: Brand & Visual Experience (5 Cols) -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-blue-600 via-primary to-blue-800 p-8 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+            <!-- Background Glow Elements -->
+            <div class="absolute -right-16 -top-16 w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-16 -bottom-16 w-56 h-56 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Top Brand -->
+            <div class="relative z-10 flex items-center gap-3">
+                <div class="w-[80px] h-[70px] rounded-2xl bg-white text-primary flex items-center justify-center font-black text-2xl shadow-lg">
+                    <img class="w-[70px]" src="/assets/images/Logo.jpg"/>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-tight block leading-none">Tabeeb</span>
+                    <span class="text-xs text-blue-200 tracking-widest uppercase font-semibold">Medical Platform</span>
+                </div>
+            </div>
+
+            <!-- Middle Highlights -->
+            <div class="relative z-10 my-10 space-y-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-blue-100 border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    إدارة ذكية للعيادات والمواعيد
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                    رعاية صحية أنظمة أسرع، وأطباء أقرب.
+                </h1>
+                <p class="text-blue-100/80 text-sm leading-relaxed">
+                    منصتك المتكاملة لتنظيم المواعيد الطبية، متابعة ملفات المرضى، وإدارة العيادات باحترافية تامة.
+                </p>
+            </div>
+
+            <!-- Bottom Trust Badge -->
+            <div class="relative z-10 pt-6 border-t border-white/15 flex items-center justify-between text-xs text-blue-200">
+                <span>Secure Cloud Platform</span>
+                <span>&copy; 2026 Tabeeb</span>
+            </div>
+        </div>
+
+        <!-- Right Side: Login Form (7 Cols) -->
+        <div class="lg:col-span-7 p-8 sm:p-12 lg:p-16 flex flex-col justify-between">
+            
+            <!-- Top Action Bar (Language Switcher if needed) -->
+            <div class="flex items-center justify-between w-full mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">تسجيل الدخول</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">أهلاً بك مجدداً، يرجى إدخال بيانات حسابك</p>
+                </div>
+
+                <!-- Language Dropdown Trigger (حافظنا على التوافق مع الكود القديم الخاص بك) -->
+                <div class="relative">
+                    <button
+                        type="button"
+                        cdkOverlayOrigin
+                        #trigger="cdkOverlayOrigin"
+                        (click)="isOpen = !isOpen"
+                        class="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:border-primary transition-all"
+                    >
+                        <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="" class="h-4 w-4 rounded-full object-cover" />
+                        <span class="uppercase">{{ store.locale }}</span>
+                    </button>
+
+                    <!-- Overlay Menu -->
+                    <ng-template
+                        cdkConnectedOverlay
+                        [cdkConnectedOverlayOrigin]="trigger"
+                        [cdkConnectedOverlayOpen]="isOpen"
+                        [cdkConnectedOverlayPositions]="[{ originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 6 }]"
+                        (overlayOutsideClick)="isOpen = false"
+                    >
+                        <ul @toggleAnimation class="w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-1.5 space-y-1">
+                            <li *ngFor="let item of store.languageList;">
+                                <button
+                                    type="button"
+                                    class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-primary/10 hover:text-primary transition-colors"
+                                    [ngClass]="{ 'bg-primary/10 text-primary font-bold': translate.currentLang === item.code }"
+                                    (click)="changeLanguage(item)"
+                                >
+                                    <img class="h-4 w-4 rounded-full object-cover" [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
+                                    <span>{{ item.name }}</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Form Body -->
+            <form class="space-y-5" [formGroup]="LoginForm" (ngSubmit)="onSubmit()">
+                
+                <!-- Email Field -->
+                <div>
+                    <label for="Email" class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
+                        البريد الإلكتروني
+                    </label>
+                    <div class="relative">
+                        <input
+                            id="Email"
+                            type="email5"
+                            placeholder="name@example.com"
+                            formControlName="Email"
+                            class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all ps-11"
+                        />
+                        <span class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400">
+                            <icon-mail [fill]="true" class="w-5 h-5" />
+                        </span>
+                    </div>
+                    
+                    <div *ngIf="LoginForm.get('Email')?.invalid && (LoginForm.get('Email')?.dirty || LoginForm.get('Email')?.touched)" class="text-rose-500 text-xs mt-1.5 font-medium">
+                        <small *ngIf="LoginForm.get('Email')?.errors?.['required']">البريد الإلكتروني مطلوب.</small>
+                        <small *ngIf="LoginForm.get('Email')?.errors?.['email']">البريد الإلكتروني غير صالح.</small>
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="Password" class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                            كلمة المرور
+                        </label>
+                        <a href="javascript:;" class="text-xs font-semibold text-primary hover:underline">نسيت كلمة المرور؟</a>
+                    </div>
+                    <div class="relative">
+                        <input
+                            id="Password"
+                            type="password"
+                            placeholder="••••••••"
+                            formControlName="Password"
+                            class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all ps-11"
+                        />
+                        <span class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400">
+                            <icon-lock-dots [fill]="true" class="w-5 h-5" />
+                        </span>
+                    </div>
+
+                    <div *ngIf="LoginForm.get('Password')?.invalid && (LoginForm.get('Password')?.dirty || LoginForm.get('Password')?.touched)" class="text-rose-500 text-xs mt-1.5 font-medium">
+                        <small *ngIf="LoginForm.get('Password')?.errors?.['required']">كلمة المرور مطلوبة.</small>
+                    </div>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center pt-1">
+                    <label class="flex cursor-pointer items-center gap-3">
+                        <input
+                            type="checkbox"
+                            formControlName="RememberMe"
+                            class="w-4 h-4 rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-700 dark:bg-slate-800"
+                        />
+                        <span class="text-sm font-medium text-slate-600 dark:text-slate-300">تذكرني على هذا الجهاز</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    [disabled]="LoginForm.invalid"
+                    class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-primary to-blue-700 hover:from-primary/90 hover:to-blue-800 text-white font-bold tracking-wide shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-[0.99]"
+                >
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <!-- Bottom Register Prompt -->
+            <div class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+                ليس لديك حساب في المنصة؟
+                <a routerLink="/auth/cover-register" class="font-bold text-primary hover:underline ms-1">
+                    إنشاء حساب جديد
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,369 @@
+::ng-deep ngx-custom-modal .modal-dialog,
+::ng-deep .modal-content {
+  max-width: 850px !important; /* عرض مثالي لعرض الفواتير والـ PDF */
+  width: 100% !important;
+  margin: auto !important;
+}
+
+/* ضمان أن الحاوية الداخلية للـ PDF تأخذ المساحة بدقة */
+::ng-deep ngx-extended-pdf-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.invoice-preview {
+  width: 100%;
+  height: 75vh;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.invoice-modal {
+  max-width: 1100px;
+  width: 90vw;
+}
+
+.invoice-pdf-container {
+    direction: ltr !important;
+    unicode-bidi: isolate;
+}
+
+.invoice-pdf-container ngx-extended-pdf-viewer {
+    direction: ltr !important;
+}
+
+.history-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    .history-header-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: rgba(67, 97, 238, 0.1);
+        color: #4361ee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 23px;
+    }
+
+    h3 {
+        font-size: 19px;
+        font-weight: 700;
+        margin: 0 0 5px;
+        color: #1e293b;
+    }
+
+    p {
+        font-size: 12px;
+        color: #94a3b8;
+        margin: 0;
+    }
+}
+
+.history-content {
+    padding: 8px 2px;
+}
+
+.history-summary {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px 18px;
+    background: #f8faff;
+    border: 1px solid #e9edff;
+    border-radius: 12px;
+    margin-bottom: 20px;
+
+    .summary-icon {
+        width: 42px;
+        height: 42px;
+        background: #e9edff;
+        color: #4361ee;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+    }
+
+    span {
+        display: block;
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 3px;
+    }
+
+    strong {
+        font-size: 21px;
+        color: #1e293b;
+        font-weight: 700;
+    }
+}
+
+.history-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e9edf3;
+    border-radius: 12px;
+}
+
+.history-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+
+    thead {
+        background: #f8fafc;
+
+        th {
+            padding: 15px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            white-space: nowrap;
+            border-bottom: 1px solid #e9edf3;
+        }
+    }
+
+    tbody {
+        tr {
+            transition: background 0.2s;
+
+            &:hover {
+                background: #f8faff;
+            }
+
+            &:not(:last-child) td {
+                border-bottom: 1px solid #f1f3f7;
+            }
+        }
+
+        td {
+            padding: 15px 14px;
+            font-size: 13px;
+            color: #334155;
+            vertical-align: middle;
+        }
+    }
+}
+
+.row-number {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.table-main-text {
+    font-weight: 600;
+    color: #1e293b;
+    min-width: 110px;
+}
+
+.package-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    .package-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eef2ff;
+        color: #4361ee;
+    }
+}
+
+.date-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 12px;
+
+    i {
+        color: #94a3b8;
+    }
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+
+    .status-dot {
+        background: #22c55e;
+    }
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #dc2626;
+
+    .status-dot {
+        background: #ef4444;
+    }
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #b45309;
+
+    .status-dot {
+        background: #f59e0b;
+    }
+}
+
+.status-cancelled {
+    background: #f1f5f9;
+    color: #64748b;
+
+    .status-dot {
+        background: #94a3b8;
+    }
+}
+
+.status-default {
+    background: #eef2ff;
+    color: #4338ca;
+
+    .status-dot {
+        background: #6366f1;
+    }
+}
+
+.history-loading,
+.history-empty {
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    i {
+        font-size: 43px;
+        color: #94a3b8;
+        margin-bottom: 12px;
+    }
+
+    h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    p {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 5px 0 0;
+    }
+}
+
+.history-loading {
+    .spinner-border {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Modal */
+::ng-deep .subscription-history-modal {
+    .modal-content {
+        border: 0 !important;
+        border-radius: 16px !important;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f1f3f7;
+    }
+
+    .modal-body {
+        padding: 20px 24px 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    ::ng-deep .subscription-history-modal {
+        .modal-header,
+        .modal-body {
+            padding: 15px;
+        }
+    }
+
+    .history-modal-header h3 {
+        font-size: 16px;
+    }
+}
+
+.status-new {
+    background: #dbeafe;
+    color: #1d4ed8;
+
+    .status-dot {
+        background: #3b82f6;
+    }
+}
+
+.status-current {
+    background: #dcfce7;
+    color: #15803d;
+
+    .status-dot {
+        background: #22c55e;
+    }
+}
+
+.status-cancelled {
+    background: #f1f5f9;
+    color: #64748b;
+
+    .status-dot {
+        background: #94a3b8;
+    }
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #dc2626;
+
+    .status-dot {
+        background: #ef4444;
+    }
+}

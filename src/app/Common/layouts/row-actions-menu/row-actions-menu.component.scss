@@ -1,0 +1,27 @@
+:host {
+    display: inline-flex;
+    position: relative;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.actions-menu-panel {
+    padding: 10px !important;
+    min-width: 120px;
+    border-radius: 4px;
+    background: white;
+    list-style: none;
+    margin: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+:host-context(.dark) .actions-menu-panel {
+    background: #1b2e4b;
+    color: #e3e4eb;
+}

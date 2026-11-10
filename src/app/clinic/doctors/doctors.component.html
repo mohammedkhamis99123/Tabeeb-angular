@@ -1,0 +1,664 @@
+<div class="doctors-page panel" [dir]="isArabic ? 'rtl' : 'ltr'">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-info">
+            <div class="header-icon">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+
+            <div>
+                <h2>{{ isArabic ? 'أطباء العيادة' : 'Clinic Doctors' }}</h2>
+                <p>
+                    {{ isArabic
+                        ? 'إدارة ومتابعة الأطباء المسجلين في العيادة'
+                        : 'Manage and monitor your clinic doctors'
+                    }}
+                </p>
+            </div>
+        </div>
+
+        <button class="btn-add-doctor" type="button" (click)="openAddModal()">
+            <i class="fa-solid fa-plus"></i>
+            {{ isArabic ? 'إضافة طبيب' : 'Add Doctor' }}
+        </button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon doctors-icon">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div>
+                <span>{{ isArabic ? 'إجمالي الأطباء' : 'Total Doctors' }}</span>
+                <strong>{{ doctors.length }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon active-icon">
+                <i class="fa-solid fa-user-check"></i>
+            </div>
+            <div>
+                <span>{{ isArabic ? 'الأطباء النشطون' : 'Active Doctors' }}</span>
+                <strong>{{ activeDoctorsCount }}</strong>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon inactive-icon">
+                <i class="fa-solid fa-user-clock"></i>
+            </div>
+            <div>
+                <span>{{ isArabic ? 'غير النشطين' : 'Inactive Doctors' }}</span>
+                <strong>{{ doctors.length - activeDoctorsCount }}</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Doctors List -->
+    <div class="doctors-card">
+
+        <div class="card-header">
+            <div>
+                <h3>{{ isArabic ? 'قائمة الأطباء' : 'Doctors List' }}</h3>
+                <p>
+                    {{ isArabic
+                        ? 'جميع الأطباء المرتبطين بهذه العيادة'
+                        : 'All doctors associated with this clinic'
+                    }}
+                </p>
+            </div>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="text"
+                    [placeholder]="isArabic ? 'ابحث عن طبيب...' : 'Search doctors...'"
+                    #searchInput
+                    (input)="onSearch(searchInput.value)">
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-state" *ngIf="isLoading">
+            <span class="spinner-border text-primary"></span>
+            <p>{{ isArabic ? 'جاري تحميل الأطباء...' : 'Loading doctors...' }}</p>
+        </div>
+
+        <!-- Empty -->
+        <div
+            class="empty-state"
+            *ngIf="!isLoading && filteredDoctors.length === 0">
+
+            <div class="empty-icon">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+
+            <h4>
+                {{ searchTerm
+                    ? (isArabic ? 'لا توجد نتائج' : 'No results found')
+                    : (isArabic ? 'لا يوجد أطباء حتى الآن' : 'No doctors yet')
+                }}
+            </h4>
+
+            <p>
+                {{ searchTerm
+                    ? (isArabic ? 'جرّب البحث بكلمات أخرى' : 'Try searching with different keywords')
+                    : (isArabic ? 'ابدأ بإضافة أول طبيب للعيادة' : 'Start by adding your first doctor')
+                }}
+            </p>
+
+            <button
+                *ngIf="!searchTerm"
+                class="btn-add-doctor"
+                type="button"
+                (click)="openAddModal()">
+                <i class="fa-solid fa-plus"></i>
+                {{ isArabic ? 'إضافة طبيب' : 'Add Doctor' }}
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div
+            class="table-responsive"
+            *ngIf="!isLoading && filteredDoctors.length > 0">
+
+            <table class="doctors-table">
+                <thead>
+                    <tr>
+                        <th class="text-center">{{ isArabic ? 'الطبيب' : 'Doctor' }}</th>
+                        <th class="text-center">{{ isArabic ? 'رقم الهوية' : 'Identity Number' }}</th>
+                        <th class="text-center">{{ isArabic ? 'التخصص' : 'Specialization' }}</th>
+                        <th class="text-center">{{ isArabic ? 'سعر الكشف' : 'Session Price' }}</th>
+                        <th class="text-center">{{ isArabic ? 'مدة الجلسة' : 'Duration' }}</th>
+                        <th class="text-center">{{ isArabic ? 'تاريخ الانضمام' : 'Join Date' }}</th>
+                        <th class="text-center">{{ isArabic ? 'الحالة' : 'Status' }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let doctor of filteredDoctors; trackBy: trackByDoctor">
+
+                        <!-- Doctor -->
+                        <td class="text-center">
+                            <div class="doctor-info">
+
+                                <div class="doctor-avatar">
+                                    <img
+                                        *ngIf="doctor.imagePath"
+                                        [src]="doctor.imagePath"
+                                        [alt]="getDoctorName(doctor)">
+
+                                    <span *ngIf="!doctor.imagePath">
+                                        {{ doctorInitial(doctor) }}
+                                    </span>
+                                </div>
+
+                                <div class="doctor-details">
+                                    <strong>{{ getDoctorName(doctor) }}</strong>
+                                    <span>{{ doctor.email }}</span>
+                                </div>
+
+                            </div>
+                        </td>
+
+                        <!-- Identity -->
+                        <td class="text-center">
+                            <span class="identity-value">
+                                {{ doctor.identityNumber }}
+                            </span>
+                        </td>
+
+                        <!-- Specialization -->
+                        <td class="text-center">
+                            <span class="specialization-badge">
+                                {{ isArabic? doctor.specializationArName :doctor.specializationEnName }}
+                            </span>
+                        </td>
+
+                        <!-- Price -->
+                         <td class="text-center">
+                            <strong class="price-value">
+                                {{ doctor.sessionPrice | number:'1.0-2' }}
+                            </strong>
+                            <small>{{ isArabic ? 'ر.س' : 'SAR' }}</small>
+                        </td>
+
+                        <!-- Duration -->
+                         <td class="text-center">
+                            <span class="duration-value">
+                                <i class="fa-regular fa-clock"></i>
+                                {{ doctor.sessionDuration }}
+                                {{ isArabic ? 'دقيقة' : 'min' }}
+                            </span>
+                        </td>
+
+                        <!-- Join Date -->
+                         <td class="text-center">
+                            <span class="date-value">
+                                {{ doctor.joinDate | date:'dd MMM yyyy' }}
+                            </span>
+                        </td>
+
+                        <!-- Status -->
+                        <td>
+                            <span
+                                class="status-badge"
+                                [class.status-active]="doctor.isActive"
+                                [class.status-inactive]="!doctor.isActive">
+
+                                <span class="status-dot"></span>
+                                {{ getStatusLabel(doctor.isActive) }}
+                            </span>
+                        </td>
+                        <td>
+                        <app-row-actions-menu>
+    <ng-template>
+        <li class="my-2">
+            <!--<button
+                (click)="Update(value.id)"
+                class="btn btn-sm btn-outline-primary w-full">
+                <i class="fa-solid fa-user-pen me-1"></i>
+                {{ "Update" | translate }}
+            </button>-->
+        </li>
+
+        <li class="my-2">
+            <button
+                (click)="OpenWorkSchedule(doctor)"
+                class="btn btn-sm btn-outline-info w-full">
+                <i class="fa-solid fa-calendar-days me-1"></i>
+                {{ "WorkSchedule" | translate }}
+            </button>
+        </li>
+    </ng-template>
+</app-row-actions-menu>
+
+</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div
+            class="table-footer"
+            *ngIf="!isLoading && filteredDoctors.length > 0">
+
+            <span>
+                {{ isArabic ? 'عدد النتائج:' : 'Showing:' }}
+                <strong>{{ filteredDoctors.length }}</strong>
+            </span>
+
+            <button class="btn-refresh" type="button" (click)="loadDoctors()">
+                <i class="fa-solid fa-rotate"></i>
+                {{ isArabic ? 'تحديث' : 'Refresh' }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Add Doctor Modal -->
+<ngx-custom-modal
+    #AddDoctorModal
+    [title]="isArabic ? 'إضافة طبيب جديد' : 'Add New Doctor'"
+    [closeOnOutsideClick]="false"
+    [closeOnEscape]="false">
+
+    <ng-template #modalBody>
+
+        <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()">
+
+            <div class="doctor-form">
+
+                <!-- Names -->
+                <div class="form-section-title">
+                    <i class="fa-solid fa-user"></i>
+                    {{ isArabic ? 'البيانات الشخصية' : 'Personal Information' }}
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'الاسم بالعربي' : 'Arabic Name' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            formControlName="arName"
+                            [placeholder]="isArabic ? 'أدخل الاسم بالعربي' : 'Arabic name'">
+
+                        <small
+                            class="field-error"
+                            *ngIf="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.invalid">
+                            {{ isArabic ? 'الاسم بالعربي مطلوب' : 'Arabic name is required' }}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'الاسم بالإنجليزي' : 'English Name' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            formControlName="enName"
+                            [placeholder]="isArabic ? 'أدخل الاسم بالإنجليزي' : 'English name'">
+
+                        <small
+                            class="field-error"
+                            *ngIf="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.invalid">
+                            {{ isArabic ? 'الاسم بالإنجليزي مطلوب' : 'English name is required' }}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'البريد الإلكتروني' : 'Email' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="email"
+                            formControlName="email"
+                            placeholder="doctor@example.com">
+
+                        <small
+                            class="field-error"
+                            *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.invalid">
+                            {{ isArabic ? 'أدخل بريدًا إلكترونيًا صحيحًا' : 'Enter a valid email' }}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'رقم الهوية' : 'Identity Number' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            formControlName="identityNumber"
+                            placeholder="">
+
+                        <small
+                            class="field-error"
+                            *ngIf="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.invalid">
+                            {{ isArabic ? 'رقم الهوية مطلوب' : 'Identity number is required' }}
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'رقم التخصص' : 'Specialization ID' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            formControlName="specializationId"
+                            min="1">
+
+                        <small class="field-hint">
+                            {{ isArabic ? 'يمكن استبداله بقائمة التخصصات لاحقًا' : 'Can be replaced with a specialization dropdown' }}
+                        </small>
+                    </div>
+
+                </div>
+
+                <!-- Session -->
+                <div class="form-section-title">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    {{ isArabic ? 'إعدادات الجلسات' : 'Session Settings' }}
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'سعر الكشف' : 'Session Price' }}
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-with-icon">
+                            <input
+                                type="number"
+                                formControlName="sessionPrice"
+                                min="0">
+                            <span>{{ isArabic ? 'ر.س' : 'SAR' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            {{ isArabic ? 'مدة الجلسة بالدقائق' : 'Session Duration (Minutes)' }}
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            formControlName="sessionDuration"
+                            min="1">
+                    </div>
+
+                </div>
+
+                <!-- Files -->
+                <div class="form-section-title">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    {{ isArabic ? 'الصور والختم' : 'Images & Stamp' }}
+                </div>
+
+                <div class="upload-grid">
+
+                    <!-- Doctor Image -->
+                    <div class="upload-box">
+                        <label>{{ isArabic ? 'صورة الطبيب' : 'Doctor Image' }}</label>
+
+                        <div class="upload-preview">
+                            <img
+                                *ngIf="imagePreview"
+                                [src]="imagePreview"
+                                alt="Doctor image">
+
+                            <i
+                                *ngIf="!imagePreview"
+                                class="fa-solid fa-user-doctor">
+                            </i>
+                        </div>
+
+                        <label class="upload-button">
+                            <i class="fa-solid fa-upload"></i>
+                            {{ isArabic ? 'اختيار صورة' : 'Choose Image' }}
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                (change)="onFileSelected($event, 'image')">
+                        </label>
+                    </div>
+
+                    <!-- Stamp -->
+                    <div class="upload-box">
+                        <label>{{ isArabic ? 'ختم الطبيب' : 'Doctor Stamp' }}</label>
+
+                        <div class="upload-preview stamp-preview">
+                            <img
+                                *ngIf="stampPreview"
+                                [src]="stampPreview"
+                                alt="Doctor stamp">
+
+                            <i
+                                *ngIf="!stampPreview"
+                                class="fa-solid fa-stamp">
+                            </i>
+                        </div>
+
+                        <label class="upload-button">
+                            <i class="fa-solid fa-upload"></i>
+                            {{ isArabic ? 'اختيار الختم' : 'Choose Stamp' }}
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                (change)="onFileSelected($event, 'stamp')">
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Active -->
+                <div class="active-option">
+                    <label class="switch-label">
+                        <input type="checkbox" formControlName="isActive">
+                        <span class="switch"></span>
+                        <span>
+                            {{ isArabic ? 'تفعيل الطبيب في العيادة' : 'Activate doctor in clinic' }}
+                        </span>
+                    </label>
+                </div>
+
+            </div>
+
+            <!-- Actions -->
+            <div class="modal-actions">
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    [disabled]="isSaving"
+                    (click)="closeModal()">
+                    {{ isArabic ? 'إلغاء' : 'Cancel' }}
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-submit"
+                    [disabled]="isSaving">
+
+                    <span
+                        *ngIf="isSaving"
+                        class="spinner-border spinner-border-sm">
+                    </span>
+
+                    <i
+                        *ngIf="!isSaving"
+                        class="fa-solid fa-floppy-disk">
+                    </i>
+
+                    {{ isSaving
+                        ? (isArabic ? 'جاري الحفظ...' : 'Saving...')
+                        : (isArabic ? 'حفظ الطبيب' : 'Save Doctor')
+                    }}
+                </button>
+            </div>
+
+        </form>
+
+    </ng-template>
+</ngx-custom-modal>
+
+<ngx-custom-modal
+    #WorkScheduleModal
+    [closeOnOutsideClick]="false"
+    [closeOnEscape]="false">
+
+    <ng-template #modalHeader>
+        <div class="work-modal-header">
+            <div class="work-modal-icon">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+
+            <div>
+                <h3>{{ 'DoctorWorkSchedule' | translate }}</h3>
+                <p *ngIf="selectedDoctor">
+                    {{ selectedDoctor.arName }}
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+
+        <div *ngIf="isLoadingWorkTimes" class="work-loading">
+            <span class="spinner-border"></span>
+            <p>{{ 'Loading' | translate }}</p>
+        </div>
+
+        <div *ngIf="!isLoadingWorkTimes" class="work-schedule">
+
+            <div
+                class="work-day-card"
+                *ngFor="let item of workTimes; let i = index">
+
+                <div class="work-day-header">
+
+                    <div class="day-info">
+                        <span class="day-number">{{ i + 1 }}</span>
+
+                        <div>
+                            <h4>{{ getDayName(item.dayOfWeek) }}</h4>
+                            <span class="day-status"
+                                  [class.active]="item.isActive">
+                                {{
+                                    item.isActive
+                                        ? ('Active' | translate)
+                                        : ('Inactive' | translate)
+                                }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <label class="work-switch">
+                        <input
+                            type="checkbox"
+                            [(ngModel)]="item.isActive"
+                            
+                            [ngModelOptions]="{standalone: true}">
+
+                        <span class="work-slider"></span>
+                    </label>
+
+                </div>
+
+                <div class="work-time-fields" *ngIf="item.startAt || item.isActive">
+
+                    <div class="time-field">
+                        <label>{{ 'StartAt' | translate }}</label>
+
+                        <div class="time-input-wrapper">
+                            <i class="fa-regular fa-clock"></i>
+
+                            <input
+                                type="time"
+                                [(ngModel)]="item.startAt"
+                                [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+
+                    <div class="time-field">
+                        <label>{{ 'EndAt' | translate }}</label>
+
+                        <div class="time-input-wrapper">
+                            <i class="fa-regular fa-clock"></i>
+
+                            <input
+                                type="time"
+                                [(ngModel)]="item.endAt"
+                                [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="inactive-message" *ngIf="!item.isActive">
+                    <i class="fa-solid fa-moon"></i>
+                    {{ 'DayOff' | translate }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <div class="work-modal-footer">
+
+            <button
+                type="button"
+                class="btn-cancel"
+                (click)="WorkScheduleModal.close()">
+                {{ 'Cancel' | translate }}
+            </button>
+
+            <button
+                type="button"
+                class="btn-save"
+                (click)="SaveWorkSchedule()"
+                [disabled]="isSavingWorkTimes || isLoadingWorkTimes">
+
+                <i class="fa-solid fa-floppy-disk"
+                   *ngIf="!isSavingWorkTimes"></i>
+
+                <span
+                    *ngIf="isSavingWorkTimes"
+                    class="spinner-border spinner-border-sm">
+                </span>
+
+                {{ 'SaveChanges' | translate }}
+            </button>
+
+        </div>
+    </ng-template>
+
+</ngx-custom-modal>

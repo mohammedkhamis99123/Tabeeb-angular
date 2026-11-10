@@ -1,0 +1,1018 @@
+<!-- ================= NAVBAR ================= -->
+<nav class="clinic-navbar">
+  <div class="container navbar-content">
+
+    <a href="#" class="brand">
+      <span class="brand-icon">T</span>
+      <span>Tabeeb</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#about">عن العيادة</a>
+      <a href="#gallery">الصور</a>
+      <a href="#doctors">الأطباء</a>
+      <a href="#reviews">التقييمات</a>
+      <a href="#offers">العروض</a>
+      <a href="#contact">التواصل</a>
+    </div>
+
+    <button class="btn-primary nav-book-btn" (click)="scrollToBooking()">
+      احجز موعدك
+      <span>←</span>
+    </button>
+
+  </div>
+</nav>
+
+
+<!-- ================= HERO ================= -->
+<section class="clinic-hero" id="about">
+  <div class="hero-pattern"></div>
+
+  <div class="container hero-content">
+
+    <div class="hero-info">
+
+      <div class="verified-badge">
+        <span>✓</span>
+        عيادة موثقة على طبيب
+      </div>
+
+      <h1>{{ clinic.name }}</h1>
+
+      <p class="hero-description">
+        {{ clinic.description }}
+      </p>
+
+      <div class="hero-rating">
+        <span class="rating-stars">★★★★★</span>
+        <strong>{{ clinic.rating }}</strong>
+        <span>({{ clinic.reviewsCount }} تقييم)</span>
+      </div>
+
+      <div class="hero-details">
+
+        <div class="hero-detail">
+          <span class="detail-icon">📍</span>
+          <span>{{ clinic.address }}</span>
+        </div>
+
+        <div class="hero-detail">
+          <span class="detail-icon">🕒</span>
+          <span>{{ clinic.workingHours }}</span>
+        </div>
+
+        <div class="hero-detail">
+          <span class="detail-icon">📞</span>
+          <span>{{ clinic.phone }}</span>
+        </div>
+
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn-primary" (click)="scrollToBooking()">
+          احجز موعد الآن
+          <span>←</span>
+        </button>
+
+        <button class="btn-outline" (click)="scrollToDoctors()">
+          تعرف على الأطباء
+        </button>
+      </div>
+
+      <div class="hero-stats">
+
+        <div>
+          <strong>{{ clinic.doctorsCount }}+</strong>
+          <span>طبيب متخصص</span>
+        </div>
+
+        <div>
+          <strong>{{ clinic.patientsCount | number }}</strong>
+          <span>مريض</span>
+        </div>
+
+        <div>
+          <strong>{{ clinic.rating }}</strong>
+          <span>تقييم المرضى</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-image-wrapper">
+
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1000"
+          alt="Clinic"
+        />
+      </div>
+
+      <div class="hero-floating-card">
+        <div class="floating-icon">✓</div>
+        <div>
+          <strong>رعاية طبية موثوقة</strong>
+          <span>نضع صحتك أولويتنا</span>
+        </div>
+      </div>
+
+      <div class="hero-floating-rating">
+        <span>⭐</span>
+        <strong>{{ clinic.rating }}/5</strong>
+        <small>تقييم المرضى</small>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= QUICK FEATURES ================= -->
+<section class="quick-features">
+  <div class="container features-grid">
+
+    <div class="quick-feature">
+      <div class="quick-icon">👨‍⚕️</div>
+      <div>
+        <strong>نخبة من الأطباء</strong>
+        <span>خبرات طبية متميزة</span>
+      </div>
+    </div>
+
+    <div class="quick-feature">
+      <div class="quick-icon">📅</div>
+      <div>
+        <strong>حجز إلكتروني</strong>
+        <span>احجز في أي وقت</span>
+      </div>
+    </div>
+
+    <div class="quick-feature">
+      <div class="quick-icon">🏥</div>
+      <div>
+        <strong>تجهيزات حديثة</strong>
+        <span>أحدث الأجهزة الطبية</span>
+      </div>
+    </div>
+
+    <div class="quick-feature">
+      <div class="quick-icon">💙</div>
+      <div>
+        <strong>رعاية متكاملة</strong>
+        <span>اهتمام بكل التفاصيل</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= GALLERY ================= -->
+<section class="section gallery-section" id="gallery">
+  <div class="container">
+
+    <div class="section-heading">
+      <div>
+        <span class="section-kicker">معرض الصور</span>
+        <h2>اكتشف عيادتنا</h2>
+        <p>تعرف على المكان والتجهيزات الطبية قبل زيارتك.</p>
+      </div>
+    </div>
+
+    <div class="gallery-grid">
+
+      @for (image of galleryImages; track image.url; let i = $index) {
+        <div
+          class="gallery-item"
+          [class.gallery-main]="i === 0"
+          (click)="openGallery(image.url)"
+        >
+          <img [src]="image.url" [alt]="image.alt" />
+
+          <div class="gallery-overlay">
+            <span>⌕</span>
+            <small>{{ image.alt }}</small>
+          </div>
+        </div>
+      }
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= DOCTORS ================= -->
+<section class="section doctors-section" id="doctors">
+  <div class="container">
+
+    <div class="section-heading heading-between">
+
+      <div>
+        <span class="section-kicker">فريقنا الطبي</span>
+        <h2>تعرف على أطبائنا</h2>
+        <p>نخبة من الأطباء المتخصصين لتقديم أفضل رعاية طبية.</p>
+      </div>
+
+      <button class="btn-outline" (click)="scrollToBooking()">
+        احجز مع طبيب
+      </button>
+
+    </div>
+
+    <div class="doctors-grid">
+
+      @for (doctor of doctors; track doctor.id) {
+
+        <div class="doctor-card">
+
+          <div class="doctor-image-wrapper">
+            <img [src]="doctor.image" [alt]="doctor.name" />
+
+            @if (doctor.available) {
+              <span class="doctor-available">
+                <span></span>
+                متاح للحجز
+              </span>
+            }
+          </div>
+
+          <div class="doctor-content">
+
+            <div class="doctor-rating">
+              <span>★</span>
+              {{ doctor.rating }}
+              <small>({{ doctor.reviews }} تقييم)</small>
+            </div>
+
+            <h3>{{ doctor.name }}</h3>
+
+            <p class="doctor-specialty">{{ doctor.specialty }}</p>
+
+            <div class="doctor-experience">
+              <span>✦</span>
+              خبرة {{ doctor.experience }} سنوات
+            </div>
+
+            <div class="doctor-card-footer">
+
+              <div class="doctor-price">
+                <strong>{{ doctor.price }}</strong>
+                <span>جنيه / الكشف</span>
+              </div>
+
+              <button
+                class="btn-primary doctor-book-btn"
+                [disabled]="!doctor.available"
+                (click)="selectDoctor(doctor); scrollToBooking()"
+              >
+                احجز الآن
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= BOOKING STEPPER ================= -->
+<section class="section booking-section" id="booking">
+  <div class="container">
+
+    <div class="booking-header">
+      <span class="section-kicker">حجز موعد</span>
+      <h2>احجز زيارتك بسهولة</h2>
+      <p>اتبع الخطوات التالية لتأكيد موعدك في العيادة.</p>
+    </div>
+
+    <div class="booking-card">
+
+      <!-- STEPPER HEADER -->
+      <div class="stepper">
+
+        <div class="stepper-item" [class.active]="currentStep >= 1"
+             [class.completed]="currentStep > 1">
+
+          <div class="step-circle">
+            @if (currentStep > 1) {
+              ✓
+            } @else {
+              1
+            }
+          </div>
+
+          <span>اختيار الطبيب</span>
+        </div>
+
+        <div class="stepper-line" [class.completed]="currentStep > 1"></div>
+
+        <div class="stepper-item" [class.active]="currentStep >= 2"
+             [class.completed]="currentStep > 2">
+
+          <div class="step-circle">
+            @if (currentStep > 2) {
+              ✓
+            } @else {
+              2
+            }
+          </div>
+
+          <span>اختيار الموعد</span>
+        </div>
+
+        <div class="stepper-line" [class.completed]="currentStep > 2"></div>
+
+        <div class="stepper-item" [class.active]="currentStep >= 3"
+             [class.completed]="currentStep > 3">
+
+          <div class="step-circle">
+            @if (currentStep > 3) {
+              ✓
+            } @else {
+              3
+            }
+          </div>
+
+          <span>بيانات المريض</span>
+        </div>
+
+        <div class="stepper-line" [class.completed]="currentStep >= 4"></div>
+
+        <div class="stepper-item" [class.active]="currentStep === 4">
+
+          <div class="step-circle">4</div>
+          <span>تأكيد الحجز</span>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 1: SELECT DOCTOR -->
+      @if (currentStep === 1) {
+
+        <div class="booking-step">
+
+          <div class="step-title">
+            <h3>اختر الطبيب المناسب لك</h3>
+            <p>حدد الطبيب الذي ترغب في حجز موعد معه.</p>
+          </div>
+
+          <div class="booking-doctors-grid">
+
+            @for (doctor of doctors; track doctor.id) {
+
+              <div
+                class="booking-doctor"
+                [class.selected]="selectedDoctor?.id === doctor.id"
+                (click)="selectDoctor(doctor)"
+              >
+
+                <img [src]="doctor.image" [alt]="doctor.name" />
+
+                <div class="booking-doctor-info">
+                  <strong>{{ doctor.name }}</strong>
+                  <span>{{ doctor.specialty }}</span>
+
+                  <div class="doctor-rating">
+                    <span>★</span>
+                    {{ doctor.rating }}
+                  </div>
+
+                  <strong class="booking-doctor-price">
+                    {{ doctor.price }} جنيه
+                  </strong>
+                </div>
+
+                <div class="select-circle">
+                  @if (selectedDoctor?.id === doctor.id) {
+                    ✓
+                  }
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+          <div class="step-actions">
+            <button
+              class="btn-primary"
+              [disabled]="!selectedDoctor"
+              (click)="nextStep()"
+            >
+              التالي: اختيار الموعد ←
+            </button>
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- STEP 2: SELECT DATE AND TIME -->
+      @if (currentStep === 2) {
+
+        <div class="booking-step">
+
+          <div class="step-title">
+            <h3>اختر اليوم والوقت المناسب</h3>
+            <p>حدد موعد زيارتك من المواعيد المتاحة.</p>
+          </div>
+
+          @if (selectedDoctor) {
+            <div class="selected-doctor-summary">
+
+              <img [src]="selectedDoctor.image" [alt]="selectedDoctor.name" />
+
+              <div>
+                <strong>{{ selectedDoctor.name }}</strong>
+                <span>{{ selectedDoctor.specialty }}</span>
+              </div>
+
+              <strong class="summary-price">
+                {{ selectedDoctor.price }} جنيه
+              </strong>
+
+            </div>
+          }
+
+          <div class="booking-subtitle">
+            <span>📅</span>
+            اختر يوم الزيارة
+          </div>
+
+          <div class="days-grid">
+
+            @for (day of bookingDays; track day.date.getTime()) {
+
+              <button
+                class="day-card"
+                [class.selected]="selectedDate?.getTime() === day.date.getTime()"
+                (click)="selectDate(day)"
+              >
+
+                <span>{{ day.dayName }}</span>
+                <strong>{{ day.dayNumber }}</strong>
+                <small>{{ day.monthName }}</small>
+
+              </button>
+
+            }
+
+          </div>
+
+          <div class="booking-subtitle">
+            <span>🕒</span>
+            اختر الوقت المناسب
+          </div>
+
+          @if (!selectedDate) {
+
+            <div class="empty-selection">
+              من فضلك اختر اليوم أولاً لعرض المواعيد.
+            </div>
+
+          } @else {
+
+            <div class="times-grid">
+
+              @for (time of availableTimes; track time) {
+
+                <button
+                  class="time-slot"
+                  [class.selected]="selectedTime === time"
+                  (click)="selectTime(time)"
+                >
+                  {{ time }}
+                </button>
+
+              }
+
+            </div>
+
+          }
+
+          <div class="step-actions between">
+
+            <button class="btn-outline" (click)="previousStep()">
+              → السابق
+            </button>
+
+            <button
+              class="btn-primary"
+              [disabled]="!selectedDate || !selectedTime"
+              (click)="nextStep()"
+            >
+              التالي: بيانات المريض ←
+            </button>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- STEP 3: PATIENT INFORMATION -->
+      @if (currentStep === 3) {
+
+        <div class="booking-step">
+
+          <div class="step-title">
+            <h3>أدخل بياناتك الشخصية</h3>
+            <p>يرجى إدخال البيانات التالية لاستكمال الحجز.</p>
+          </div>
+
+          <div class="booking-summary">
+
+            <div>
+              <span>الطبيب</span>
+              <strong>{{ selectedDoctor?.name }}</strong>
+            </div>
+
+            <div>
+              <span>تاريخ الزيارة</span>
+              <strong>{{ selectedDate | date:'fullDate':'':'ar-EG' }}</strong>
+            </div>
+
+            <div>
+              <span>الوقت</span>
+              <strong>{{ selectedTime }}</strong>
+            </div>
+
+            <div>
+              <span>سعر الكشف</span>
+              <strong>{{ selectedDoctor?.price }} جنيه</strong>
+            </div>
+
+          </div>
+
+          <form [formGroup]="patientForm" (ngSubmit)="nextStep()">
+
+            <div class="form-grid">
+
+              <div class="form-group full-width">
+                <label>الاسم بالكامل <span>*</span></label>
+
+                <input
+                  type="text"
+                  formControlName="fullName"
+                  placeholder="اكتب اسمك بالكامل"
+                  [class.invalid]="fullNameControl?.touched && fullNameControl?.invalid"
+                />
+
+                @if (fullNameControl?.touched && fullNameControl?.hasError('required')) {
+                  <small class="error-message">الاسم مطلوب.</small>
+                }
+
+                @if (fullNameControl?.touched && fullNameControl?.hasError('minlength')) {
+                  <small class="error-message">يجب أن يكون الاسم 3 أحرف على الأقل.</small>
+                }
+              </div>
+
+
+              <div class="form-group">
+                <label>رقم الهاتف <span>*</span></label>
+
+                <input
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="01xxxxxxxxx"
+                  dir="ltr"
+                  [class.invalid]="phoneControl?.touched && phoneControl?.invalid"
+                />
+
+                @if (phoneControl?.touched && phoneControl?.invalid) {
+                  <small class="error-message">أدخل رقم هاتف مصري صحيح.</small>
+                }
+              </div>
+
+
+              <div class="form-group">
+                <label>العمر <span>*</span></label>
+
+                <input
+                  type="number"
+                  formControlName="age"
+                  placeholder="العمر"
+                  [class.invalid]="ageControl?.touched && ageControl?.invalid"
+                />
+
+                @if (ageControl?.touched && ageControl?.invalid) {
+                  <small class="error-message">أدخل عمراً صحيحاً.</small>
+                }
+              </div>
+
+
+              <div class="form-group full-width">
+                <label>النوع <span>*</span></label>
+
+                <select
+                  formControlName="gender"
+                  [class.invalid]="genderControl?.touched && genderControl?.invalid"
+                >
+                  <option value="">اختر النوع</option>
+                  <option value="male">ذكر</option>
+                  <option value="female">أنثى</option>
+                </select>
+
+                @if (genderControl?.touched && genderControl?.invalid) {
+                  <small class="error-message">من فضلك اختر النوع.</small>
+                }
+              </div>
+
+
+              <div class="form-group full-width">
+                <label>ملاحظات إضافية</label>
+
+                <textarea
+                  formControlName="notes"
+                  rows="4"
+                  placeholder="هل لديك أي معلومات أو ملاحظات ترغب في إضافتها؟"
+                ></textarea>
+              </div>
+
+            </div>
+
+            <div class="step-actions between">
+
+              <button type="button" class="btn-outline" (click)="previousStep()">
+                → السابق
+              </button>
+
+              <button type="submit" class="btn-primary">
+                تأكيد بيانات الحجز ←
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      }
+
+
+      <!-- STEP 4: CONFIRMATION -->
+      @if (currentStep === 4 && bookingConfirmed) {
+
+        <div class="booking-success">
+
+          <div class="success-icon">✓</div>
+
+          <h3>تم تجهيز طلب الحجز بنجاح!</h3>
+
+          <p>
+            تم إنشاء ملخص الحجز التجريبي. سيتم تأكيد الموعد بعد ربط النظام بخدمة الحجز.
+          </p>
+
+          <div class="booking-number">
+            <span>رقم الطلب</span>
+            <strong>{{ bookingNumber }}</strong>
+          </div>
+
+          <div class="success-details">
+
+            <div>
+              <span>الطبيب</span>
+              <strong>{{ selectedDoctor?.name }}</strong>
+            </div>
+
+            <div>
+              <span>التاريخ</span>
+              <strong>{{ selectedDate | date:'fullDate':'':'ar-EG' }}</strong>
+            </div>
+
+            <div>
+              <span>الوقت</span>
+              <strong>{{ selectedTime }}</strong>
+            </div>
+
+            <div>
+              <span>اسم المريض</span>
+              <strong>{{ patientForm.value.fullName }}</strong>
+            </div>
+
+            <div>
+              <span>رقم الهاتف</span>
+              <strong>{{ patientForm.value.phone }}</strong>
+            </div>
+
+            <div>
+              <span>سعر الكشف</span>
+              <strong>{{ selectedDoctor?.price }} جنيه</strong>
+            </div>
+
+          </div>
+
+          <button class="btn-primary" (click)="resetBooking()">
+            حجز موعد جديد
+          </button>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= REVIEWS ================= -->
+<section class="section reviews-section" id="reviews">
+  <div class="container">
+
+    <div class="section-heading heading-between">
+
+      <div>
+        <span class="section-kicker">آراء المرضى</span>
+        <h2>ماذا يقول عملاؤنا؟</h2>
+        <p>تجارب وآراء بعض المرضى حول خدمات العيادة.</p>
+      </div>
+
+      <div class="reviews-overview">
+        <strong>{{ clinic.rating }}</strong>
+        <div>
+          <div class="rating-stars">★★★★★</div>
+          <span>{{ clinic.reviewsCount }} تقييم</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reviews-grid">
+
+      @for (review of reviews; track review.id) {
+
+        <div class="review-card">
+
+          <div class="review-top">
+            <div class="review-user">
+              <div class="review-avatar">
+                {{ review.initials }}
+              </div>
+
+              <div>
+                <strong>{{ review.name }}</strong>
+                <span>{{ review.date }}</span>
+              </div>
+            </div>
+
+            <span class="verified-review">✓</span>
+          </div>
+
+          <div class="rating-stars review-stars">
+            @for (star of getStars(review.rating); track star) {
+              <span [class.empty-star]="star > review.rating">★</span>
+            }
+          </div>
+
+          <p>{{ review.comment }}</p>
+
+          <div class="review-footer">
+            <span>✓ تجربة مريض</span>
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= OFFERS ================= -->
+<section class="section offers-section" id="offers">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="section-kicker">عروضنا المميزة</span>
+      <h2>اهتم بصحتك ووفر أكثر</h2>
+      <p>اكتشف العروض والباقات المتاحة داخل العيادة.</p>
+    </div>
+
+    <div class="offers-grid">
+
+      @for (offer of offers; track offer.id) {
+
+        <div class="offer-card">
+
+          <div class="offer-top">
+            <div class="offer-icon">{{ offer.icon }}</div>
+            <span class="discount-badge">
+              خصم {{ offer.discount }}%
+            </span>
+          </div>
+
+          <h3>{{ offer.title }}</h3>
+
+          <p>{{ offer.description }}</p>
+
+          <div class="offer-price">
+            <strong>{{ offer.newPrice }} <small>جنيه</small></strong>
+            <del>{{ offer.oldPrice }} جنيه</del>
+          </div>
+
+          <div class="offer-validity">
+            <span>◷</span>
+            {{ offer.validity }}
+          </div>
+
+          <button class="btn-primary offer-button" (click)="scrollToBooking()">
+            احجز واستفد من العرض
+            <span>←</span>
+          </button>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+<section class="section contact-section" id="contact">
+  <div class="container">
+
+    <div class="section-heading">
+      <span class="section-kicker">تواصل معنا</span>
+      <h2>نحن هنا لمساعدتك</h2>
+      <p>يسعدنا استقبال استفساراتك ومساعدتك في الوصول إلينا.</p>
+    </div>
+
+    <div class="contact-grid">
+
+      <div class="contact-info">
+
+        <div class="contact-card">
+          <div class="contact-icon">📍</div>
+          <div>
+            <strong>عنوان العيادة</strong>
+            <span>{{ clinic.address }}</span>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">📞</div>
+          <div>
+            <strong>رقم الهاتف</strong>
+            <a [href]="'tel:' + clinic.phone" dir="ltr">{{ clinic.phone }}</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <strong>البريد الإلكتروني</strong>
+            <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-icon">🕒</div>
+          <div>
+            <strong>مواعيد العمل</strong>
+            <span>{{ clinic.workingHours }}</span>
+          </div>
+        </div>
+
+        <a
+          [href]="clinic.locationUrl"
+          target="_blank"
+          rel="noopener"
+          class="btn-primary directions-button"
+        >
+          احصل على الاتجاهات ←
+        </a>
+
+      </div>
+
+      <div class="map-wrapper">
+        <iframe
+          src="https://maps.google.com/maps?q=Damanhur,Egypt&t=&z=13&ie=UTF8&iwloc=&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="موقع العيادة على الخريطة"
+        ></iframe>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="clinic-footer">
+
+  <div class="container">
+
+    <div class="footer-main">
+
+      <div class="footer-about">
+
+        <a href="#" class="brand footer-brand">
+          <span class="brand-icon">T</span>
+          <span>Tabeeb</span>
+        </a>
+
+        <p>
+          {{ clinic.name }}، نسعى لتقديم أفضل خدمات الرعاية الطبية
+          من خلال فريق متخصص وتجهيزات طبية حديثة.
+        </p>
+
+        <div class="social-links">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="WhatsApp">◉</a>
+        </div>
+
+      </div>
+
+      <div class="footer-column">
+        <h4>روابط سريعة</h4>
+        <a href="#about">عن العيادة</a>
+        <a href="#gallery">معرض الصور</a>
+        <a href="#doctors">الأطباء</a>
+        <a href="#reviews">آراء المرضى</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>خدماتنا</h4>
+        <a href="#booking">حجز موعد</a>
+        <a href="#offers">العروض والباقات</a>
+        <a href="#contact">تواصل معنا</a>
+      </div>
+
+      <div class="footer-column">
+        <h4>معلومات التواصل</h4>
+        <span>{{ clinic.address }}</span>
+        <a [href]="'tel:' + clinic.phone" dir="ltr">{{ clinic.phone }}</a>
+        <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {{ 2026 }} Tabeeb. جميع الحقوق محفوظة.</span>
+      <span>صحتك أولويتنا 💙</span>
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- ================= GALLERY LIGHTBOX ================= -->
+@if (selectedGalleryImage) {
+
+  <div class="gallery-lightbox" (click)="closeGallery()">
+
+    <button
+      class="lightbox-close"
+      type="button"
+      aria-label="إغلاق"
+      (click)="closeGallery()"
+    >
+      ×
+    </button>
+
+    <img
+      [src]="selectedGalleryImage"
+      alt="صورة العيادة"
+      (click)="$event.stopPropagation()"
+    />
+
+  </div>
+
+}
+
+
+<!-- ================= FLOATING BOOKING BUTTON ================= -->
+<button
+  class="floating-booking"
+  type="button"
+  (click)="scrollToBooking()"
+>
+  <span>📅</span>
+  احجز موعدك
+</button>

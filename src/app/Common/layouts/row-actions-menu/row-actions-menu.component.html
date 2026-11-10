@@ -1,0 +1,20 @@
+<button type="button" class="dropdown-toggle rounded-none" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+        aria-haspopup="menu" [attr.aria-expanded]="isOpen" [attr.aria-label]="'Actions' | translate"
+        (click)="toggle()">
+    <i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+
+<ng-template cdkConnectedOverlay
+             [cdkConnectedOverlayOrigin]="trigger"
+             [cdkConnectedOverlayOpen]="isOpen"
+             [cdkConnectedOverlayPositions]="positions"
+             [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+             [cdkConnectedOverlayFlexibleDimensions]="false"
+             [cdkConnectedOverlayPush]="true"
+             [cdkConnectedOverlayViewportMargin]="8"
+             (overlayOutsideClick)="close()"
+             (overlayKeydown)="onOverlayKeydown($event)">
+    <ul class="actions-menu-panel" role="menu" (click)="onItemClick($event)">
+        <ng-container *ngTemplateOutlet="itemsTemplate"></ng-container>
+    </ul>
+</ng-template>

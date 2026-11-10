@@ -1,0 +1,20 @@
+#clinicMap {
+  width: 100% !important;
+  height: 280px !important;
+  min-width: 100% !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0.75rem;
+}
+
+:host ::ng-deep .CrudModal .modal-dialog{
+max-width: 50rem !important;
+
+}

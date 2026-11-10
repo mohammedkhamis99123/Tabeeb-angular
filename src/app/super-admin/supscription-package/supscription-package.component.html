@@ -1,0 +1,256 @@
+<div class="flex justify-center flex-col panel">
+
+    <!-- Header & Search/Filters Bar -->
+    <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
+        <div class="flex justify-between items-center" style="width: 100%;">
+            <h2 class="text-xl ">{{"Subscription Packages"|translate}}</h2>
+            <button 
+            *ngIf="hasAnyPermissionOf([sfc.Permissions.AddSubscriptionPackage])"
+            (click)="ResetValidation();CrudModal.open()"
+             class="btn btn-primary min-w-[150px]">{{"Create"|translate}}</button>
+        </div>
+
+        <div class="search-filter-card !py-3 !px-3.5 w-full mb-4 mt-2">
+            <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                <!-- Filters label -->
+                <span class="flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-primary opacity-60 whitespace-nowrap shrink-0">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {{"Filters"|translate}}
+                </span>
+
+                <!-- Vertical divider — desktop only -->
+                <span class="hidden sm:block w-px h-5 bg-primary/20 shrink-0"></span>
+
+                <!-- Search input -->
+                <div class="search-input-wrapper flex-1 min-w-[200px]">
+                    <span class="search-icon">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                    </span>
+                    <input type="text" [(ngModel)]="SearchTerm" (keyup)="onSearch()"
+                        class="form-input w-full" [placeholder]="'search'|translate">
+                </div>
+
+                <!-- فلتر الحالة (Status Filter) -->
+                <div class="w-full sm:w-[160px]">
+                    <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="form-input w-full">
+                        <option [value]="null">{{"All Status"|translate}}</option>
+                        <option [value]="true">{{"Active"|translate}}</option>
+                        <option [value]="false">{{"Inactive"|translate}}</option>
+                    </select>
+                </div>
+
+                <!-- زرار Reset Filters -->
+                <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary px-3.5 py-2 text-xs font-semibold whitespace-nowrap gap-1.5 h-[42px]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 3v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {{"Reset"|translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="datagrid">
+        <ng-datatable #datatable
+            [rows]="rows"
+            skin="bh-table-striped"
+            [columns]="cols"
+            [sortable]="true"
+            [paginationInfo]="label.paginationInfo"
+            [noDataContent]="label.NoDataContent"
+            [totalRows]="totalCount"
+            [isServerMode]="true"
+            (changeServer)="onchange($event)"
+            skin="whitespace-nowrap bh-table-hover"
+            firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+            lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
+            previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+            nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
+        >
+            <ng-template slot="ID" let-value="data">
+                <strong class="text-info flex items-center justify-center">{{ value.id }}</strong>
+            </ng-template>
+            <ng-template slot="ArName" let-value="data">
+                <div class="flex items-center justify-center gap-2">
+                    <div class="font-semibold">{{ value.arName }}</div>
+                </div>
+            </ng-template>
+            <ng-template slot="EnName" let-value="data">
+                <div class="flex items-center justify-center gap-2">
+                    <div class="font-semibold">{{ value.enName }}</div>
+                </div>
+            </ng-template>
+            <ng-template slot="Price" let-value="data">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="font-bold text-success">{{ value.price }}</span>
+                </div>
+            </ng-template>
+            <ng-template slot="DurationInDays" let-value="data">
+                <div class="flex items-center justify-center gap-2">
+                    <span>{{ value.durationInDays }} {{"Days" | translate}}</span>
+                </div>
+            </ng-template>
+            <ng-template slot="isActive" let-value="data">
+                <div class="flex items-center justify-center">
+                    <span [class]="value.isActive ? 'badge bg-success/10 text-success px-2.5 py-1 rounded-md' : 'badge bg-danger/10 text-danger px-2.5 py-1 rounded-md'">
+                        {{ value.isActive ? ('Active' | translate) : ('Inactive' | translate) }}
+                    </span>
+                </div>
+            </ng-template>
+         
+            <ng-template slot="Actions" let-value="data">
+                <app-row-actions-menu>
+                    <ng-template>
+                        <li class="my-2" *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateSubscriptionPackage])">
+                            <button (click)="Update(value.id);" class="btn btn-sm btn-outline-primary w-full">{{"Update"|translate}}</button>
+                        </li>
+                        <li class="my-2" *ngIf="hasAnyPermissionOf([sfc.Permissions.DeleteSubscriptionPackage])">
+                            <button (click)="Delete(value.id)" class="btn btn-sm btn-outline-danger w-full">{{"Delete"|translate}}</button>
+                        </li>
+                    </ng-template>
+                </app-row-actions-menu>
+            </ng-template>
+        </ng-datatable>
+    </div>
+</div>
+
+<!-- Modal للإنشاء والتعديل -->
+<ngx-custom-modal [closeOnOutsideClick]="false"
+    #CrudModal
+    [hideCloseButton]="false"
+    [closeOnEscape]="false"
+    customClass="modal-top animate animate-slide-in-down CrudModal"
+>
+    <ng-template #modalHeader>
+        <div class="relative">
+            <h1 *ngIf="state=='Update'"> {{"Update"|translate}} {{"Subscription Package"|translate}}</h1>
+            <h1 *ngIf="state=='Create'"> {{"Create"|translate}} {{"Subscription Package"|translate}}</h1>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <div class="flex items-center justify-center">
+            <form class="space-y-4 dark:text-white mt-2 w-full" [formGroup]="packageForm" (ngSubmit)="HandleRequest()">
+                
+                <!-- Arabic Name -->
+                <div>
+                    <label for="ArName"><span>{{label.requiredLabel}}</span>{{"Arabic Name"|translate}}</label>
+                    <div class="relative text-white-dark">
+                        <input id="ArName" type="text" formControlName="ArName" [placeholder]='"Enter ArName"|translate' class="form-input ps-10 placeholder:text-white-dark" />
+                    </div>
+                </div>
+                <div *ngIf="packageForm.get('ArName')?.touched&&packageForm.get('ArName')?.invalid">
+                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['required']">{{"Arabic Name is required"|translate}}</div>
+                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['maxlength']">{{"max Length"|translate}} 150 {{"Character"|translate}} </div>
+                </div>
+
+                <!-- English Name -->
+                <div>
+                    <label for="EnName"><span>{{label.requiredLabel}}</span>{{"English Name"|translate}}</label>
+                    <div class="relative text-white-dark">
+                        <input id="EnName" type="text" [placeholder]='"Enter EN-Name"|translate' formControlName="EnName" class="form-input ps-10 placeholder:text-white-dark" />
+                    </div>
+                </div>
+                <div *ngIf="packageForm.get('EnName')?.touched&&packageForm.get('EnName')?.invalid">
+                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['required']">{{'English Name is required'|translate}}</div>
+                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['maxlength']">{{"max Length"|translate}} 100 {{"Character"|translate}} </div>
+                </div>
+
+                <!-- Price & Duration Row -->
+              <!-- Price & Duration Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Price -->
+                    <div>
+                        <label for="Price"><span>{{label.requiredLabel}}</span>{{"Price"|translate}}</label>
+                        <input id="Price" type="number" step="0.01" formControlName="Price" class="form-input" />
+                        
+                        <div *ngIf="packageForm.get('Price')?.touched && packageForm.get('Price')?.invalid" class="text-danger text-xs mt-1 space-y-0.5">
+                            <div *ngIf="packageForm.get('Price')?.errors?.['required']">{{"Price is required"|translate}}</div>
+                            <div *ngIf="packageForm.get('Price')?.errors?.['min']">{{"Price must be greater than or equal to 0"|translate}}</div>
+                            <div *ngIf="packageForm.get('Price')?.errors?.['pattern']">{{"Price must be a valid decimal with up to 2 decimal places"|translate}}</div>
+                        </div>
+                    </div>
+
+                    <!-- Duration In Days -->
+                    <div>
+                        <label for="DurationInDays"><span>{{label.requiredLabel}}</span>{{"Duration (Days)"|translate}}</label>
+                        <input id="DurationInDays" type="number" step="1" formControlName="DurationInDays" class="form-input" />
+                        
+                        <div *ngIf="packageForm.get('DurationInDays')?.touched && packageForm.get('DurationInDays')?.invalid" class="text-danger text-xs mt-1 space-y-0.5">
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['required']">{{"Duration is required"|translate}}</div>
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['min']">{{"Duration must be at least 1 day"|translate}}</div>
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['pattern']">{{"Duration must be a whole number (integer)"|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arabic Description -->
+                <div>
+                    <label for="ArDescription">{{"Arabic Description"|translate}}</label>
+                    <textarea id="ArDescription" formControlName="ArDescription" rows="2" class="form-input"></textarea>
+                </div>
+
+                <!-- English Description -->
+                <div>
+                    <label for="EnDescription">{{"English Description"|translate}}</label>
+                    <textarea id="EnDescription" formControlName="EnDescription" rows="2" class="form-input"></textarea>
+                </div>
+
+                <!-- IsActive Checkbox -->
+                <div class="flex items-center gap-2 pt-1">
+                    <input id="isActive" type="checkbox" class="form-checkbox w-5 h-5 rounded text-primary" formControlName="IsActive">
+                    <label for="isActive" class="cursor-pointer mb-0 font-medium">{{"Active" | translate}}</label>
+                </div>
+
+                <button type="submit" [disabled]="packageForm.invalid" class="btn btn-gradient !mt-6 w-full border-0 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                    {{ (state == 'Update' ? 'Update' : 'Create') | translate }} {{"Subscription Package" | translate}}
+                </button>
+            </form>
+        </div>
+    </ng-template>
+</ngx-custom-modal>
+
+<!-- Modal التأكيد للحذف -->
+<ngx-custom-modal [closeOnOutsideClick]="false"
+    #DeleteModal
+    [hideCloseButton]="false"
+    [closeOnEscape]="false"
+    customClass="modal-top animate animate-slide-in-down DeleteModal"
+>
+    <ng-template #modalHeader>
+        <div class="relative">
+            <h1>{{"Delete Confirmation" | translate}}</h1>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <div class="text-center space-y-4 py-2">
+            <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 mb-2">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">
+                {{"Are you sure you want to delete this?" | translate}}
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                {{"This action cannot be undone. All related data will be permanently removed."|translate}}
+            </p>
+            <div class="flex items-center gap-3 mt-6">
+                <button type="button" (click)="DeleteModal.close()" class="btn btn-outline-secondary w-1/2 py-2.5">
+                    {{"Cancel" | translate}}
+                </button>
+                <button type="button" (click)="DeleteRecord()" class="btn btn-danger w-1/2 py-2.5 bg-red-600 hover:bg-red-700 text-white border-0 shadow-md shadow-red-500/20">
+                    {{"Delete" | translate}}
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</ngx-custom-modal>

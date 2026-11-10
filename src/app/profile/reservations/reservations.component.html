@@ -1,0 +1,307 @@
+
+<div class="appointments-page" dir="rtl">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h2>إدارة المواعيد</h2>
+      <p>متابعة وتنظيم مواعيد الأطباء والحجوزات اليومية</p>
+    </div>
+
+    <button class="btn-primary" type="button">
+      <i class="bi bi-plus-lg"></i>
+      حجز موعد جديد
+    </button>
+  </div>
+
+  <!-- Statistics -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <i class="fa-solid fa-calendar-check"></i>
+      </div>
+      <div>
+        <span>إجمالي الحجوزات</span>
+        <h3>{{ totalCount}}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <span>الحجوزات المؤكدة</span>
+        <h3>
+          {{
+            confirmedCount
+          }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orange">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+      </div>
+      <div>
+        <span>قيد الانتظار</span>
+        <h3>
+          {{
+            pendingCount
+          }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <i class="fa-solid fa-hourglass-half"></i>
+      </div>
+      <div>
+        <span>مدة الجلسة</span>
+        <h3>{{ selectedDoctor?.sessionDuration }} دقيقة</h3>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Doctors Section -->
+  <div class="main-card">
+
+    <div class="section-header">
+      <div>
+        <h3>الأطباء</h3>
+        <p>اختر الطبيب لعرض جدول مواعيده</p>
+      </div>
+    </div>
+
+    <!-- Doctor Tabs -->
+    <div class="doctor-tabs">
+
+      <button
+        type="button"
+        *ngFor="let doctor of doctors"
+        class="doctor-tab"
+        [class.active]="selectedDoctor?.id === doctor.id"
+        (click)="selectDoctor(doctor)">
+
+        <img
+          [src]="doctor.image"
+          [alt]="doctor.name"
+>
+        <div class="doctor-tab-info">
+          <strong>{{ doctor.name }}</strong>
+          <small>{{ doctor.specialization }}</small>
+        </div>
+
+        <i
+          class="bi bi-check-circle-fill selected-icon"
+          *ngIf="selectedDoctor?.id === doctor.id">
+        </i>
+
+      </button>
+
+    </div>
+
+    <!-- Selected Doctor Information -->
+    <div class="selected-doctor-info" *ngIf="selectedDoctor">
+
+      <div class="selected-doctor-profile">
+
+        <img
+          [src]="selectedDoctor.image"
+          [alt]="selectedDoctor.name"
+          >
+
+        <div>
+          <h4>{{ selectedDoctor.name }}</h4>
+          <span>{{ selectedDoctor.specialization }}</span>
+        </div>
+
+      </div>
+
+      <div class="doctor-working-info">
+
+        <div>
+          <i class="bi bi-clock"></i>
+          <span>
+            {{ selectedDoctor.startTime }} -
+            {{ selectedDoctor.endTime }}
+          </span>
+        </div>
+
+        <div>
+          <i class="bi bi-hourglass"></i>
+          <span>
+            {{ selectedDoctor.sessionDuration }} دقيقة للجلسة
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar-container">
+
+      <div class="calendar-header">
+        <div>
+          <h3>جدول المواعيد</h3>
+          <p>اضغط على أي حجز لعرض التفاصيل</p>
+        </div>
+
+        <div class="calendar-legend">
+
+          <span>
+            <i class="legend-dot confirmed"></i>
+            مؤكد
+          </span>
+
+          <span>
+            <i class="legend-dot pending"></i>
+            قيد الانتظار
+          </span>
+
+          <span>
+            <i class="legend-dot completed"></i>
+            مكتمل
+          </span>
+
+          <span>
+            <i class="legend-dot cancelled"></i>
+            ملغي
+          </span>
+
+          <span>
+            <i class="legend-dot available"></i>
+            متاح
+          </span>
+
+        </div>
+      </div>
+
+      <full-calendar
+        #calendar
+        [options]="calendarOptions">
+      </full-calendar>
+
+    </div>
+
+  </div>
+
+  <!-- Appointment Details Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="isDetailsModalOpen && selectedAppointment"
+    (click)="closeBookingDetails()">
+
+    <div
+      class="appointment-modal"
+      (click)="$event.stopPropagation()">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+
+        <div>
+          <h3>تفاصيل الحجز</h3>
+          <p>معلومات المريض والموعد</p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeBookingDetails()">
+
+          <i class="bi bi-x-lg"></i>
+
+        </button>
+
+      </div>
+
+      <!-- Patient Information -->
+      <div class="modal-body">
+
+        <div class="patient-profile">
+
+          <img
+            [src]="selectedAppointment.patientImage"
+            alt="Patient"
+           >
+
+          <div>
+            <h4>{{ selectedAppointment.patientName }}</h4>
+            <span>بيانات المريض</span>
+          </div>
+
+        </div>
+
+        <div class="details-grid">
+
+          <div class="detail-item">
+            <span>رقم الهاتف</span>
+            <strong>{{ selectedAppointment.patientPhone }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>الخدمة</span>
+            <strong>{{ selectedAppointment.serviceName }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>وقت الحجز</span>
+            <strong>{{ selectedAppointment.startTime }}</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>مدة الجلسة</span>
+            <strong>{{ selectedDoctor.sessionDuration }} دقيقة</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>سعر الكشف</span>
+            <strong>{{ selectedAppointment.price }} ج.م</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>حالة الحجز</span>
+
+            <strong
+              class="status-badge"
+              [ngClass]="getStatusClass(selectedAppointment.status)">
+
+              {{ getStatusName(selectedAppointment.status) }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+        <div class="notes-box" *ngIf="selectedAppointment.notes">
+          <span>ملاحظات</span>
+          <p>{{ selectedAppointment.notes }}</p>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="closeBookingDetails()">
+
+          إغلاق
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

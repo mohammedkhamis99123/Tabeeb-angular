@@ -1,0 +1,459 @@
+<div class="flex justify-center flex-col panel">
+
+    <!-- Header & Search/Filters Bar -->
+    <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
+        <div class="flex justify-between items-center" style="width: 100%;">
+            <h2 class="text-xl font-bold">{{"ClinicsManagement"|translate}}</h2>
+            <button 
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.AddClinic])"
+                (click)="ResetValidation(); CrudModal.open(); openMapWithDelay()"
+                class="btn btn-primary min-w-[150px]">
+                {{"Create"|translate}}
+            </button>
+        </div>
+
+        <div class="search-filter-card !py-3 !px-3.5 w-full mb-4 mt-2">
+            <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+                <!-- Filters label -->
+                <span class="flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-primary opacity-60 whitespace-nowrap shrink-0">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {{"Filters"|translate}}
+                </span>
+
+                <span class="hidden sm:block w-px h-5 bg-primary/20 shrink-0"></span>
+
+                <!-- Search input -->
+                <div class="search-input-wrapper flex-1 min-w-[200px]">
+                    <span class="search-icon">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                    </span>
+                    <input type="text" [(ngModel)]="SearchTerm" (keyup)="onSearch()"
+                        class="form-input w-full" [placeholder]="'search'|translate">
+                </div>
+
+                <!-- فلتر المدينة -->
+                <div class="w-full sm:w-[190px]">
+                    <select [(ngModel)]="selectedCityId" (change)="onFilterChange()" class="form-select w-full">
+                        <option [value]="null">{{"AllCities"|translate}}</option>
+                        <option *ngFor="let city of citiesList" [value]="city.id">
+                            {{ translate.currentLang == 'ae' ? city.arName : city.enName }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- فلتر الحالة -->
+                <div class="w-full sm:w-[160px]">
+                    <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="form-select w-full">
+                        <option [value]="null">{{"All Status"|translate}}</option>
+                        <option [value]="true">{{"Active"|translate}}</option>
+                        <option [value]="false">{{"Inactive"|translate}}</option>
+                    </select>
+                </div>
+                <div class="w-full sm:w-[160px]">
+                   <select [(ngModel)]="selectedPackageId" class="form-select" (change)="onFilterChange()">
+                            <option [ngValue]="null" disabled>{{'SelectPackage'|translate}}</option>
+                            <option *ngFor="let pkg of packagesList" [value]="pkg.id">
+                                {{ translate.currentLang == 'ae' ? pkg.arName : pkg.enName }}
+                            </option>
+                        </select>
+                </div>
+
+                   <div class="w-full sm:w-[160px]">
+                    <input type="text" #fromDateInput [(ngModel)]="from" (change)="onSearch()"
+                        (focus)="fromDateInput.type='date'"
+                        class="form-input w-full" [placeholder]="'SubscriptionEndsFrom'|translate">
+                </div>
+
+                        <div class="w-full sm:w-[160px]">
+                    <input type="text" #toDateInput [(ngModel)]="to" (change)="onSearch()"
+                        (focus)="toDateInput.type='date'"
+                        class="form-input w-full" [placeholder]="'SubscriptionEndsTo'|translate">
+                </div>
+                <!-- Reset Filters -->
+                <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary px-3.5 py-2 text-xs font-semibold whitespace-nowrap gap-1.5 h-[42px]">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 3v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {{"Reset"|translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="datagrid">
+        <ng-datatable #datatable
+            [rows]="rows"
+            skin="bh-table-striped"
+            [columns]="cols"
+            [sortable]="true"
+            [paginationInfo]="label.paginationInfo"
+            [noDataContent]="label.NoDataContent"
+            [totalRows]="totalCount"
+            [isServerMode]="true"
+            (changeServer)="onchange($event)"
+            skin="whitespace-nowrap bh-table-hover"
+        >
+            <ng-template slot="ID" let-value="data">
+                <strong class="text-info flex items-center justify-center">{{ value.id }}</strong>
+            </ng-template>
+            <ng-template slot="ArName" let-value="data">
+                <div class="font-semibold text-center">{{ value.arName }}</div>
+            </ng-template>
+                <ng-template slot="City" let-value="data">
+                <div class="font-semibold text-center">{{ value.cityArName }}</div>
+            </ng-template>
+                    <ng-template slot="Country" let-value="data">
+                <div class="font-semibold text-center">{{ value.countryArName }}</div>
+            </ng-template>
+            <ng-template slot="Owner" let-value="data">
+                <div class="text-center">{{ value.ownerArName }}</div>
+            </ng-template>
+            <ng-template slot="Package" let-value="data">
+                <div class="text-center">{{ value.subscriptionPackageArName }}</div>
+            </ng-template>
+                <ng-template slot="SubscriptionEndAt" let-value="data">
+                <div class="text-center">{{ value.subscriptionEndAt }}</div>
+            </ng-template>
+                      <ng-template slot="DoctorsCount" let-value="data">
+                <div class="font-semibold text-center">{{ value.doctorsCount }}</div>
+            </ng-template>
+            <ng-template slot="IsActive" let-value="data">
+                <div class="flex items-center justify-center">
+                    <span [class]="value.isActive ? 'badge bg-success/10 text-success px-2.5 py-1 rounded-md' : 'badge bg-danger/10 text-danger px-2.5 py-1 rounded-md'">
+                        {{ value.isActive ? ('Active' | translate) : ('Inactive' | translate) }}
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template slot="Actions" let-value="data">
+                <app-row-actions-menu>
+                    <ng-template>
+                        <li class="my-2" *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateClinic])">
+                            <button (click)="Update(value.id); openMapWithDelay()" class="btn btn-sm btn-outline-primary w-full">{{"Update"|translate}}</button>
+                        </li>
+                        <li class="my-2" *ngIf="hasAnyPermissionOf([sfc.Permissions.DeleteClinic])">
+                            <button (click)="Delete(value.id)" class="btn btn-sm btn-outline-danger w-full">{{"Delete"|translate}}</button>
+                        </li>
+                    </ng-template>
+                </app-row-actions-menu>
+            </ng-template>
+        </ng-datatable>
+    </div>
+</div>
+
+<!-- Modal للإنشاء والتعديل مقسم تابات -->
+<ngx-custom-modal #CrudModal customClass="CrudModal">
+    <ng-template #modalHeader>
+        <div class="relative">
+            <h1 *ngIf="state=='Update'"> {{"Update"|translate}} {{"Clinic"|translate}}</h1>
+            <h1 *ngIf="state=='Create'"> {{"Create"|translate}} {{"Clinic"|translate}}</h1>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <div class="max-h-[80vh] overflow-y-auto px-2">
+            
+            <!-- أزرار التابات الرئيسية -->
+            <div class="flex border-b border-slate-200 mb-6">
+                <button type="button" (click)="activeMainTab = 'details'" 
+                    [class.border-primary]="activeMainTab == 'details'" [class.text-primary]="activeMainTab == 'details'"
+                    class="pb-3 px-6 font-bold text-base border-b-2 border-transparent transition-all">
+                    {{"ClinicDetails" | translate}}
+                </button>
+                <button type="button" (click)="activeMainTab = 'images'" 
+                    [class.border-primary]="activeMainTab == 'images'" [class.text-primary]="activeMainTab == 'images'"
+                    class="pb-3 px-6 font-bold text-base border-b-2 border-transparent transition-all">
+                    {{"ClinicImages" | translate}}
+                </button>
+            </div>
+
+            <!-- FORM 1: بيانات العيادة الأساسية -->
+            <form *ngIf="activeMainTab == 'details'" [formGroup]="clinicForm" (ngSubmit)="HandleRequest()" class="space-y-4">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Arabic Name -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"ArabicName"|translate}}</label>
+                        <input type="text" formControlName="ArName" class="form-input" [ngClass]="{'border-danger': clinicForm.get('ArName')?.invalid && clinicForm.get('ArName')?.touched}" />
+                        <div *ngIf="clinicForm.get('ArName')?.invalid && clinicForm.get('ArName')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('ArName')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('ArName')?.errors?.['maxlength']">{{'maxLength'|translate}} 200</span>
+                            <div class="text-danger" *ngIf="clinicForm.get('ArName')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </div>
+
+                        </div>
+                    </div>
+                    <!-- English Name -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"EnglishName"|translate}}</label>
+                        <input type="text" formControlName="EnName" class="form-input" [ngClass]="{'border-danger': clinicForm.get('EnName')?.invalid && clinicForm.get('EnName')?.touched}" />
+                        <div *ngIf="clinicForm.get('EnName')?.invalid && clinicForm.get('EnName')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('EnName')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('EnName')?.errors?.['maxlength']">{{'maxLength'|translate}} 200</span>
+                            <span class="text-danger" *ngIf="clinicForm.get('EnName')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Arabic Street -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"ArabicStreet"|translate}}</label>
+                        <input type="text" formControlName="StreetArName" class="form-input" />
+                        <div *ngIf="clinicForm.get('StreetArName')?.invalid && clinicForm.get('StreetArName')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+
+                        </div>
+                         <div class="text-danger" *ngIf="clinicForm.get('StreetArName')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </div>
+
+                    </div>
+                    <!-- English Street -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"EnglishStreet"|translate}}</label>
+                        <input type="text" formControlName="StreetEnName" class="form-input" />
+                        <div *ngIf="clinicForm.get('StreetEnName')?.invalid && clinicForm.get('StreetEnName')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                         <div class="text-danger" *ngIf="clinicForm.get('StreetEnName')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </div>
+
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- City -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"City"|translate}}</label>
+                        <select formControlName="CityId" class="form-select">
+                            <option [ngValue]="null" disabled>{{'SelectCity'|translate}}</option>
+                            <option *ngFor="let city of citiesList" [value]="city.id">
+                                {{ translate.currentLang == 'ae' ? city.arName : city.enName }}
+                            </option>
+                        </select>
+                        <div *ngIf="clinicForm.get('CityId')?.invalid && clinicForm.get('CityId')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                    <!-- Owner Email -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"OwnerEmail"|translate}}</label>
+                        <input type="email" formControlName="OwnerEmail" class="form-input" />
+                        <div *ngIf="clinicForm.get('OwnerEmail')?.invalid && clinicForm.get('OwnerEmail')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('OwnerEmail')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('OwnerEmail')?.errors?.['email']">{{'InvalidEmailFormat'|translate}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- حقول الاشتراك -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Subscription Package -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"SubscriptionPackage"|translate}}</label>
+                        <select formControlName="SubscriptionPackageId" class="form-select">
+                            <option [ngValue]="null" disabled>{{'SelectPackage'|translate}}</option>
+                            <option *ngFor="let pkg of packagesList" [value]="pkg.id">
+                                {{ translate.currentLang == 'ae' ? pkg.arName : pkg.enName }}
+                            </option>
+                        </select>
+                        <div *ngIf="clinicForm.get('SubscriptionPackageId')?.invalid && clinicForm.get('SubscriptionPackageId')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                    <!-- Subscription Start Date -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"SubscriptionStartDate"|translate}}</label>
+                        <input type="date" formControlName="SubscriptionStartAt" class="form-input" />
+                        <div *ngIf="clinicForm.get('SubscriptionStartAt')?.invalid && clinicForm.get('SubscriptionStartAt')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Owner Arabic Name -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"OwnerArabicName"|translate}}</label>
+                        <input type="text" formControlName="OwnerArName" class="form-input" />
+                        <div *ngIf="clinicForm.get('OwnerArName')?.invalid && clinicForm.get('OwnerArName')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                    <!-- Owner English Name -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"OwnerEnglishName"|translate}}</label>
+                        <input type="text" formControlName="OwnerEnName" class="form-input" />
+                        <div *ngIf="clinicForm.get('OwnerEnName')?.invalid && clinicForm.get('OwnerEnName')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="state == 'Create'" class="grid grid-cols-1 gap-4">
+                    <!-- Owner Password -->
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"Owner Password"|translate}}</label>
+                        <input type="password" formControlName="OwnerPassword" class="form-input" />
+                        <div *ngIf="clinicForm.get('OwnerPassword')?.invalid && clinicForm.get('OwnerPassword')?.touched" class="text-danger text-xs mt-1">
+                            <span>{{'required'|translate}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الوصف والبروفايل -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"ArabicDescription"|translate}}</label>
+                        <textarea formControlName="ArDescription" class="form-textarea" rows="2"></textarea>
+                          <div *ngIf="clinicForm.get('ArDescription')?.invalid && clinicForm.get('ArDescription')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('ArDescription')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('ArDescription')?.errors?.['maxlength']">{{'maxLength'|translate}} 200</span>
+                            <span class="text-danger" *ngIf="clinicForm.get('ArDescription')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </span>
+
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"EnglishDescription"|translate}}</label>
+                        <textarea formControlName="EnDescription" class="form-textarea" rows="2"></textarea>
+                             <div *ngIf="clinicForm.get('EnDescription')?.invalid && clinicForm.get('EnDescription')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('EnDescription')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('EnDescription')?.errors?.['maxlength']">{{'maxLength'|translate}} 200</span>
+                            <span class="text-danger" *ngIf="clinicForm.get('EnDescription')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"ArabicProfile"|translate}}</label>
+                        <input type="text" formControlName="ProfileAr" class="form-input" />
+                             <div *ngIf="clinicForm.get('ProfileAr')?.invalid && clinicForm.get('ProfileAr')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('ProfileAr')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('ProfileAr')?.errors?.['maxlength']">{{'maxLength'|translate}} 100</span>
+                            <span class="text-danger" *ngIf="clinicForm.get('ProfileAr')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </span>
+
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-1 font-semibold"><span>*</span>{{"EnglishProfile"|translate}}</label>
+                        <input type="text" formControlName="ProfileEn" class="form-input" />
+                            <div *ngIf="clinicForm.get('ProfileEn')?.invalid && clinicForm.get('ProfileEn')?.touched" class="text-danger text-xs mt-1">
+                            <span *ngIf="clinicForm.get('ProfileEn')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="clinicForm.get('ProfileEn')?.errors?.['maxlength']">{{'maxLength'|translate}} 100</span>
+                            <span class="text-danger" *ngIf="clinicForm.get('ProfileEn')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الخريطة التفاعلية -->
+                <div class="pt-2 w-full">
+                    <label class="block mb-1 font-semibold">
+                        <span>*</span>{{"SelectLocation"|translate}}
+                    </label>
+                    
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <input type="text" formControlName="Latitude" readonly class="form-input bg-slate-100 text-xs" placeholder="Latitude" />
+                        <input type="text" formControlName="Langitude" readonly class="form-input bg-slate-100 text-xs" placeholder="Longitude" />
+                    </div>
+
+                    <div class="w-full overflow-hidden rounded-xl border border-slate-300">
+                        <div id="clinicMap" style="width: 100% !important; height: 260px !important;"></div>
+                    </div>
+                </div>
+
+                <!-- أزرار حفظ البيانات -->
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" (click)="CrudModal.close()" class="btn btn-outline-danger">{{"Cancel"|translate}}</button>
+                    <button type="submit" class="btn btn-primary">{{"Save Details"|translate}}</button>
+                </div>
+
+            </form>
+
+            <!-- FORM 2: صور العيادة (مع Drag & Drop ومعاينة وتكبير) -->
+            <form *ngIf="activeMainTab == 'images'" [formGroup]="imagesForm" (ngSubmit)="SaveClinicImages()" class="space-y-6">
+                
+                <!-- Logo Upload -->
+                <div>
+                    <label class="block mb-2 font-semibold text-slate-700">{{"ClinicLogo" | translate}}</label>
+                    <div *ngIf="!logoPreview" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 relative cursor-pointer hover:bg-slate-100 transition"
+                         (dragover)="$event.preventDefault()" (drop)="onFileDropped($event, 'LogoImage')">
+                        <input type="file" (change)="onFileSelected($event, 'LogoImage')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" />
+                        <p class="text-sm text-slate-600">{{"Drag" | translate}}</p>
+                    </div>
+                    <div *ngIf="logoPreview" class="border rounded-xl p-3 bg-white flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <img [src]="logoPreview" class="w-14 h-14 object-cover rounded-lg border cursor-pointer hover:opacity-90" (click)="openImagePopup(logoPreview)" />
+                            <span class="text-sm font-medium">{{"LogoSelected" | translate}}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" (click)="openImagePopup(logoPreview)" class="btn btn-sm btn-outline-primary">{{"View" | translate}}</button>
+                            <button type="button" (click)="removeImage('LogoImage')" class="btn btn-sm btn-outline-danger">{{"Delete" | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banner Upload -->
+                <div>
+                    <label class="block mb-2 font-semibold text-slate-700">{{"ClinicBanner" | translate}}</label>
+                    <div *ngIf="!bannerPreview" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 relative cursor-pointer hover:bg-slate-100 transition"
+                         (dragover)="$event.preventDefault()" (drop)="onFileDropped($event, 'BannerImage')">
+                        <input type="file" (change)="onFileSelected($event, 'BannerImage')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" />
+                        <p class="text-sm text-slate-600">{{"Drag" | translate}}</p>
+                    </div>
+                    <div *ngIf="bannerPreview" class="border rounded-xl p-3 bg-white flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <img [src]="bannerPreview" class="w-14 h-14 object-cover rounded-lg border cursor-pointer hover:opacity-90" (click)="openImagePopup(bannerPreview)" />
+                            <span class="text-sm font-medium">{{"BannerSelected" | translate}}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" (click)="openImagePopup(bannerPreview)" class="btn btn-sm btn-outline-primary">{{"View" | translate}}</button>
+                            <button type="button" (click)="removeImage('BannerImage')" class="btn btn-sm btn-outline-danger">{{"Delete" | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Logo Upload -->
+                <div>
+                    <label class="block mb-2 font-semibold text-slate-700">{{"InvoiceLogo" | translate}}</label>
+                    <div *ngIf="!invoicePreview" class="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50 relative cursor-pointer hover:bg-slate-100 transition"
+                         (dragover)="$event.preventDefault()" (drop)="onFileDropped($event, 'InvoiceImage')">
+                        <input type="file" (change)="onFileSelected($event, 'InvoiceImage')" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" />
+                        <p class="text-sm text-slate-600">{{"Drag" | translate}}</p>
+                    </div>
+                    <div *ngIf="invoicePreview" class="border rounded-xl p-3 bg-white flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <img [src]="invoicePreview" class="w-14 h-14 object-cover rounded-lg border cursor-pointer hover:opacity-90" (click)="openImagePopup(invoicePreview)" />
+                            <span class="text-sm font-medium">{{"InvoiceLogoSelected" | translate}}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" (click)="openImagePopup(invoicePreview)" class="btn btn-sm btn-outline-primary">{{"View" | translate}}</button>
+                            <button type="button" (click)="removeImage('InvoiceImage')" class="btn btn-sm btn-outline-danger">{{"Delete" | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- أزرار حفظ الصور -->
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" (click)="CrudModal.close()" class="btn btn-outline-danger">{{"Cancel"|translate}}</button>
+                    <button type="submit" class="btn btn-primary">{{"Save"|translate}}</button>
+                </div>
+            </form>
+
+        </div>
+    </ng-template>
+</ngx-custom-modal>
+
+<!-- Popup المكبر لعرض الصور بحجم كبير -->
+<div *ngIf="showPopup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" style="z-index: 99999;"(click)="showPopup = false">
+    <div class="relative max-w-3xl w-full bg-white rounded-2xl p-4 shadow-2xl" (click)="$event.stopPropagation()">
+        <button type="button" (click)="showPopup = false" class="absolute top-3 right-3 text-slate-500 hover:text-red-500 text-xl font-bold bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center">×</button>
+        <img [src]="popupImageSrc" class="w-full max-h-[75vh] object-contain rounded-lg mt-4" />
+    </div>
+</div>

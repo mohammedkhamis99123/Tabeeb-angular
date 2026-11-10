@@ -1,0 +1,382 @@
+@import 'tippy.js/dist/tippy.css';
+@import 'highlight.js/styles/monokai-sublime.css';
+/* @import 'swiper/swiper-bundle.min.css'; */
+@import '../../../node_modules/swiper/swiper-bundle.min.css';
+@import 'ngx-lightbox/lightbox.css';
+@import '@ng-select/ng-select/themes/default.theme.css';
+@import 'quill/dist/quill.snow.css';
+@import 'file-upload-with-preview/dist/style.css';
+@import 'flatpickr/dist/flatpickr.min.css';
+@import 'nouislider/dist/nouislider.min.css';
+@import 'tailwind.css';
+@import '@angular/cdk/overlay-prebuilt.css';
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "leaflet/dist/leaflet.css";
+/* ================================================================= */
+/* Global Enterprise Dashboard Theme Tweaks (Applied Site-wide)      */
+/* ================================================================= */
+
+/* --- Panel & Card Containers --- */
+.panel {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.dark .panel {
+    background-color: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Search & Filter Card Wrapper --- */
+.search-filter-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.dark .search-filter-card {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+/* --- Search Input Styling --- */
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    left: 0.875rem;
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+[dir="rtl"] .search-input-wrapper .search-icon {
+    left: auto;
+    right: 0.875rem;
+}
+
+.search-input-wrapper .form-input {
+    padding-left: 2.5rem !important;
+    padding-right: 1rem;
+}
+
+[dir="rtl"] .search-input-wrapper .form-input {
+    padding-left: 1rem !important;
+    padding-right: 2.5rem !important;
+}
+
+/* --- Form Inputs & Controls --- *//* --- Form Inputs & Controls --- */
+.form-input {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    color: #1e293b;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    outline: none;
+}
+
+.dark .form-input {
+    background-color: #0f172a;
+    border-color: #475569;
+    color: #f8fafc;
+}
+
+/* --- Datagrid / Table Enhancements --- */
+.datagrid {
+    overflow-x: auto;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+}
+
+.dark .datagrid {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+/* --- Buttons --- */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #4361ee;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #3b50d6;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+}
+
+/* --- Modal Global Polish --- */
+.ngx-custom-modal .modal-content, 
+.modal-top .bh-modal-content {
+    border-radius: 1rem !important;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 10%), 0 10px 10px -5px rgba(0, 0, 0, 4%);
+}
+
+.dark .ngx-custom-modal .modal-content, 
+.dark .modal-top .bh-modal-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* Form Validation & Spacing Fixes in Modals */
+form .space-y-5 > * + * {
+    margin-top: 1.25rem;
+}
+/* ================================================================= */
+/* Datagrid / Table Center Alignment & General Enhancements        */
+/* ================================================================= */
+
+/* تجميع عناصر الجداول وتوسيط المحتوى تماماً */
+.datagrid table th,
+.datagrid table td,
+.bh-table-striped th,
+.bh-table-striped td,
+.bh-table-hover th,
+.bh-table-hover td {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 0.875rem 1rem !important;
+}
+
+/* ضمان توسيط جميع العناصر الفليكس (Flex) داخل خلايا الجدول */
+.datagrid td > div,
+.datagrid td > span,
+.datagrid th > div,
+.datagrid th > span {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* تحسين شكل رأس الجدول (Header) */
+.datagrid table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.dark .datagrid table th {
+    background-color: #0f172a;
+    color: #94a3b8;
+    border-color: #334155;
+}
+
+
+/* ================================================================= */
+/* Modern Modal Design & Layout Improvements                         */
+/* ================================================================= */
+
+/* تحسين حاوي المودال (Modal Container & Shadow) */
+.ngx-custom-modal .modal-content, 
+.modal-top .bh-modal-content {
+    border-radius: 1.25rem !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+.dark .ngx-custom-modal .modal-content, 
+.dark .modal-top .bh-modal-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+/* هيدر المودال (Modal Header) */
+.ngx-custom-modal .modal-header,
+.CrudModal .modal-header {
+    padding: 1.25rem 1.5rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background-color: #f8fafc;
+}
+
+.dark .ngx-custom-modal .modal-header,
+.dark .CrudModal .modal-header {
+    background-color: #0f172a;
+    border-color: #334155 !important;
+}
+
+.ngx-custom-modal .modal-header h1,
+.ngx-custom-modal .modal-header h2 {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #0f172a;
+    margin: 0;
+}
+
+.dark .ngx-custom-modal .modal-header h1,
+.dark .ngx-custom-modal .modal-header h2 {
+    color: #f8fafc;
+}
+
+/* جسم المودال (Modal Body) */
+.ngx-custom-modal .modal-body,
+.CrudModal .modal-body {
+    padding: 1.5rem !important;
+}
+
+/* تحسين المدخلات والـ Label داخل المودال والفروم */
+form label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: #334155;
+}
+
+.dark form label {
+    color: #cbd5e1;
+}
+
+/* ألوان أخطاء الـ Validation تحت الحقول */
+.text-danger {
+    color: #ef4444 !important;
+    font-size: 0.775rem !important;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+/* زر الحفظ / التحديث المدمج Gradient Button */
+.btn-gradient {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 0.625rem !important;
+    transition: all 0.25 ease-in-out !important;
+}
+
+.btn-gradient:hover:not(:disabled) {
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.4) !important;
+}
+
+.btn-gradient:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}
+/* ================================================================= */
+/* Modern Compact Modal & Full-Width Form Controls Design            */
+/* ================================================================= */
+
+/* تحديد مقاسات المودال وجعله مرن ومناسب للشاشات */
+.ngx-custom-modal .modal-content, 
+.modal-top .bh-modal-content {
+    max-width: 480px !important; /* عرض مثالي لنموذج الإدخال */
+    width: 92% !important;
+    margin: 1.75rem auto !important;
+    border-radius: 1rem !important;
+    overflow: hidden !important;
+}
+
+/* تقليص ارتفاع الهيدر وجعله مضغوطاً */
+.ngx-custom-modal .modal-header,
+.CrudModal .modal-header {
+    padding: 0.875rem 1.25rem !important; /* تقليل الهوامش الداخلية */
+    min-height: auto !important;
+}
+
+.ngx-custom-modal .modal-header h1,
+.ngx-custom-modal .modal-header h2 {
+    font-size: 1.1rem !important; /* تصحيح حجم الخط ليناسب الهيدر الضيق */
+    line-height: 1.2 !important;
+}
+
+/* تقليص مساحات الـ Body */
+.ngx-custom-modal .modal-body,
+.CrudModal .modal-body {
+    padding: 1.25rem 1.25rem 1.5rem 1.25rem !important;
+}
+
+/* إجبار النموذج وجميع الحقول والأزرار على أخذ العرض الكامل Full Width */
+.ngx-custom-modal form,
+.CrudModal form {
+    width: 100% !important;
+}
+
+.ngx-custom-modal form .space-y-5 > *,
+.CrudModal form .space-y-5 > * {
+    width: 100% !important;
+}
+
+/* الحقول، الـ Inputs، والأزرار بعرض 100% وبدون مشاكل */
+.ngx-custom-modal .form-input,
+.ngx-custom-modal .btn,
+.CrudModal .form-input,
+.CrudModal .btn {
+    width: 100% !important;
+}
+
+/* تحسين مسافات العناصر داخل الفورم */
+.ngx-custom-modal form .space-y-5 > * + *,
+.CrudModal form .space-y-5 > * + * {
+    margin-top: 1rem !important; /* تقليل المسافات الزائدة بين الحقول */
+}
+
+.bh-pagination {
+    padding: 20px;
+}
+/* تصغير خط الـ Toast */
+.swal2-toast {
+  font-size: 14px !important;
+}
+
+.swal2-toast .swal2-title {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+
+.swal2-toast .swal2-html-container {
+  font-size: 14px !important;
+}
+
+.swal2-toast .swal2-icon {
+  width: 1.7em !important;
+  height: 1.7em !important;
+  margin: 0 0.5em 0 0 !important;
+}
+
+.swal2-toast .swal2-icon .swal2-icon-content {
+  font-size: 1.4em !important;
+}
+
+form label > span{
+    color:red
+}
