@@ -203,5 +203,8 @@
   "DownloadInvoice": "الفاتورة",
   "Subscription": "اشتراك",
   "SelectClinic": "اختر العيادة",
-  "Save Details": "حفظ"
+  "Save Details": "حفظ",
+  "Actions": "الاجراءات",
+  "SubscriptionHistory": "سجل الاشتراكات",
+  "SavedSuccessfully": "تم الحفظ بنجاح"
 }

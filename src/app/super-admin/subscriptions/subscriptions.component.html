@@ -5,6 +5,7 @@
         <div class="flex justify-between items-center" style="width: 100%;">
             <h2 class="text-xl font-bold">{{"SubscriptionsManagement"|translate}}</h2>
             <button 
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.AddSubscription])"
                 (click)="ResetValidation(); CrudModal.open()"
                 class="btn btn-primary min-w-[150px]">
                 {{"Create"|translate}}
@@ -116,7 +117,9 @@
                 <ng-template>
         <!-- زر تجديد الاشتراك -->
         <li class="my-2" *ngIf="value.status==4">
-            <button (click)="openRenewModal(value)" class="btn btn-sm btn-outline-success w-full d-flex align-items-center justify-content-center gap-2">
+            <button
+            *ngIf="hasAnyPermissionOf([sfc.Permissions.RenewSubscription])"
+             (click)="openRenewModal(value)" class="btn btn-sm btn-outline-success w-full d-flex align-items-center justify-content-center gap-2">
                 <i class="fa-solid fa-rotate-right"></i>
                 <span>{{"Renew"|translate}}</span>
             </button>
@@ -124,7 +127,9 @@
 
         <!-- زر إلغاء الاشتراك -->
         <li class="my-2" *ngIf="value.status<3">
-            <button (click)="CancelSubscription(value.clinicId)" class="btn btn-sm btn-outline-danger w-full d-flex align-items-center justify-content-center gap-2">
+            <button 
+            *ngIf="hasAnyPermissionOf([sfc.Permissions.CancelSubscription])"
+            (click)="CancelSubscription(value.clinicId)" class="btn btn-sm btn-outline-danger w-full d-flex align-items-center justify-content-center gap-2">
                 <i class="fa-solid fa-ban"></i>
                 <span>{{"CancelSubscription"|translate}}</span>
             </button>
@@ -132,20 +137,22 @@
 
         <!-- زر تحميل الفاتورة -->
         <li class="my-2">
-            <button (click)="openInvoiceModal(value.id)" class="btn btn-sm btn-outline-secondary w-full d-flex align-items-center justify-content-center gap-2">
+            <button 
+            *ngIf="hasAnyPermissionOf([sfc.Permissions.ShowSubscriptionInvoice])"
+            (click)="openInvoiceModal(value.id)" class="btn btn-sm btn-outline-secondary w-full d-flex align-items-center justify-content-center gap-2">
                 <i class="fa-solid fa-file-arrow-down"></i>
                 <span>{{"DownloadInvoice"|translate}}</span>
             </button>
         </li>
   <li class="my-2">
         <button
+    *ngIf="hasAnyPermissionOf([sfc.Permissions.ShowSubscriptionHistory])"
     type="button"
     class="btn btn-outline-primary btn-sm"
     (click)="openHistoryModal(value.clinicId)">
 
     <i class="bi bi-clock-history me-1"></i>
-
-    {{ isArabic ? 'سجل الاشتراكات' : 'Subscription History' }}
+     {{"SubscriptionHistory"|translate}}
   
 </button>
   </li>

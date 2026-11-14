@@ -46,4 +46,18 @@ export class ClinicDoctorsService {
               request
           );
       }
+
+      GetById(id: number, clinicId: number) {
+    return this.http.get<any>(
+        `${this.baseUrl}/GetClinicDoctor/${id}/${clinicId}`
+   
+    );
+}
+
+UpdatClinicDoctor(data: FormData) {
+    return this.http.put(
+        `${this.baseUrl}`,
+        data
+    );
+}
 }

@@ -3,6 +3,9 @@ import { Store } from '@ngrx/store';
 import { AppService } from '../../app.service';
 import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { LoadingService } from '../Services/loading.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -11,13 +14,19 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppLayout {
     store: any;
     showTopButton = false;
-    constructor(public translate: TranslateService, public storeData: Store<any>, private service: AppService, private router: Router) {
+     private destroy$ = new Subject<void>();
+    constructor(public translate: TranslateService
+        , public storeData: Store<any>
+        , private service: AppService
+        , private router: Router
+        , private spinner: NgxSpinnerService,
+        private loadingService: LoadingService,) {
         this.initStore();
     }
     headerClass = '';
     ngOnInit() {
-        this.initAnimation();
-        this.toggleLoader();
+        //this.initAnimation();
+        //this.toggleLoader();
         window.addEventListener('scroll', () => {
             if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
                 this.showTopButton = true;
@@ -25,13 +34,29 @@ export class AppLayout {
                 this.showTopButton = false;
             }
         });
+                this.loadingService.loading$
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(isLoading => {
+    
+                    if (isLoading) {
+                        this.spinner.show();
+                    } else {
+                        this.spinner.hide();
+                    }
+    
+                });
     }
 
     ngOnDestroy() {
         window.removeEventListener('scroll', () => {});
+          this.destroy$.next();
+            this.destroy$.complete();
     }
 
-    initAnimation() {
+     
+ 
+
+    /*initAnimation() {
         this.service.changeAnimation();
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
@@ -50,7 +75,7 @@ export class AppLayout {
         setTimeout(() => {
             this.storeData.dispatch({ type: 'toggleMainLoader', payload: false });
         }, 500);
-    }
+    }*/
 
     async initStore() {
         this.storeData

@@ -37,7 +37,8 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
 
     const token = sessionStorage.getItem('Token');
-
+    
+    
     const clonedReq = token
       ? this.addTokenHeader(request, token)
       : request;

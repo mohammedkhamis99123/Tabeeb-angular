@@ -1,17 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { LoadingService } from './Common/Services/loading.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit,OnDestroy{
+
+      private destroy$ = new Subject<void>();
+
+
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private titleService: Title,
+        private spinner: NgxSpinnerService,
+        private loadingService: LoadingService,
+        
     ) {
         this.router.events
             .pipe(
@@ -37,5 +48,27 @@ export class AppComponent {
                 }),
             )
             .subscribe();
+
+            
+    }
+
+    
+    ngOnInit(): void {
+        this.loadingService.loading$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(isLoading => {
+
+                if (isLoading) {
+                    this.spinner.show();
+                } else {
+                    this.spinner.hide();
+                }
+
+            });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

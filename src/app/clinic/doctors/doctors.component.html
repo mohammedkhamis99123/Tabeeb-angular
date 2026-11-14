@@ -113,7 +113,7 @@
             </p>
 
             <button
-                *ngIf="!searchTerm"
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.AddClinicDoctors])"
                 class="btn-add-doctor"
                 type="button"
                 (click)="openAddModal()">
@@ -137,6 +137,8 @@
                         <th class="text-center">{{ isArabic ? 'مدة الجلسة' : 'Duration' }}</th>
                         <th class="text-center">{{ isArabic ? 'تاريخ الانضمام' : 'Join Date' }}</th>
                         <th class="text-center">{{ isArabic ? 'الحالة' : 'Status' }}</th>
+                        <th class="text-center">{{ "Actions"|translate }}</th>
+
                     </tr>
                 </thead>
 
@@ -218,17 +220,21 @@
                         <td>
                         <app-row-actions-menu>
     <ng-template>
-        <li class="my-2">
-            <!--<button
-                (click)="Update(value.id)"
+           <li class="my-2">
+            <button
+                (click)="Update(doctor)"
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateClinicDoctors])"
+
                 class="btn btn-sm btn-outline-primary w-full">
                 <i class="fa-solid fa-user-pen me-1"></i>
                 {{ "Update" | translate }}
-            </button>-->
+            </button>
         </li>
 
         <li class="my-2">
             <button
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateDoctorWorkTime])"
+
                 (click)="OpenWorkSchedule(doctor)"
                 class="btn btn-sm btn-outline-info w-full">
                 <i class="fa-solid fa-calendar-days me-1"></i>
@@ -268,7 +274,9 @@
 <!-- Add Doctor Modal -->
 <ngx-custom-modal
     #AddDoctorModal
-    [title]="isArabic ? 'إضافة طبيب جديد' : 'Add New Doctor'"
+    [title]="isArabic
+        ? (modalMode === 'Create' ? 'إضافة طبيب جديد' : 'تعديل بيانات الطبيب')
+        : (modalMode === 'Create' ? 'Add New Doctor' : 'Update Doctor')"
     [closeOnOutsideClick]="false"
     [closeOnEscape]="false">
 
@@ -276,252 +284,337 @@
 
         <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()">
 
-            <div class="doctor-form">
+            
+<form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()">
 
-                <!-- Names -->
-                <div class="form-section-title">
-                    <i class="fa-solid fa-user"></i>
-                    {{ isArabic ? 'البيانات الشخصية' : 'Personal Information' }}
-                </div>
+    <div class="doctor-form">
 
-                <div class="form-grid">
+        <!-- Personal Information -->
+        <div class="form-section-title">
+            <i class="fa-solid fa-user"></i>
+            {{ isArabic ? 'البيانات الشخصية' : 'Personal Information' }}
+        </div>
 
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'الاسم بالعربي' : 'Arabic Name' }}
-                            <span>*</span>
-                        </label>
+        <div class="form-grid">
 
-                        <input
-                            type="text"
-                            formControlName="arName"
-                            [placeholder]="isArabic ? 'أدخل الاسم بالعربي' : 'Arabic name'">
+            <!-- Arabic Name -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'الاسم بالعربي' : 'Arabic Name' }}
+                    <span>*</span>
+                </label>
 
-                        <small
-                            class="field-error"
-                            *ngIf="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.invalid">
-                            {{ isArabic ? 'الاسم بالعربي مطلوب' : 'Arabic name is required' }}
-                        </small>
-                    </div>
+                <input
+                    type="text"
+                    formControlName="arName"
+                    maxlength="150"
+                    [class.invalid-input]="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.invalid"
+                    [placeholder]="isArabic ? 'أدخل الاسم بالعربي' : 'Arabic name'">
 
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'الاسم بالإنجليزي' : 'English Name' }}
-                            <span>*</span>
-                        </label>
+                <small class="field-error"
+                    *ngIf="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.hasError('required')">
+                    {{ isArabic ? 'الاسم بالعربي مطلوب' : 'Arabic name is required' }}
+                </small>
 
-                        <input
-                            type="text"
-                            formControlName="enName"
-                            [placeholder]="isArabic ? 'أدخل الاسم بالإنجليزي' : 'English name'">
+                <small class="field-error"
+                    *ngIf="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.hasError('maxlength')">
+                    {{ isArabic ? 'الاسم يجب ألا يتجاوز 150 حرفًا' : 'Maximum length is 150 characters' }}
+                </small>
 
-                        <small
-                            class="field-error"
-                            *ngIf="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.invalid">
-                            {{ isArabic ? 'الاسم بالإنجليزي مطلوب' : 'English name is required' }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'البريد الإلكتروني' : 'Email' }}
-                            <span>*</span>
-                        </label>
-
-                        <input
-                            type="email"
-                            formControlName="email"
-                            placeholder="doctor@example.com">
-
-                        <small
-                            class="field-error"
-                            *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.invalid">
-                            {{ isArabic ? 'أدخل بريدًا إلكترونيًا صحيحًا' : 'Enter a valid email' }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'رقم الهوية' : 'Identity Number' }}
-                            <span>*</span>
-                        </label>
-
-                        <input
-                            type="text"
-                            formControlName="identityNumber"
-                            placeholder="">
-
-                        <small
-                            class="field-error"
-                            *ngIf="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.invalid">
-                            {{ isArabic ? 'رقم الهوية مطلوب' : 'Identity number is required' }}
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'رقم التخصص' : 'Specialization ID' }}
-                            <span>*</span>
-                        </label>
-
-                        <input
-                            type="number"
-                            formControlName="specializationId"
-                            min="1">
-
-                        <small class="field-hint">
-                            {{ isArabic ? 'يمكن استبداله بقائمة التخصصات لاحقًا' : 'Can be replaced with a specialization dropdown' }}
-                        </small>
-                    </div>
-
-                </div>
-
-                <!-- Session -->
-                <div class="form-section-title">
-                    <i class="fa-solid fa-calendar-check"></i>
-                    {{ isArabic ? 'إعدادات الجلسات' : 'Session Settings' }}
-                </div>
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'سعر الكشف' : 'Session Price' }}
-                            <span>*</span>
-                        </label>
-
-                        <div class="input-with-icon">
-                            <input
-                                type="number"
-                                formControlName="sessionPrice"
-                                min="0">
-                            <span>{{ isArabic ? 'ر.س' : 'SAR' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            {{ isArabic ? 'مدة الجلسة بالدقائق' : 'Session Duration (Minutes)' }}
-                            <span>*</span>
-                        </label>
-
-                        <input
-                            type="number"
-                            formControlName="sessionDuration"
-                            min="1">
-                    </div>
-
-                </div>
-
-                <!-- Files -->
-                <div class="form-section-title">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    {{ isArabic ? 'الصور والختم' : 'Images & Stamp' }}
-                </div>
-
-                <div class="upload-grid">
-
-                    <!-- Doctor Image -->
-                    <div class="upload-box">
-                        <label>{{ isArabic ? 'صورة الطبيب' : 'Doctor Image' }}</label>
-
-                        <div class="upload-preview">
-                            <img
-                                *ngIf="imagePreview"
-                                [src]="imagePreview"
-                                alt="Doctor image">
-
-                            <i
-                                *ngIf="!imagePreview"
-                                class="fa-solid fa-user-doctor">
-                            </i>
-                        </div>
-
-                        <label class="upload-button">
-                            <i class="fa-solid fa-upload"></i>
-                            {{ isArabic ? 'اختيار صورة' : 'Choose Image' }}
-
-                            <input
-                                type="file"
-                                accept="image/*"
-                                (change)="onFileSelected($event, 'image')">
-                        </label>
-                    </div>
-
-                    <!-- Stamp -->
-                    <div class="upload-box">
-                        <label>{{ isArabic ? 'ختم الطبيب' : 'Doctor Stamp' }}</label>
-
-                        <div class="upload-preview stamp-preview">
-                            <img
-                                *ngIf="stampPreview"
-                                [src]="stampPreview"
-                                alt="Doctor stamp">
-
-                            <i
-                                *ngIf="!stampPreview"
-                                class="fa-solid fa-stamp">
-                            </i>
-                        </div>
-
-                        <label class="upload-button">
-                            <i class="fa-solid fa-upload"></i>
-                            {{ isArabic ? 'اختيار الختم' : 'Choose Stamp' }}
-
-                            <input
-                                type="file"
-                                accept="image/*"
-                                (change)="onFileSelected($event, 'stamp')">
-                        </label>
-                    </div>
-
-                </div>
-
-                <!-- Active -->
-                <div class="active-option">
-                    <label class="switch-label">
-                        <input type="checkbox" formControlName="isActive">
-                        <span class="switch"></span>
-                        <span>
-                            {{ isArabic ? 'تفعيل الطبيب في العيادة' : 'Activate doctor in clinic' }}
-                        </span>
-                    </label>
-                </div>
-
+                <small class="field-error"
+                    *ngIf="doctorForm.get('arName')?.touched && doctorForm.get('arName')?.hasError('invalidLanguage')">
+                    {{ isArabic ? 'يُسمح بالحروف العربية فقط' : 'Only Arabic characters are allowed' }}
+                </small>
             </div>
 
-            <!-- Actions -->
-            <div class="modal-actions">
-                <button
-                    type="button"
-                    class="btn-cancel"
-                    [disabled]="isSaving"
-                    (click)="closeModal()">
-                    {{ isArabic ? 'إلغاء' : 'Cancel' }}
-                </button>
+            <!-- English Name -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'الاسم بالإنجليزي' : 'English Name' }}
+                    <span>*</span>
+                </label>
 
-                <button
-                    type="submit"
-                    class="btn-submit"
-                    [disabled]="isSaving">
+                <input
+                    type="text"
+                    formControlName="enName"
+                    maxlength="150"
+                    [class.invalid-input]="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.invalid"
+                    [placeholder]="isArabic ? 'أدخل الاسم بالإنجليزي' : 'English name'">
 
-                    <span
-                        *ngIf="isSaving"
-                        class="spinner-border spinner-border-sm">
-                    </span>
+                <small class="field-error"
+                    *ngIf="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.hasError('required')">
+                    {{ isArabic ? 'الاسم بالإنجليزي مطلوب' : 'English name is required' }}
+                </small>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.hasError('maxlength')">
+                    {{ isArabic ? 'الاسم يجب ألا يتجاوز 150 حرفًا' : 'Maximum length is 150 characters' }}
+                </small>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('enName')?.touched && doctorForm.get('enName')?.hasError('invalidLanguage')">
+                    {{ isArabic ? 'يُسمح بالحروف الإنجليزية فقط' : 'Only English characters are allowed' }}
+                </small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'البريد الإلكتروني' : 'Email' }}
+                    <span>*</span>
+                </label>
+
+                <input
+                    type="email"
+                    formControlName="email"
+                    [class.invalid-input]="doctorForm.get('email')?.touched && doctorForm.get('email')?.invalid"
+                    placeholder="doctor@example.com">
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.hasError('required')">
+                    {{ isArabic ? 'البريد الإلكتروني مطلوب' : 'Email is required' }}
+                </small>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.hasError('email')">
+                    {{ isArabic ? 'صيغة البريد الإلكتروني غير صحيحة' : 'Invalid email format' }}
+                </small>
+            </div>
+
+            <!-- Identity Number -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'رقم الهوية' : 'Identity Number' }}
+                    <span>*</span>
+                </label>
+
+                <input
+                    type="text"
+                    formControlName="identityNumber"
+                    [class.invalid-input]="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.invalid">
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.hasError('required')">
+                    {{ isArabic ? 'رقم الهوية مطلوب' : 'Identity number is required' }}
+                </small>
+            </div>
+<!-- Specialization -->
+<div class="form-group">
+    <label>
+        {{ isArabic ? 'التخصص' : 'Specialization' }}
+        <span>*</span>
+    </label>
+
+    <ng-select
+        [items]="specializionList"
+        bindLabel="name"
+        bindValue="id"
+        formControlName="specializationId"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="isArabic ? 'اختر التخصص' : 'Select Specialization'"
+        [notFoundText]="isArabic ? 'لا توجد نتائج' : 'No results found'"
+        [class.invalid-input]="doctorForm.get('specializationId')?.touched && doctorForm.get('specializationId')?.invalid"
+        [dir]="isArabic ? 'rtl' : 'ltr'">
+
+        <ng-template ng-option-tmp let-item="item">
+            <div class="specialization-option">
+                <i class="fa-solid fa-stethoscope mx-2"></i>
+                <span>{{ item.name }}</span>
+            </div>
+        </ng-template>
+
+    </ng-select>
+
+    <small class="field-error"
+        *ngIf="doctorForm.get('specializationId')?.touched && doctorForm.get('specializationId')?.hasError('required')">
+        {{ isArabic ? 'التخصص مطلوب' : 'Specialization is required' }}
+    </small>
+</div>
+
+        </div>
+
+        <!-- Session Settings -->
+        <div class="form-section-title">
+            <i class="fa-solid fa-calendar-check"></i>
+            {{ isArabic ? 'إعدادات الجلسات' : 'Session Settings' }}
+        </div>
+
+        <div class="form-grid">
+
+            <!-- Session Price -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'سعر الكشف' : 'Session Price' }}
+                    <span>*</span>
+                </label>
+
+                <div class="input-with-icon">
+                    <input
+                        type="number"
+                        formControlName="sessionPrice"
+                        min="1"
+                        [class.invalid-input]="doctorForm.get('sessionPrice')?.touched && doctorForm.get('sessionPrice')?.invalid">
+
+                    <span>{{ isArabic ? 'ر.س' : 'SAR' }}</span>
+                </div>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('sessionPrice')?.touched && doctorForm.get('sessionPrice')?.hasError('required')">
+                    {{ isArabic ? 'سعر الكشف مطلوب' : 'Session price is required' }}
+                </small>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('sessionPrice')?.touched && doctorForm.get('sessionPrice')?.hasError('min')">
+                    {{ isArabic ? 'السعر يجب أن يكون 1 على الأقل' : 'Price must be at least 1' }}
+                </small>
+            </div>
+
+            <!-- Session Duration -->
+            <div class="form-group">
+                <label>
+                    {{ isArabic ? 'مدة الجلسة بالدقائق' : 'Session Duration (Minutes)' }}
+                    <span>*</span>
+                </label>
+
+                <input
+                    type="number"
+                    formControlName="sessionDuration"
+                    min="1"
+                    [class.invalid-input]="doctorForm.get('sessionDuration')?.touched && doctorForm.get('sessionDuration')?.invalid">
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('sessionDuration')?.touched && doctorForm.get('sessionDuration')?.hasError('required')">
+                    {{ isArabic ? 'مدة الجلسة مطلوبة' : 'Session duration is required' }}
+                </small>
+
+                <small class="field-error"
+                    *ngIf="doctorForm.get('sessionDuration')?.touched && doctorForm.get('sessionDuration')?.hasError('min')">
+                    {{ isArabic ? 'مدة الجلسة يجب أن تكون دقيقة واحدة على الأقل' : 'Duration must be at least 1 minute' }}
+                </small>
+            </div>
+
+        </div>
+
+        <!-- Images & Stamp -->
+        <div class="form-section-title">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            {{ isArabic ? 'الصور والختم' : 'Images & Stamp' }}
+        </div>
+
+        <div class="upload-grid">
+
+            <!-- Doctor Image -->
+            <div class="upload-box">
+                <label>{{ isArabic ? 'صورة الطبيب' : 'Doctor Image' }}</label>
+
+                <div class="upload-preview">
+                    <img
+                        *ngIf="imagePreview"
+                        [src]="imagePreview"
+                        alt="Doctor image">
 
                     <i
-                        *ngIf="!isSaving"
-                        class="fa-solid fa-floppy-disk">
+                        *ngIf="!imagePreview"
+                        class="fa-solid fa-user-doctor">
                     </i>
+                </div>
 
-                    {{ isSaving
-                        ? (isArabic ? 'جاري الحفظ...' : 'Saving...')
-                        : (isArabic ? 'حفظ الطبيب' : 'Save Doctor')
-                    }}
-                </button>
+                <label class="upload-button">
+                    <i class="fa-solid fa-upload"></i>
+                    {{ isArabic ? 'اختيار صورة' : 'Choose Image' }}
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onFileSelected($event, 'image')">
+                </label>
             </div>
 
+            <!-- Doctor Stamp -->
+            <div class="upload-box">
+                <label>{{ isArabic ? 'ختم الطبيب' : 'Doctor Stamp' }}</label>
+
+                <div class="upload-preview stamp-preview">
+                    <img
+                        *ngIf="stampPreview"
+                        [src]="stampPreview"
+                        alt="Doctor stamp">
+
+                    <i
+                        *ngIf="!stampPreview"
+                        class="fa-solid fa-stamp">
+                    </i>
+                </div>
+
+                <label class="upload-button">
+                    <i class="fa-solid fa-upload"></i>
+                    {{ isArabic ? 'اختيار الختم' : 'Choose Stamp' }}
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onFileSelected($event, 'stamp')">
+                </label>
+            </div>
+
+        </div>
+
+        <!-- Active -->
+        <div class="active-option">
+            <label class="switch-label">
+                <input type="checkbox" formControlName="isActive">
+                <span class="switch"></span>
+                <span>
+                    {{ isArabic ? 'تفعيل الطبيب في العيادة' : 'Activate doctor in clinic' }}
+                </span>
+            </label>
+        </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+
+        <button
+            type="button"
+            class="btn-cancel"
+            [disabled]="isSaving"
+            (click)="closeModal()">
+            {{ isArabic ? 'إلغاء' : 'Cancel' }}
+        </button>
+
+        <button
+            type="submit"
+            class="btn-submit"
+            [disabled]="isSaving || isLoading">
+
+            <span
+                *ngIf="isSaving || isLoading"
+                class="spinner-border spinner-border-sm">
+            </span>
+
+            <i
+                *ngIf="!isSaving && !isLoading"
+                class="fa-solid fa-floppy-disk">
+            </i>
+
+            {{ isLoading
+                ? (isArabic ? 'جاري تحميل البيانات...' : 'Loading...')
+                : isSaving
+                    ? (isArabic ? 'جاري الحفظ...' : 'Saving...')
+                    : modalMode === 'Create'
+                        ? (isArabic ? 'حفظ الطبيب' : 'Save Doctor')
+                        : (isArabic ? 'حفظ التعديلات' : 'Save Changes')
+            }}
+        </button>
+
+    </div>
+
+</form>
+
+
+    
         </form>
 
     </ng-template>

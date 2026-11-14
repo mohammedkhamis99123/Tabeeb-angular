@@ -27,6 +27,8 @@ import { IconModule } from './Common/shared/icon/icon.module';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { HeaderComponent } from './Common/layouts/header';
 import { MenuModule } from 'headlessui-angular';
+import { LoadingInterceptor } from './Common/Interceptors/loading.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
 // AOT compilation support
 export function HttpLoaderFactory(httpHandler: HttpBackend): TranslateHttpLoader {
     return new TranslateHttpLoader(new HttpClient(httpHandler));
@@ -45,6 +47,7 @@ export function HttpLoaderFactory(httpHandler: HttpBackend): TranslateHttpLoader
         MenuModule,
         StoreModule.forRoot({ index: indexReducer }),
         HttpClientModule,
+        NgxSpinnerModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -68,7 +71,13 @@ export function HttpLoaderFactory(httpHandler: HttpBackend): TranslateHttpLoader
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }],
+    },
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: LoadingInterceptor,
+        multi: true
+    }
+],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

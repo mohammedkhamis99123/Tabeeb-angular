@@ -203,5 +203,8 @@
   "DownloadInvoice": "Invoice PDF",
   "Subscription": "Subscription",
   "SelectClinic": "Select Clinic",
-  "Save Details": "Save"
+  "Save Details": "Save",
+  "Actions": "Actions",
+  "SubscriptionHistory": "Subscription History",
+  "SavedSuccessfully": "Saved Successfully"
 }

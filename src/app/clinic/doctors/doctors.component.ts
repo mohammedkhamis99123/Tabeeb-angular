@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, viewChild } from '@angular/core';
+import { Component, DestroyRef, inject, INJECTOR, Input, OnInit, ViewChild, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { IClinicDoctorDto } from './models/IClinicDoctorDto.model';
@@ -9,6 +9,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { SpecializationService } from 'src/app/super-admin/specialization/Services/specialization.service';
 import { DoctorWorkTimeInfo, IDoctorWorkTime } from './models/IDoctorWorkTime.model';
 import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import Swal from 'sweetalert2';
+import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
+import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
+import { Language, TextLangValidator } from 'src/app/Common/Validators/TextValidator';
+import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ISpecialization } from 'src/app/super-admin/specialization/Models/ISpecialization';
 
 
 @Component({
@@ -19,7 +26,7 @@ import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
 export class ClinicDoctorsComponent implements OnInit {
 
 
-
+  destroy=inject(DestroyRef);
 
    clinicId: number=parseInt(sessionStorage.getItem("SelectedClinic")!);
 
@@ -49,14 +56,18 @@ export class ClinicDoctorsComponent implements OnInit {
     workTimes: DoctorWorkTimeInfo[] = [];
     isLoadingWorkTimes = false;
     isSavingWorkTimes = false;
+    modalMode: 'Create' | 'Update' = 'Create';
 
     @ViewChild("AddDoctorModal") AddDoctorModal!:NgxCustomModalComponent
+    specializionList: any[]=[];
 
     constructor(
         private fb: FormBuilder,
         private clinicDoctorsService: ClinicDoctorsService,
         private translate:TranslateService,
-        private SpecializationServ:SpecializationService
+        private SpecializationServ:SpecializationService,
+        protected sfc:SystemFacadeService,
+        private currentUserService:CurrentUserService
     ) {}
 
     ngOnInit(): void {
@@ -71,7 +82,24 @@ export class ClinicDoctorsComponent implements OnInit {
         }
     }
   loadSpecializations() {
-    
+    var data:IGetGeneric={
+        Page:1,
+        PageSize:2000,
+        SearchTerm:null,
+        SortBy:"Id",
+        SortOrder:"asc"
+    }
+
+    this.SpecializationServ.getAll(data).pipe(
+      takeUntilDestroyed(this.destroy)
+    ).subscribe(result=>{
+      if(result.isSuccess){
+        this.specializionList=[]
+        result.data.items.forEach((item:ISpecialization)=>{
+          this.specializionList.push({id:item.id,name:this.isArabic ?item.arName :item.enName})
+        })
+      }
+    })
   }
     daysOfWeek = [
     { value: 0, name: 'Sunday', arName: 'الأحد' },
@@ -86,13 +114,13 @@ export class ClinicDoctorsComponent implements OnInit {
 
     private initializeForm(): void {
         this.doctorForm = this.fb.group({
-            arName: ['', [Validators.required, Validators.maxLength(150)]],
-            enName: ['', [Validators.required, Validators.maxLength(150)]],
+            arName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.Arabic)]],
+            enName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.English)]],
             email: ['', [Validators.required, Validators.email]],
             identityNumber: ['', Validators.required],
             specializationId: [null, Validators.required],
             sessionDuration: [30, [Validators.required, Validators.min(1)]],
-            sessionPrice: [0, [Validators.required, Validators.min(0)]],
+            sessionPrice: [1, [Validators.required, Validators.min(1)]],
             isActive: [true]
         });
     }
@@ -140,6 +168,8 @@ export class ClinicDoctorsComponent implements OnInit {
     }
 
     openAddModal(): void {
+        this.modalMode = 'Create';
+        this.selectedDoctor=null
         this.doctorForm.reset({
             arName: '',
             enName: '',
@@ -162,7 +192,7 @@ export class ClinicDoctorsComponent implements OnInit {
     closeModal(): void {
         if (this.isSaving) return;
 
-        this.showModal = false;
+        this.AddDoctorModal.close()
     }
 
     onFileSelected(event: Event, type: 'image' | 'stamp'): void {
@@ -172,7 +202,18 @@ export class ClinicDoctorsComponent implements OnInit {
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            alert(this.isArabic ? 'من فضلك اختر ملف صورة صحيح' : 'Please select a valid image file');
+    const toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          showCloseButton: true,
+          customClass: { popup: `color-danger` },
+        });
+
+        toast.fire({
+          title: this.isArabic ? 'من فضلك اختر ملف صورة صحيح' : 'Please select a valid image file',
+        });            
             input.value = '';
             return;
         }
@@ -186,58 +227,71 @@ export class ClinicDoctorsComponent implements OnInit {
         }
     }
 
-    saveDoctor(): void {
-        if (this.doctorForm.invalid) {
-            this.doctorForm.markAllAsTouched();
-            return;
-        }
-
-        if (!this.selectedImage || !this.selectedStamp) {
-            alert(
-                this.isArabic
-                    ? 'من فضلك اختر صورة الطبيب والختم'
-                    : 'Please select the doctor image and stamp'
-            );
-            return;
-        }
-
-        const formData = new FormData();
-
-        const formValue = this.doctorForm.getRawValue();
-
-        formData.append('ArName', formValue.arName);
-        formData.append('EnName', formValue.enName);
-        formData.append('Email', formValue.email);
-        formData.append('IdentityNumber', formValue.identityNumber);
-        formData.append('SpecializationId', String(formValue.specializationId));
-        formData.append('SessionDuration', String(formValue.sessionDuration));
-        formData.append('SessionPrice', String(formValue.sessionPrice));
-        formData.append('IsActive', String(formValue.isActive));
-        formData.append('ClinicId', String(this.clinicId));
-
-        formData.append('Image', this.selectedImage);
-        formData.append('Stamp', this.selectedStamp);
-
-        this.isSaving = true;
-
-        this.clinicDoctorsService.addClinicDoctor(formData).subscribe({
-            next: () => {
-                this.isSaving = false;
-                this.showModal = false;
-                this.loadDoctors();
-            },
-            error: (error) => {
-                console.error('Error adding doctor:', error);
-                this.isSaving = false;
-
-                alert(
-                    this.isArabic
-                        ? 'حدث خطأ أثناء إضافة الطبيب'
-                        : 'An error occurred while adding the doctor'
-                );
-            }
-        });
+ saveDoctor() {
+    if (this.doctorForm.invalid) {
+        this.doctorForm.markAllAsTouched();
+        return;
     }
+
+    const formData = new FormData();
+
+    Object.entries(this.doctorForm.getRawValue()).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+            formData.append(
+                key.charAt(0).toUpperCase() + key.slice(1),
+                value.toString()
+            );
+        }
+    });
+
+    formData.append('ClinicId', this.clinicId.toString());
+
+    if (this.modalMode === 'Update' && this.selectedDoctor?.doctorId) {
+        formData.append('DoctorId', this.selectedDoctor?.doctorId.toString());
+    }
+
+     if(this.modalMode=="Create" &&(!this.selectedImage || !this.selectedStamp)){
+      Swal.fire("")
+      
+     }
+    if (this.selectedImage) {
+        formData.append('Image', this.selectedImage);
+    }
+
+    if (this.selectedStamp) {
+        formData.append('Stamp', this.selectedStamp);
+    }
+
+    this.isSaving = true;
+
+    const request$ = this.modalMode === 'Create'
+        ? this.clinicDoctorsService.addClinicDoctor(formData)
+        : this.clinicDoctorsService.UpdatClinicDoctor(formData);
+
+    request$.subscribe({
+        next: () => {
+            this.isSaving = false;
+            this.closeModal();
+                 // اعرض رسالة validation باستخدام SweetAlert أو Toastr
+            const toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          showCloseButton: true,
+          customClass: { popup: `color-danger` },
+        });
+        toast.fire({
+          title:this.translate.instant("SavedSuccessfully")
+        })
+            this.loadDoctors();
+        },
+        error: (error) => {
+            this.isSaving = false;
+            console.error(error);
+        }
+    });
+}
 
     getDoctorName(doctor: IClinicDoctorDto): string {
         return this.isArabic ? doctor.arName : doctor.enName;
@@ -332,7 +386,34 @@ SaveWorkSchedule() {
     );
 
     if (invalidDay) {
+
+      
         // اعرض رسالة validation باستخدام SweetAlert أو Toastr
+            const toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          showCloseButton: true,
+          customClass: { popup: `color-danger` },
+        });
+        
+        if(invalidDay.startAt >= invalidDay.endAt){
+        toast.fire({
+          title: this.isArabic ? 'من فضلك ادخل بيانات المواعيد بشكل صحيح ويجب ان يكون وقت النهاية بعد وقت البدايه' : 'Please Enter Valid Work Times (Start time must be less than End Time) ',
+        }); 
+        }else if(!invalidDay.startAt){
+          var day=this.daysOfWeek.filter(a=>a.value==invalidDay.dayOfWeek)[0]
+             toast.fire({
+              title:this.isArabic ?`وقت البدايه مطلوب ليوم ${day.arName}` :`Start Time is Required For Day ${day.name} ` 
+        }); 
+        }else{
+                    var day=this.daysOfWeek.filter(a=>a.value==invalidDay.dayOfWeek)[0]
+             toast.fire({
+              title:this.isArabic ?`وقت النهاية مطلوب ليوم ${day.arName}` :`End Time is Required For Day ${day.name} ` 
+        }); 
+        }
+        
         return;
     }
 
@@ -356,4 +437,98 @@ SaveWorkSchedule() {
             }
         });
 }
+
+Update(doctor: IClinicDoctorDto) {
+    this.modalMode = 'Update';
+    this.selectedDoctor = doctor;
+
+    this.isLoading = true;
+
+    this.clinicDoctorsService.GetById(this.selectedDoctor.doctorId, this.clinicId)
+        .subscribe({
+            next: (result:any) => {
+                this.doctorForm.patchValue({
+                    arName: result.data.arName,
+                    enName: result.data.enName,
+                    identityNumber: result.data.identityNumber,
+                    specializationId: result.data.specializationId,
+                    sessionDuration: result.data.sessionDuration,
+                    sessionPrice: result.data.sessionPrice,
+                    isActive: result.data.isActive,
+                    email: result.data.email
+                });
+
+                this.imagePreview = result.data.imagePath
+                    ? environment.ImageServer +"/"+ result.data.imagePath
+                    : null;
+
+                this.stampPreview = result.data.doctorStamp
+                    ? environment.ImageServer +"/"+ result.data.doctorStamp
+                    : null;
+
+                this.selectedImage = null;
+                this.selectedStamp = null;
+
+                this.isLoading = false;
+                this.AddDoctorModal.open();
+            },
+            error: (error) => {
+                this.isLoading = false;
+                console.error(error);
+            }
+        });
+}
+
+HandleRequest() {
+    if (this.doctorForm.invalid) {
+        this.doctorForm.markAllAsTouched();
+        return;
+    }
+
+    const formData = new FormData();
+
+    Object.keys(this.doctorForm.value).forEach(key => {
+        const value = this.doctorForm.value[key];
+
+        if (value !== null && value !== undefined) {
+            formData.append(key, value.toString());
+        }
+    });
+
+    if (this.selectedImage) {
+        formData.append('Image', this.selectedImage);
+    }
+
+    if (this.selectedStamp) {
+        formData.append('Stamp', this.selectedStamp);
+    }
+
+    formData.append('ClinicId', this.clinicId.toString());
+
+    if (this.modalMode === 'Update' && this.selectedDoctor?.doctorId) {
+        formData.append('DoctorId', this.selectedDoctor?.doctorId.toString());
+    }
+
+    this.isSaving = true;
+
+    const request$ = this.modalMode === 'Create'
+        ? this.clinicDoctorsService.addClinicDoctor(formData)
+        : this.clinicDoctorsService.UpdatClinicDoctor(formData);
+
+    request$.subscribe({
+        next: () => {
+            this.isSaving = false;
+            this.AddDoctorModal.close();
+            this.loadDoctors();
+        },
+        error: (error:any) => {
+            this.isSaving = false;
+            console.error(error);
+        }
+    });
+}
+
+hasAnyPermissionOf(permissions: number[]): boolean {
+    return this.currentUserService.hasAnyPermissionOf(permissions);
+  }
 }

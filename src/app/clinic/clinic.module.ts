@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RowActionsMenuComponent } from '../Common/layouts/row-actions-menu/row-actions-menu.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { RowActionsMenuComponent } from '../Common/layouts/row-actions-menu/row-
     NgxCustomModalComponent,
     FormsModule,
     ReactiveFormsModule,
-    RowActionsMenuComponent
+    RowActionsMenuComponent,
+    NgSelectModule
 ]
 })
 export class ClinicModule { }

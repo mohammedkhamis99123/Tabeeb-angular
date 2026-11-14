@@ -3,7 +3,7 @@
     <!-- Header & Search/Filters Bar -->
     <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
         <div class="flex justify-between items-center" style="width: 100%;">
-            <h2 class="text-xl ">{{"Subscription Packages"|translate}}</h2>
+            <h2 class="text-xl ">{{"SubscriptionPackages"|translate}}</h2>
             <button 
             *ngIf="hasAnyPermissionOf([sfc.Permissions.AddSubscriptionPackage])"
             (click)="ResetValidation();CrudModal.open()"
@@ -130,8 +130,8 @@
 >
     <ng-template #modalHeader>
         <div class="relative">
-            <h1 *ngIf="state=='Update'"> {{"Update"|translate}} {{"Subscription Package"|translate}}</h1>
-            <h1 *ngIf="state=='Create'"> {{"Create"|translate}} {{"Subscription Package"|translate}}</h1>
+            <h1 *ngIf="state=='Update'"> {{"Update"|translate}} {{"SubscriptionPackage"|translate}}</h1>
+            <h1 *ngIf="state=='Create'"> {{"Create"|translate}} {{"SubscriptionPackage"|translate}}</h1>
         </div>
     </ng-template>
 
@@ -141,26 +141,26 @@
                 
                 <!-- Arabic Name -->
                 <div>
-                    <label for="ArName"><span>{{label.requiredLabel}}</span>{{"Arabic Name"|translate}}</label>
+                    <label for="ArName"><span>{{label.requiredLabel}}</span>{{"ArabicName"|translate}}</label>
                     <div class="relative text-white-dark">
-                        <input id="ArName" type="text" formControlName="ArName" [placeholder]='"Enter ArName"|translate' class="form-input ps-10 placeholder:text-white-dark" />
+                        <input id="ArName" type="text" formControlName="ArName" [placeholder]='"EnterArName"|translate' class="form-input ps-10 placeholder:text-white-dark" />
                     </div>
                 </div>
                 <div *ngIf="packageForm.get('ArName')?.touched&&packageForm.get('ArName')?.invalid">
-                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['required']">{{"Arabic Name is required"|translate}}</div>
-                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['maxlength']">{{"max Length"|translate}} 150 {{"Character"|translate}} </div>
+                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['required']">{{"required"|translate}}</div>
+                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['maxlength']">{{"maxLength"|translate}} 200 {{"Character"|translate}} </div>
                 </div>
 
                 <!-- English Name -->
                 <div>
-                    <label for="EnName"><span>{{label.requiredLabel}}</span>{{"English Name"|translate}}</label>
+                    <label for="EnName"><span>{{label.requiredLabel}}</span>{{"EnglishName"|translate}}</label>
                     <div class="relative text-white-dark">
-                        <input id="EnName" type="text" [placeholder]='"Enter EN-Name"|translate' formControlName="EnName" class="form-input ps-10 placeholder:text-white-dark" />
+                        <input id="EnName" type="text" [placeholder]='"EnterEnglishName"|translate' formControlName="EnName" class="form-input ps-10 placeholder:text-white-dark" />
                     </div>
                 </div>
                 <div *ngIf="packageForm.get('EnName')?.touched&&packageForm.get('EnName')?.invalid">
-                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['required']">{{'English Name is required'|translate}}</div>
-                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['maxlength']">{{"max Length"|translate}} 100 {{"Character"|translate}} </div>
+                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['required']">{{'required'|translate}}</div>
+                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['maxlength']">{{"maxLength"|translate}} 200 {{"Character"|translate}} </div>
                 </div>
 
                 <!-- Price & Duration Row -->
@@ -172,9 +172,11 @@
                         <input id="Price" type="number" step="0.01" formControlName="Price" class="form-input" />
                         
                         <div *ngIf="packageForm.get('Price')?.touched && packageForm.get('Price')?.invalid" class="text-danger text-xs mt-1 space-y-0.5">
-                            <div *ngIf="packageForm.get('Price')?.errors?.['required']">{{"Price is required"|translate}}</div>
-                            <div *ngIf="packageForm.get('Price')?.errors?.['min']">{{"Price must be greater than or equal to 0"|translate}}</div>
-                            <div *ngIf="packageForm.get('Price')?.errors?.['pattern']">{{"Price must be a valid decimal with up to 2 decimal places"|translate}}</div>
+                            <div *ngIf="packageForm.get('Price')?.errors?.['required']">{{"required"|translate}}</div>
+                            <div *ngIf="packageForm.get('Price')?.errors?.['min']">{{"min"|translate}}</div>
+                             <div *ngIf="packageForm.get('Price')?.errors?.['max']">{{"max"|translate}} 1000000</div>
+
+                            <div *ngIf="packageForm.get('Price')?.errors?.['pattern']">{{"pattern"|translate}}</div>
                         </div>
                     </div>
 
@@ -184,23 +186,27 @@
                         <input id="DurationInDays" type="number" step="1" formControlName="DurationInDays" class="form-input" />
                         
                         <div *ngIf="packageForm.get('DurationInDays')?.touched && packageForm.get('DurationInDays')?.invalid" class="text-danger text-xs mt-1 space-y-0.5">
-                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['required']">{{"Duration is required"|translate}}</div>
-                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['min']">{{"Duration must be at least 1 day"|translate}}</div>
-                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['pattern']">{{"Duration must be a whole number (integer)"|translate}}</div>
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['required']">{{"required"|translate}}</div>
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['min']">{{"minDuration"|translate}}</div>
+                            <div *ngIf="packageForm.get('DurationInDays')?.errors?.['pattern']">{{"inValidDuration"|translate}}</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Arabic Description -->
                 <div>
-                    <label for="ArDescription">{{"Arabic Description"|translate}}</label>
+                    <label for="ArDescription">{{"ArabicDescription"|translate}}</label>
                     <textarea id="ArDescription" formControlName="ArDescription" rows="2" class="form-input"></textarea>
+                     <div class="text-danger" *ngIf="packageForm.get('ArDescription')?.errors?.['maxlength']">{{"maxLength"|translate}} 500 {{"Character"|translate}} </div>
+
                 </div>
 
                 <!-- English Description -->
                 <div>
-                    <label for="EnDescription">{{"English Description"|translate}}</label>
+                    <label for="EnDescription">{{"EnglishDescription"|translate}}</label>
                     <textarea id="EnDescription" formControlName="EnDescription" rows="2" class="form-input"></textarea>
+                    <div class="text-danger" *ngIf="packageForm.get('EnDescription')?.errors?.['maxlength']">{{"maxLength"|translate}} 500 {{"Character"|translate}} </div>
+
                 </div>
 
                 <!-- IsActive Checkbox -->
@@ -210,7 +216,7 @@
                 </div>
 
                 <button type="submit" [disabled]="packageForm.invalid" class="btn btn-gradient !mt-6 w-full border-0 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                    {{ (state == 'Update' ? 'Update' : 'Create') | translate }} {{"Subscription Package" | translate}}
+                    {{ (state == 'Update' ? 'Update' : 'Create') | translate }} {{"SubscriptionPackage" | translate}}
                 </button>
             </form>
         </div>
@@ -226,7 +232,7 @@
 >
     <ng-template #modalHeader>
         <div class="relative">
-            <h1>{{"Delete Confirmation" | translate}}</h1>
+            <h1>{{"DeleteConfirmation" | translate}}</h1>
         </div>
     </ng-template>
 
@@ -238,10 +244,10 @@
                 </svg>
             </div>
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">
-                {{"Are you sure you want to delete this?" | translate}}
+                {{"AreYouSure" | translate}}
             </h3>
             <p class="text-sm text-slate-500 dark:text-slate-400">
-                {{"This action cannot be undone. All related data will be permanently removed."|translate}}
+                {{"Thisaction"|translate}}
             </p>
             <div class="flex items-center gap-3 mt-6">
                 <button type="button" (click)="DeleteModal.close()" class="btn btn-outline-secondary w-1/2 py-2.5">

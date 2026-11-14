@@ -44,7 +44,7 @@ export enum Permission {
   DeleteSubscriptionPackage,
   AddSubscription,
  CancelSubscription,
- RenewSibscription,
+ RenewSubscription,
  ShowSubscriptionInvoice,
  ShowSubscriptionHistory
 }
