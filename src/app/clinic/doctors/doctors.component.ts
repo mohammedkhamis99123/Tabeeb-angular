@@ -279,7 +279,7 @@ export class ClinicDoctorsComponent implements OnInit {
           showConfirmButton: false,
           timer: 3000,
           showCloseButton: true,
-          customClass: { popup: `color-danger` },
+          customClass: { popup: `color-success` },
         });
         toast.fire({
           title:this.translate.instant("SavedSuccessfully")
