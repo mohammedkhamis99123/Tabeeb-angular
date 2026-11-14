@@ -43,7 +43,7 @@ export class AppComponent implements OnInit,OnDestroy{
                 }),
                 tap((data: any) => {
                     let title = data.title;
-                    title = (title ? title + ' | ' : '') + 'VRISTO - Multipurpose Tailwind Dashboard Template';
+                    title = (title ? title + ' | ' : '') + 'Tabeeb Platform';
                     this.titleService.setTitle(title);
                 }),
             )

@@ -506,7 +506,10 @@
 
             <!-- Doctor Image -->
             <div class="upload-box">
-                <label>{{ isArabic ? 'صورة الطبيب' : 'Doctor Image' }}</label>
+                <label>{{ isArabic ? 'صورة الطبيب' : 'Doctor Image' }}
+
+                    <span *ngIf="modalMode=='Create'">*</span>
+                </label>
 
                 <div class="upload-preview">
                     <img
@@ -533,7 +536,12 @@
 
             <!-- Doctor Stamp -->
             <div class="upload-box">
-                <label>{{ isArabic ? 'ختم الطبيب' : 'Doctor Stamp' }}</label>
+                <label>
+
+                    {{ isArabic ? 'ختم الطبيب' : 'Doctor Stamp' }}</label>
+
+                    <span *ngIf="modalMode=='Create'">*</span>
+
 
                 <div class="upload-preview stamp-preview">
                     <img
