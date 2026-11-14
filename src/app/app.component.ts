@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { LoadingService } from './Common/Services/loading.service';
+import { LoadingService } from './common/services/loading.service';
 
 @Component({
     selector: 'app-root',

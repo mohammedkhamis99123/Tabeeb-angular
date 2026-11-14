@@ -4,7 +4,7 @@ import { AppService } from '../../app.service';
 import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LoadingService } from '../Services/loading.service';
+import { LoadingService } from '../services/loading.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

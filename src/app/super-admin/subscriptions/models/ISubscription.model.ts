@@ -1,4 +1,4 @@
-import { SubscriptionStatus } from "src/app/Common/enums/SubscriptionStatus.enum";
+import { SubscriptionStatus } from "src/app/common/enums/SubscriptionStatus.enum";
 
 export interface ISubscription{
 clinicId: number;

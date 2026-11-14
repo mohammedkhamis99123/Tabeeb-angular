@@ -6,16 +6,16 @@ import { ClinicDoctorsService } from './Services/clinic-doctor.service';
 import { environment } from 'src/environments/environment.prod';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { TranslateService } from '@ngx-translate/core';
-import { SpecializationService } from 'src/app/super-admin/specialization/Services/specialization.service';
+import { SpecializationService } from 'src/app/super-admin/specialization/services/specialization.service';
 import { DoctorWorkTimeInfo, IDoctorWorkTime } from './models/IDoctorWorkTime.model';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import Swal from 'sweetalert2';
-import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
-import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
-import { Language, TextLangValidator } from 'src/app/Common/Validators/TextValidator';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ISpecialization } from 'src/app/super-admin/specialization/Models/ISpecialization';
+import { ISpecialization } from 'src/app/super-admin/specialization/models/ISpecialization';
 
 
 @Component({

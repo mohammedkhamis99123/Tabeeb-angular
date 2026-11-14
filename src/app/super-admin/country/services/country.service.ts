@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
-import { ICountry } from '../Models/ICountry.model';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
+import { ICountry } from '../models/ICountry.model';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({

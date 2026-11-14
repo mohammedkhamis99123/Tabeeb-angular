@@ -5,12 +5,12 @@ import { NgDataTableComponent } from '@bhplugin/ng-datatable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Swal from 'sweetalert2';
-import { Utilities } from 'src/app/Common/Utilities/Utiliities';
-import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
-import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
+import { Utilities } from 'src/app/common/utilities/utiliities';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
 import { SupscriptionPackageService } from './services/supscription-package.service';
 
 @Component({

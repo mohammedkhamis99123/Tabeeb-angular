@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { IGetSubscription } from '../models/IGetSubscription.model';
 import { ISubscription } from '../models/ISubscription.model';
 import { Observable } from 'rxjs';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import { JsonPipe } from '@angular/common';
 import { IRenewSubscription } from '../models/IRenewSubscription.model';
 

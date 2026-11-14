@@ -5,16 +5,16 @@ import { TranslateService } from '@ngx-translate/core';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Swal from 'sweetalert2';
-import { Utilities } from 'src/app/Common/Utilities/Utiliities';
-import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
-import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
+import { Utilities } from 'src/app/common/utilities/utiliities';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
 import * as L from 'leaflet';
 import { ClinicService } from './services/clinic.service';
 import { CityService } from '../city/services/city.service';
 import { SupscriptionPackageService } from '../supscription-package/services/supscription-package.service';
 import { environment } from 'src/environments/environment.prod';
 import { IGetClinic } from './models/IGetClinic.model';
-import { Language, TextLangValidator } from 'src/app/Common/Validators/TextValidator';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
 
 const defaultIcon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',

@@ -5,17 +5,18 @@ import { NgDataTableComponent } from '@bhplugin/ng-datatable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
-import { Language, TextLangValidator } from 'src/app/Common/Validators/TextValidator';
-import { SpecializationService } from './Services/specialization.service';
-import { ISpecialization } from './Models/ISpecialization';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
+
+import { SpecializationService } from './services/specialization.service';
+import { ISpecialization } from './models/ISpecialization';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Swal from 'sweetalert2';
-import { Utilities } from 'src/app/Common/Utilities/Utiliities';
-import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
-import { Permission } from 'src/app/Common/enums/Permission.enum';
-import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
+import { Utilities } from 'src/app/common/utilities/utiliities';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { Permission } from 'src/app/common/enums/Permission.enum';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
 @Component({
   selector: 'app-specialization',
   templateUrl: './specialization.component.html',

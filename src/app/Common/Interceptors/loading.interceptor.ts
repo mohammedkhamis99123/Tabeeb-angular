@@ -8,7 +8,7 @@ import {
 
 import { Observable } from 'rxjs';
 import { delay, finalize } from 'rxjs/operators';
-import { LoadingService } from '../Services/loading.service';
+import { LoadingService } from '../services/loading.service';
 
 
 @Injectable()

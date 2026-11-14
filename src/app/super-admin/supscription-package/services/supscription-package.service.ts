@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IGetSupscriptionPackage } from '../models/IGetSupscriptionPackage.model';
 import { Observable } from 'rxjs';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { ISubscriptionPackage } from '../models/ISupscriptionPackage.model';

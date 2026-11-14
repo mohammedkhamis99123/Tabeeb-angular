@@ -5,15 +5,15 @@ import { NgDataTableComponent } from '@bhplugin/ng-datatable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
-import { Language, TextLangValidator } from 'src/app/Common/Validators/TextValidator';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import Swal from 'sweetalert2';
-import { Utilities } from 'src/app/Common/Utilities/Utiliities';
-import { CurrentUserService } from 'src/app/Common/Services/current-user.service';
-import { SystemFacadeService } from 'src/app/Common/Services/system-facade.service';
+import { Utilities } from 'src/app/common/utilities/utiliities';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
 import { CountryService } from './services/country.service';
-import { ICountry } from './Models/ICountry.model';
+import { ICountry } from './models/ICountry.model';
 
 @Component({
   selector: 'app-country',

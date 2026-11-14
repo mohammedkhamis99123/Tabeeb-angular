@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IGetClinic } from '../models/IGetClinic.model';
 import { from, Observable } from 'rxjs';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import { IClinic } from '../models/IClinic.model';
 import { environment } from 'src/environments/environment.prod';
 

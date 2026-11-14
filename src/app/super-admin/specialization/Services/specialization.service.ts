@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import { environment } from 'src/environments/environment.prod';
-import { ISpecialization } from '../Models/ISpecialization';
+import { ISpecialization } from '../models/ISpecialization';
 
 @Injectable({
   providedIn: 'root'

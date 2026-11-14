@@ -1,4 +1,4 @@
-import { IGenericResponse } from "src/app/Common/Models/IGenericReponse";
+import { IGenericResponse } from "src/app/common/models/IGenericReponse";
 
 export interface ILoginResult {
     isSuccess:boolean,

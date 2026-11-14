@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { AppComponent } from './app.component';
-import { AppLayout } from './Common/layouts/app-layout';
+import { AppLayout } from './common/layouts/app-layout';
 
 // dashboard
 

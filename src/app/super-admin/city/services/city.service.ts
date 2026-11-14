@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IGetGeneric } from 'src/app/Common/Models/IGenericGet';
+import { IGetGeneric } from 'src/app/common/models/IGenericGet';
 import { ICity } from '../models/Icity.model';
 import { Observable } from 'rxjs';
-import { IGenericResponse } from 'src/app/Common/Models/IGenericReponse';
+import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { IGetCity } from '../models/IGetCity.model';

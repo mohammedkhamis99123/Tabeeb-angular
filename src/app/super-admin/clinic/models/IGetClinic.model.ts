@@ -1,4 +1,4 @@
-import { IGetGeneric } from "src/app/Common/Models/IGenericGet";
+import { IGetGeneric } from "src/app/common/models/IGenericGet";
 
 export interface IGetClinic extends IGetGeneric{
     isActive:boolean|null,

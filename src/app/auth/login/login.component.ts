@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { toggleAnimation } from 'src/app/Common/shared/animations';
+import { toggleAnimation } from 'src/app/common/shared/animations';
 import { AppService } from 'src/app/app.service';
 import { LoginService } from './Services/login.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
