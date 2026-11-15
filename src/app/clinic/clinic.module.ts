@@ -10,10 +10,11 @@ import { RowActionsMenuComponent } from '../common/layouts/row-actions-menu/row-
 import { NgSelectModule } from '@ng-select/ng-select';
 import { OffersComponent } from './offers/offers.component';
 import { DataTableModule } from '@bhplugin/ng-datatable';
+import { EmployeesComponent } from './employees/employees.component';
 
 
 @NgModule({
-  declarations: [ClinicDoctorsComponent,OffersComponent],
+  declarations: [ClinicDoctorsComponent,OffersComponent,EmployeesComponent],
   imports: [
     CommonModule,
     ClinicRoutingModule,

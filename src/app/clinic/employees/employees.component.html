@@ -1,0 +1,493 @@
+<div class="flex justify-center flex-col panel">
+
+    <!-- Header -->
+    <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
+
+        <div class="flex flex-col  md:flex-row  gap-2 justify-between item-start md:items-center w-full ">
+            <h2 class="text-xl font-bold">
+                {{ 'EmployeesManagement' | translate }}
+            </h2>
+
+            <button
+                type="button"
+                class="btn btn-primary  w-[100%] md:max-w-[150px]"
+                (click)="OpenCreateModal()">
+
+                <i class="fa fa-plus me-2"></i>
+                {{ 'AddEmployee' | translate }}
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="search-filter-card !py-3 !px-3.5 w-full mb-4 mt-2">
+
+            <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+
+                <span class="flex items-center gap-2 text-primary font-bold whitespace-nowrap">
+                    <i class="fa fa-filter"></i>
+                    {{ 'Filters' | translate }}
+                </span>
+
+                <span class="hidden sm:block w-px h-5 bg-primary/20 shrink-0"></span>
+
+                <!-- Search -->
+                <div class="search-input-wrapper flex-1 min-w-[200px]">
+                    <i class="fa fa-search"></i>
+
+                    <input
+                        type="text"
+                        class="form-input w-full"
+                        [(ngModel)]="searchTerm"
+                        [placeholder]="isArabic ? 'ابحث بالاسم أو الهوية أو البريد الإلكتروني' : 'Search by name, identity or email'"
+                        (keyup.enter)="ApplyFilters()">
+                </div>
+
+                <!-- Status -->
+                <div class="w-full sm:w-[190px]">
+                    <select
+                        class="form-select w-full"
+                        [(ngModel)]="isActive">
+
+                        <option [ngValue]="null">
+                            {{ 'AllStatuses' | translate }}
+                        </option>
+
+                        <option [ngValue]="true">
+                            {{ 'Active' | translate }}
+                        </option>
+
+                        <option [ngValue]="false">
+                            {{ 'Inactive' | translate }}
+                        </option>
+                    </select>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn btn-primary h-[42px]"
+                    (click)="ApplyFilters()">
+
+                    <i class="fa fa-search me-1"></i>
+                    {{ 'Search' | translate }}
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary h-[42px]"
+                    (click)="ResetFilters()">
+
+                    <i class="fa fa-refresh me-1"></i>
+                    {{ 'Reset' | translate }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="datagrid">
+
+        <ng-datatable
+            [rows]="employees"
+            [columns]="cols"
+            [totalRows]="totalCount"
+            [isServerMode]="true"
+            [page]="page"
+            [pageSize]="pageSize"
+            [loading]="loading"
+            [sortable]="true"
+            (changeServer)="onchange($event)"
+            skin="bh-table-striped whitespace-nowrap bh-table-hover"
+            [paginationInfo]="isArabic
+                ? 'عرض {0} إلى {1} من {2} موظف'
+                : 'Showing {0} to {1} of {2} employees'"
+            [noDataContent]="isArabic ? 'لا يوجد موظفون' : 'No employees found'">
+
+            <!-- Employee Name -->
+            <ng-template slot="employeeName" let-value="data">
+                <div class="flex items-center gap-3">
+
+                    <div class="employee-avatar">
+                        <img
+                            *ngIf="value.imagePath"
+                            [src]="getImageUrl(value.imagePath)"
+                            alt="Employee">
+
+                        <i
+                            *ngIf="!value.imagePath"
+                            class="fa fa-user">
+                        </i>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <span class="font-bold text-sm text-slate-800">
+                            {{ GetEmployeeName(value) }}
+                        </span>
+
+                        <span class="text-xs text-slate-500">
+                            {{ value.enName }}
+                        </span>
+                    </div>
+
+                </div>
+            </ng-template>
+
+            <!-- Identity -->
+            <ng-template slot="identityNumber" let-value="data">
+                <span class="font-semibold text-slate-700">
+                    {{ value.identityNumber || '-' }}
+                </span>
+            </ng-template>
+
+            <!-- Email -->
+            <ng-template slot="email" let-value="data">
+                <span class="text-sm text-slate-600">
+                    {{ value.email || '-' }}
+                </span>
+            </ng-template>
+
+            <!-- Role -->
+            <ng-template slot="role" let-value="data">
+                <span class="badge bg-primary/10 text-primary px-3 py-1 rounded-md">
+                    {{ GetRoleName(value.role) }}
+                </span>
+            </ng-template>
+
+            <!-- Status -->
+            <ng-template slot="isActive" let-value="data">
+                <div class="flex items-center justify-center">
+                    <span class="status-badge" [ngClass]="GetStatusClass(value)">
+                        <span class="status-dot"></span>
+                        {{ GetStatus(value) }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- Actions -->
+            <ng-template slot="actions" let-value="data">
+                
+                        <app-row-actions-menu>
+    <ng-template>
+                     <div class="flex items-center justify-center">
+
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="OpenEditModal(value)">
+
+                        <i class="fa fa-edit me-1"></i>
+                        {{ 'Edit' | translate }}
+                    </button>
+
+                </div>
+    </ng-template>
+</app-row-actions-menu>
+
+
+
+
+            </ng-template>
+
+        </ng-datatable>
+    </div>
+</div>
+
+
+<!-- Create / Edit Modal -->
+<ngx-custom-modal
+    #CrudModal
+    [customClass]="'modal-top animate animate-slide-in-down CrudModal'">
+
+    <ng-template #modalHeader>
+        <div class="flex items-center justify-between w-full">
+            <h3 class="text-lg font-bold">
+                {{ isEditMode
+                    ? ('EditEmployee' | translate)
+                    : ('AddEmployee' | translate) }}
+            </h3>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+
+        <form
+            [formGroup]="employeeForm"
+            (ngSubmit)="HandleRequest()"
+            class="space-y-4">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <!-- Arabic Name -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'ArabicName' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="arName"
+                        class="form-input"
+                        [class.invalid-input]="IsInvalid('arName')"
+                        [placeholder]="isArabic ? 'الاسم بالعربي' : 'Arabic name'">
+
+                    <small *ngIf="IsInvalid('arName')" class="text-danger">
+                        {{ 'Required' | translate }}
+                    </small>
+                </div>
+
+                <!-- English Name -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'EnglishName' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="enName"
+                        class="form-input"
+                        [class.invalid-input]="IsInvalid('enName')"
+                        [placeholder]="isArabic ? 'الاسم بالإنجليزي' : 'English name'">
+                </div>
+
+                <!-- Identity Number -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'IdentityNumber' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="identityNumber"
+                        class="form-input"
+                        [class.invalid-input]="IsInvalid('identityNumber')">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'Email' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="email"
+                        formControlName="email"
+                        class="form-input"
+                        [class.invalid-input]="IsInvalid('email')">
+                </div>
+
+                <!-- Address -->
+                <div class="form-group md:col-span-2">
+                    <label class="form-label">
+                        {{ 'Address' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <textarea
+                        formControlName="addrees"
+                        rows="2"
+                        class="form-textarea"
+                        [class.invalid-input]="IsInvalid('addrees')">
+                    </textarea>
+                </div>
+
+       <!-- Role -->
+<div class="form-group">
+    <label class="form-label">
+        {{ 'Role' | translate }}
+        <span class="text-danger">*</span>
+    </label>
+
+    <ng-select
+        formControlName="role"
+        [items]="roles"
+        bindLabel="name"
+        bindValue="id"
+        [searchable]="true"
+        [clearable]="true"
+        [placeholder]="isArabic ? 'اختر الصلاحية' : 'Select Role'"
+        [notFoundText]="isArabic ? 'لا توجد صلاحيات' : 'No roles found'"
+        [class.invalid-input]="IsInvalid('role')">
+
+        <ng-template ng-option-tmp let-item="item">
+            {{ isArabic ? item.arName : item.name }}
+        </ng-template>
+
+        <ng-template ng-label-tmp let-item="item">
+            {{ isArabic ? item.arName : item.name }}
+        </ng-template>
+    </ng-select>
+</div>
+
+<!-- Doctor -->
+<div class="form-group">
+    <label class="form-label">
+        {{ 'Doctor' | translate }}
+    </label>
+
+    <input
+        type="number"
+        formControlName="doctorId"
+        min="1"
+        class="form-input"
+        [placeholder]="isArabic ? 'رقم الدكتور (اختياري)' : 'Doctor ID (optional)'">
+</div>
+
+<!-- Active Toggle -->
+<div class="form-group md:col-span-2">
+    <label class="form-label">
+        {{ 'Status' | translate }}
+    </label>
+
+    <div class="active-toggle-card">
+
+        <div class="active-toggle-info">
+            <span class="active-toggle-title">
+                {{ isArabic ? 'حالة الموظف' : 'Employee Status' }}
+            </span>
+
+            <span class="active-toggle-description">
+                {{
+                    employeeForm.get('isActive')?.value
+                        ? (isArabic ? 'الموظف نشط ويمكنه استخدام النظام' : 'Employee is active and can access the system')
+                        : (isArabic ? 'الموظف غير نشط' : 'Employee is inactive')
+                }}
+            </span>
+        </div>
+
+        <label class="custom-toggle">
+            <input
+                type="checkbox"
+                formControlName="isActive">
+
+            <span class="toggle-slider"></span>
+        </label>
+
+    </div>
+</div>
+
+<!-- Custom Image Upload -->
+<div class="form-group md:col-span-2">
+
+    <label class="form-label">
+        {{ isArabic ? 'صورة الموظف' : 'Employee Image' }}
+
+        <span *ngIf="!isEditMode" class="text-danger">*</span>
+    </label>
+
+    <div
+        class="custom-image-upload"
+        [class.has-image]="imagePreview"
+        (click)="!imagePreview && imageInput.click()"
+        (dragover)="$event.preventDefault()"
+        (drop)="onImageDrop($event)">
+
+        <input
+            #imageInput
+            type="file"
+            accept="image/png,image/jpeg,image/jpg,image/webp"
+            hidden
+            (change)="onImageSelected($event)">
+
+        <ng-container *ngIf="!imagePreview; else imageSelected">
+
+            <div class="upload-icon">
+                <i class="fa fa-cloud-upload"></i>
+            </div>
+
+            <div class="upload-content">
+                <h4>
+                    {{ isArabic ? 'اضغط لاختيار صورة' : 'Click to upload image' }}
+                </h4>
+
+                <p>
+                    {{ isArabic
+                        ? 'أو اسحب الصورة وأفلتها هنا'
+                        : 'Or drag and drop your image here' }}
+                </p>
+
+                <span>PNG, JPG, WEBP</span>
+            </div>
+
+        </ng-container>
+
+        <ng-template #imageSelected>
+
+            <div class="image-upload-preview">
+
+                <img [src]="imagePreview" alt="Employee image">
+
+                <div class="image-upload-details">
+                    <strong>
+                        {{ isArabic ? 'تم اختيار الصورة' : 'Image selected' }}
+                    </strong>
+
+                    <span>
+                        {{ selectedImage?.name || (isArabic ? 'الصورة الحالية' : 'Current image') }}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="change-image-btn"
+                        (click)="imageInput.click(); $event.stopPropagation()">
+
+                        <i class="fa fa-refresh me-1"></i>
+                        {{ isArabic ? 'تغيير الصورة' : 'Change Image' }}
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    class="remove-image-btn"
+                    (click)="removeImage(); $event.stopPropagation()">
+
+                    <i class="fa fa-trash"></i>
+                </button>
+
+            </div>
+
+        </ng-template>
+
+    </div>
+
+    <small *ngIf="IsInvalid('image')" class="text-danger">
+        {{ isArabic ? 'صورة الموظف مطلوبة' : 'Employee image is required' }}
+    </small>
+
+</div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-end gap-2 pt-4 border-t">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    (click)="CloseModal()"
+                    [disabled]="submitting">
+
+                    {{ 'Cancel' | translate }}
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary min-w-[130px]"
+                    [disabled]="submitting">
+
+                    <i *ngIf="submitting" class="fa fa-spinner fa-spin me-2"></i>
+
+                    {{ isEditMode
+                        ? ('Update' | translate)
+                        : ('Save' | translate) }}
+                </button>
+
+            </div>
+
+        </form>
+
+    </ng-template>
+</ngx-custom-modal>

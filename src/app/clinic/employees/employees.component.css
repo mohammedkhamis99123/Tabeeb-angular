@@ -1,0 +1,505 @@
+/* ==============================
+   Employee Table
+================================= */
+
+.employee-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #eef2ff;
+    color: #4361ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+.employee-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+.search-input-wrapper > i {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 14px;
+    transform: translateY(-50%);
+    color: #888ea8;
+    z-index: 2;
+}
+
+.search-input-wrapper input {
+    padding-inline-start: 40px;
+    min-height: 42px;
+}
+
+/* ==============================
+   Status Badge
+================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-active .status-dot {
+    background: #22c55e;
+}
+
+.status-inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.status-inactive .status-dot {
+    background: #94a3b8;
+}
+
+/* ==============================
+   Form
+================================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 13px;
+    color: #334155;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 75px;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+.invalid-input {
+    border-color: #e7515a !important;
+}
+
+.text-danger {
+    color: #e7515a;
+}
+
+/* ==============================
+   ng-select
+================================= */
+
+:host ::ng-deep ng-select {
+    width: 100%;
+    font-size: 13px;
+}
+
+:host ::ng-deep ng-select .ng-select-container {
+    min-height: 42px;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    background: #fff;
+}
+
+:host ::ng-deep ng-select.ng-select-focused .ng-select-container {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+:host ::ng-deep ng-select.invalid-input .ng-select-container {
+    border-color: #e7515a !important;
+}
+
+:host ::ng-deep ng-select .ng-placeholder {
+    color: #888ea8;
+}
+
+:host ::ng-deep ng-select .ng-option {
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+/* ==============================
+   Image Preview
+================================= */
+
+.image-preview-wrapper {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.image-preview-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    inset-inline-end: 5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #e7515a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 0;
+}
+
+/* ==============================
+   Modal
+================================= */
+
+:host ::ng-deep .CrudModal .modal-content {
+    border-radius: 12px;
+}
+
+:host ::ng-deep .CrudModal .modal-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .CrudModal .modal-body {
+    padding: 22px;
+}
+
+/* ==============================
+   Responsive
+================================= */
+
+@media (max-width: 640px) {
+    .employee-avatar {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    :host ::ng-deep .CrudModal .modal-body {
+        padding: 14px;
+    }
+}
+/* =====================================
+   Wider Employee Modal
+===================================== */
+
+:host ::ng-deep .CrudModal .modal-dialog {
+    width: 95% !important;
+    max-width: 850px !important;
+    margin: 1.5rem auto;
+}
+
+:host ::ng-deep .CrudModal .modal-content {
+    width: 100%;
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+:host ::ng-deep .CrudModal .modal-header {
+    padding: 20px 26px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+:host ::ng-deep .CrudModal .modal-body {
+    padding: 26px;
+    max-height: 78vh;
+    overflow-y: auto;
+}
+
+/* =====================================
+   Custom Active Toggle
+===================================== */
+
+.active-toggle-card {
+    min-height: 65px;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: #f8fafc;
+}
+
+.active-toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.active-toggle-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.active-toggle-description {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.custom-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin: 0;
+}
+
+.custom-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 30px;
+    transition: 0.25s;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.25s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.custom-toggle input:checked + .toggle-slider {
+    background: #4361ee;
+}
+
+.custom-toggle input:checked + .toggle-slider::before {
+    transform: translateX(22px);
+}
+
+[dir="rtl"] .custom-toggle input:checked + .toggle-slider::before {
+    transform: translateX(-22px);
+}
+
+.custom-toggle input:focus-visible + .toggle-slider {
+    outline: 3px solid rgba(67, 97, 238, 0.2);
+    outline-offset: 2px;
+}
+
+/* =====================================
+   Custom Image Upload
+===================================== */
+
+.custom-image-upload {
+    width: 100%;
+    min-height: 155px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.custom-image-upload:hover {
+    border-color: #4361ee;
+    background: #f5f7ff;
+}
+
+.custom-image-upload.has-image {
+    border-style: solid;
+    border-color: #dbeafe;
+    background: #f8fafc;
+    cursor: default;
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #e0e7ff;
+    color: #4361ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    margin-inline-end: 15px;
+}
+
+.upload-content h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 5px;
+}
+
+.upload-content p {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.upload-content span {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* Image Preview */
+
+.image-upload-preview {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.image-upload-preview > img {
+    width: 95px;
+    height: 95px;
+    min-width: 95px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.image-upload-details {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.image-upload-details strong {
+    font-size: 14px;
+    color: #334155;
+}
+
+.image-upload-details span {
+    font-size: 12px;
+    color: #64748b;
+    overflow-wrap: anywhere;
+}
+
+.change-image-btn {
+    width: fit-content;
+    padding: 6px 10px;
+    background: #eef2ff;
+    color: #4361ee;
+    border: 0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* =====================================
+   Responsive
+===================================== */
+
+@media (max-width: 640px) {
+    :host ::ng-deep .CrudModal .modal-dialog {
+        width: 96% !important;
+        max-width: none !important;
+        margin: 10px auto;
+    }
+
+    :host ::ng-deep .CrudModal .modal-body {
+        padding: 15px;
+        max-height: 82vh;
+    }
+
+    .image-upload-preview {
+        align-items: flex-start;
+        padding-inline-end: 25px;
+    }
+
+    .image-upload-preview > img {
+        width: 75px;
+        height: 75px;
+        min-width: 75px;
+    }
+}
