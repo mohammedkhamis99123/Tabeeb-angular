@@ -148,7 +148,11 @@ export class ClinicComponent implements AfterViewInit {
       OwnerEnName: new FormControl('', [Validators.required]),
       OwnerEmail: new FormControl('', [Validators.required, Validators.email]),
       OwnerPassword: new FormControl('', [Validators.required]),
-      IsActive: new FormControl(true)
+      IsActive: new FormControl(true),
+      SnapshatUser :new FormControl(''),
+      InstgramUser :new FormControl(''),
+      WhatsappNumber :new FormControl(''),
+  
     });
 
     this.imagesForm = new FormGroup({
@@ -403,8 +407,11 @@ ResetValidation() {
         OwnerArName: val.ownerArName,
         OwnerEnName: val.ownerEnName,
         OwnerEmail: val.ownerEmail,
-        IsActive: val.isActive
-      });
+        IsActive: val.isActive,
+        SnapshatUser :val.snapshatUser,
+        InstgramUser :val.instgramUser,
+        WhatsappNumber:val.whatsappNumber
+      })
 
       this.logoPreview =val.logoPath? environment.ImageServer+"/Images/"+ val.logoPath : null;
       this.bannerPreview = val.bannerPath?environment.ImageServer+"/Images/"+val.bannerPath : null;

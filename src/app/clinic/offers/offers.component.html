@@ -1,0 +1,440 @@
+
+<div class="flex justify-center flex-col panel">
+
+    <!-- Header -->
+    <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
+
+        <div class="flex justify-between items-center w-full">
+            <div>
+                <h2 class="text-xl font-bold">
+                    {{ 'OffersManagement' |translate}}
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">
+                    {{'title'|translate}}
+                </p>
+            </div>
+
+            <button type="button"
+                (click)="OpenCreateModal()"
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.AddOffer])"
+                class="btn btn-primary min-w-[150px]">
+
+                <i class="fa-solid fa-plus me-1"></i>
+                {{ 'Create'|translate }}
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="search-filter-card !py-3 !px-3.5 w-full mb-4 mt-2">
+
+            <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
+
+                <!-- Filters Label -->
+                <span class="flex items-center gap-1.5 text-[11px] font-bold tracking-widest uppercase text-primary opacity-60 whitespace-nowrap shrink-0">
+                    <i class="fa-solid fa-filter"></i>
+                    {{  'Filters' |translate}}
+                </span>
+
+                <span class="hidden sm:block w-px h-5 bg-primary/20 shrink-0"></span>
+
+
+                     <div class="search-input-wrapper max-w-[350px]">
+                    <span class="search-icon">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                    </span>
+                    <input type="text" [(ngModel)]="SearchTerm" (keyup)="onSearch()"
+                        class="form-input" [placeholder]="'search'|translate">
+                </div>
+                <!-- From Date -->
+                <div class="flex-1 min-w-[160px]">
+                    <input type="date"
+                        [(ngModel)]="from"
+                        class="form-input w-full"
+                        (change)="ApplyFilters()"
+                        [title]="'fromDate'|translate">
+                </div>
+
+                <!-- To Date -->
+                <div class="flex-1 min-w-[160px]">
+                    <input type="date"
+                        [(ngModel)]="to"
+                        (change)="ApplyFilters()"
+                        class="form-input w-full"
+                        [title]="'toDate'|translate">
+                </div>
+
+                <!-- Status -->
+                <div class="w-full sm:w-[180px]">
+                    <select [(ngModel)]="isActive"
+                        (change)="ApplyFilters()"
+                        class="form-select w-full">
+                         <option [value]="null"  disabled selected hidden >
+                            {{ 'SelectStatus'|translate }}
+                        </option>
+                        <option value="">
+                            {{ 'AllStatus'|translate }}
+                        </option>
+
+                        <option value="true">
+                            {{  'Active'|translate }}
+                        </option>
+
+                        <option value="false">
+                            {{ 'Inactive'|translate }}
+                        </option>
+                    </select>
+                </div>
+
+            
+
+                <!-- Reset -->
+                <button type="button"
+                    (click)="ResetFilters()"
+                    class="btn btn-outline-secondary px-3.5 py-2 text-xs font-semibold whitespace-nowrap gap-1.5 h-[42px]">
+
+                    <i class="fa-solid fa-rotate-left"></i>
+                    {{'Reset'|translate }}
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="datagrid">
+
+        <ng-datatable #datatable
+            [rows]="offers"
+            skin="bh-table-striped whitespace-nowrap bh-table-hover"
+            [columns]="cols"
+            [sortable]="true"
+            [paginationInfo]="isArabic
+                ? 'عرض {0} إلى {1} من {2}'
+                : 'Showing {0} to {1} of {2}'"
+            [noDataContent]="isArabic ? 'لا توجد عروض' : 'No offers found'"
+            [totalRows]="totalCount"
+            [isServerMode]="true"
+            [page]="page"
+            [pageSize]="pageSize"
+            [loading]="loading"
+            (changeServer)="onchange($event)">
+
+            <!-- Doctor -->
+            <ng-template slot="doctorName" let-value="data">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary shrink-0">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </span>
+
+                    <span class="font-semibold text-center">
+                        {{ translate.currentLang=='ae' ?value.doctorArName   :value.doctorEnName }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- Percentage -->
+            <ng-template slot="percentage" let-value="data">
+                <div class="flex items-center justify-center">
+                    <span class="badge bg-primary/10 text-primary px-2.5 py-1 rounded-md font-bold">
+                        {{ GetPercentage(value.percentage) }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- Start Date -->
+            <ng-template slot="startAt" let-value="data">
+                <div class="flex items-center justify-center gap-2 text-slate-600">
+                    <i class="fa-regular fa-calendar text-slate-400"></i>
+                    <span>
+                        {{ value.startAt | date:'dd/MM/yyyy hh:mm a' }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- End Date -->
+            <ng-template slot="endAt" let-value="data">
+                <div class="flex items-center justify-center gap-2 text-slate-600">
+                    <i class="fa-regular fa-calendar-check text-slate-400"></i>
+                    <span>
+                        {{ value.endAt | date:'dd/MM/yyyy hh:mm a' }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- Status -->
+            <ng-template slot="status" let-value="data">
+                <div class="flex items-center justify-center">
+                    <span class="badge px-2.5 py-1 rounded-md"
+                        [ngClass]="{
+                            'bg-success/10 text-success': GetOfferStatusClass(value) === 'status-active',
+                            'bg-danger/10 text-danger': GetOfferStatusClass(value) === 'status-expired',
+                            'bg-warning/10 text-warning': GetOfferStatusClass(value) === 'status-upcoming',
+                            'bg-secondary/10 text-secondary': GetOfferStatusClass(value) === 'status-inactive'
+                        }">
+
+                        {{ GetOfferStatus(value) }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <!-- Actions -->
+            <ng-template slot="actions" let-value="data">
+                <app-row-actions-menu>
+                    <ng-template>
+
+                        <li class="my-2">
+                            <button type="button"
+                                (click)="OpenEditModal(value)"
+                                *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateOffer])"
+                                class="btn btn-sm btn-outline-success w-full d-flex align-items-center justify-content-center gap-2">
+
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span>{{'Edit'|translate }}</span>
+                            </button>
+                        </li>
+
+                        <li class="my-2">
+                            <button type="button"
+                            *ngIf="hasAnyPermissionOf([sfc.Permissions.DeleteOffer])"
+                                (click)="openDelete(value.id)"
+                                class="btn btn-sm btn-outline-danger w-full d-flex align-items-center justify-content-center gap-2">
+
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>{{ 'Delete'|translate }}</span>
+                            </button>
+                        </li>
+
+                    </ng-template>
+                </app-row-actions-menu>
+            </ng-template>
+
+        </ng-datatable>
+    </div>
+</div>
+
+
+<!-- Create / Update Modal -->
+<ngx-custom-modal
+    #CrudModal
+    [closeOnOutsideClick]="false"
+    [closeOnEscape]="false"
+    customClass="CrudModal">
+
+    <ng-template #modalHeader>
+        <div class="relative">
+            <h1>
+                {{ isEditMode
+                    ? ('EditOffer'|translate)
+                    : ( 'AddNewOffer'|translate) }}
+            </h1>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <div class="max-h-[80vh] overflow-y-auto px-2">
+
+            <form [formGroup]="offerForm"
+                (ngSubmit)="HandleRequest()"
+                class="space-y-4">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- Doctor -->
+                    <div class="md:col-span-2">
+                        <label class="block mb-1 font-semibold">
+                            <span>*</span>
+                            {{ 'Doctor'|translate }}
+                        </label>
+
+                   <ng-select
+    formControlName="doctorId"
+    [items]="doctors"
+    [placeholder]="isArabic ? 'اختر الدكتور' : 'Select Doctor'"
+    [searchable]="true"
+    [clearable]="true"
+     bindLabel="name"
+     bindValue="id"
+    [class.invalid-input]="IsInvalid('doctorId')"
+    [notFoundText]="isArabic ? 'لا يوجد أطباء' : 'No doctors found'">
+
+  <ng-template ng-option-tmp let-item="item">
+            <div class="specialization-option">
+                <i class="fa-solid fa-stethoscope mx-2"></i>
+                <span>{{ item.name }}</span>
+            </div>
+        </ng-template>
+   
+
+</ng-select>
+                        <div *ngIf="IsInvalid('doctorId')"
+                            class="text-danger text-xs mt-1">
+                            {{'required'|translate}}
+                        </div>
+                    </div>
+
+                    <!-- Percentage -->
+                    <div class="md:col-span-2">
+                        <label class="block mb-1 font-semibold">
+                            <span>*</span>
+                            {{'DiscountPercentage'|translate }}
+                        </label>
+
+                        <div class="relative">
+                            <input type="number"
+                                formControlName="percentage"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                placeholder="0.15"
+                                class="form-input"
+                                [class.invalid-input]="IsInvalid('percentage')">
+                        </div>
+
+                        <small class="block text-slate-500 text-xs mt-1">
+                            {{ isArabic
+                                ? 'مثال: 0.15 تعني خصم 15%'
+                                : 'Example: 0.15 means 15% discount' }}
+                        </small>
+
+                        <small *ngIf="IsInvalid('percentage')"
+                            class="text-danger text-xs mt-1 block">
+
+                            {{ offerForm.get('percentage')?.hasError('required')
+                                ? (isArabic ? 'نسبة الخصم مطلوبة' : 'Percentage is required')
+                                : (isArabic
+                                    ? 'النسبة يجب أن تكون بين 0 و 1'
+                                    : 'Percentage must be between 0 and 1') }}
+                        </small>
+                    </div>
+
+                    <!-- Start Date -->
+                    <div>
+                        <label class="block mb-1 font-semibold">
+                            <span>*</span>
+                            {{ 'StartDate' |translate}}
+                        </label>
+
+                        <input type="datetime-local"
+                            formControlName="startAt"
+                            class="form-input"
+                            [class.invalid-input]="IsInvalid('startAt')">
+
+                        <small *ngIf="IsInvalid('startAt')"
+                            class="text-danger text-xs mt-1 block">
+                            {{ 'required' |translate }}
+                        </small>
+                    </div>
+
+                    <!-- End Date -->
+                    <div>
+                        <label class="block mb-1 font-semibold">
+                            <span>*</span>
+                            {{  'EndDate'|translate }}
+                        </label>
+
+                        <input type="datetime-local"
+                            formControlName="endAt"
+                            class="form-input"
+                            [class.invalid-input]="IsInvalid('endAt')">
+
+                        <small *ngIf="IsInvalid('endAt')"
+                            class="text-danger text-xs mt-1 block">
+
+                            {{ offerForm.get('endAt')?.hasError('invalidDateRange')
+                                ? (isArabic
+                                    ? 'تاريخ النهاية يجب أن يكون بعد تاريخ البداية'
+                                    : 'End date must be after start date')
+                                : ('required'|translate) }}
+                        </small>
+                    </div>
+
+                    <!-- Active -->
+                    <div class="md:col-span-2">
+                        <label class="flex items-center gap-3 font-semibold cursor-pointer">
+                            <input type="checkbox"
+                                formControlName="isActive"
+                                class="form-checkbox rounded">
+
+                            {{ 'ActivateOffer'|translate }}
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button"
+                        (click)="CloseModal()"
+                        class="btn btn-outline-danger">
+                        {{ 'Cancel' |translate}}
+                    </button>
+
+                    <button type="submit"
+                        [disabled]="submitting || offerForm.invalid"
+                        class="btn btn-primary">
+
+                        <i class="fa-solid fa-spinner fa-spin" *ngIf="submitting"></i>
+                        <i class="fa-solid fa-check" *ngIf="!submitting"></i>
+
+                        {{ isEditMode
+                            ? ( 'SaveChanges'|translate)
+                            : ('SaveOffer'|translate) }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </ng-template>
+</ngx-custom-modal>
+
+
+<!-- Delete Modal -->
+<ngx-custom-modal
+    #DeleteModal
+    [closeOnOutsideClick]="false"
+    [hideCloseButton]="false"
+    [closeOnEscape]="false"
+    customClass="DeleteModal">
+
+    <ng-template #modalHeader>
+        <div class="relative">
+            <h1>{{ "DeleteConfirmation" | translate }}</h1>
+        </div>
+    </ng-template>
+
+    <ng-template #modalBody>
+        <div class="text-center space-y-4 py-2">
+
+            <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 mb-2">
+                <i class="fa-solid fa-circle-exclamation text-2xl"></i>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">
+                {{ "AreYouSure" | translate }}
+            </h3>
+
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                {{ "Thisaction" | translate }}
+            </p>
+
+            <div class="flex items-center gap-3 mt-6">
+                <button type="button"
+                    (click)="DeleteModal.close()"
+                    class="btn btn-outline-secondary w-1/2 py-2.5">
+
+                    {{ "Cancel" | translate }}
+                </button>
+
+                <button type="button"
+                    (click)="DeleteRecord()"
+                    class="btn btn-danger w-1/2 py-2.5">
+
+                    {{ "Delete" | translate }}
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</ngx-custom-modal>

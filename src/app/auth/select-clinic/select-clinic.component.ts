@@ -39,16 +39,18 @@ ngOnInit(): void {
             sessionStorage.setItem("Permissions",result.data.permissions.toString())
             sessionStorage.setItem("Roles",result.data.roles.toString())
             sessionStorage.setItem("Clinics",JSON.stringify(result.data.clinics))
+            sessionStorage.setItem("SelectedClinic",this.selectedClinicId?.toString()!)
 
              if(result.data.roles.includes("SuperAdmin")){
              this.router.navigateByUrl("/SuperAdmin");
+             }
                       
 
             if(!result.data.roles.includes("SuperAdmin")){
                this.router.navigateByUrl("/Clinic");
             } 
 
-          }
+          
         }
         
     })

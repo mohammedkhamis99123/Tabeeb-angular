@@ -8,10 +8,12 @@ import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RowActionsMenuComponent } from '../common/layouts/row-actions-menu/row-actions-menu.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { OffersComponent } from './offers/offers.component';
+import { DataTableModule } from '@bhplugin/ng-datatable';
 
 
 @NgModule({
-  declarations: [ClinicDoctorsComponent],
+  declarations: [ClinicDoctorsComponent,OffersComponent],
   imports: [
     CommonModule,
     ClinicRoutingModule,
@@ -20,7 +22,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
     ReactiveFormsModule,
     RowActionsMenuComponent,
-    NgSelectModule
+    NgSelectModule,
+    DataTableModule
 ]
 })
 export class ClinicModule { }

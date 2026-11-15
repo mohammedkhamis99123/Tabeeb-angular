@@ -1,0 +1,836 @@
+
+/* =========================================
+   OFFERS - TABEEB DESIGN SYSTEM
+========================================= */
+
+:host {
+    display: block;
+    width: 100%;
+}
+
+.offers-page {
+    width: 100%;
+    padding: 0;
+    color: #334155;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.page-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.page-header p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.btn-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 150px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 6px;
+    background: #4361ee;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-add:hover {
+    background: #3451d1;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+/* =========================================
+   FILTER CARD
+========================================= */
+
+.search-filter-card {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 18px;
+    padding: 13px 14px;
+    border: 1px solid #e9edf3;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.025);
+}
+
+.filters-grid {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 13px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+    gap: 7px;
+}
+
+.filter-group label {
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    height: 40px;
+    padding: 8px 11px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    outline: none;
+    background: #fff;
+    color: #334155;
+    font-family: inherit;
+    font-size: 12px;
+    transition: 0.2s ease;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.08);
+}
+
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-btn,
+.reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 40px;
+    padding: 0 15px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.filter-btn {
+    border: 1px solid #4361ee;
+    background: #4361ee;
+    color: #fff;
+}
+
+.filter-btn:hover {
+    background: #3451d1;
+}
+
+.reset-btn {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+}
+
+.reset-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* =========================================
+   PANEL
+========================================= */
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #e9edf3;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.025);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid #f1f3f7;
+}
+
+.panel-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.panel-header span {
+    display: inline-block;
+    margin-top: 5px;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* =========================================
+   DATA TABLE
+========================================= */
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+:host ::ng-deep ng-datatable {
+    display: block;
+    width: 100%;
+}
+
+:host ::ng-deep ng-datatable table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+:host ::ng-deep ng-datatable thead th {
+    padding: 14px 13px !important;
+    background: #f8fafc !important;
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap;
+    border-bottom: 1px solid #e9edf3 !important;
+}
+
+:host ::ng-deep ng-datatable tbody td {
+    padding: 14px 13px !important;
+    color: #334155 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f3f7 !important;
+}
+
+:host ::ng-deep ng-datatable tbody tr {
+    transition: background 0.2s ease;
+}
+
+:host ::ng-deep ng-datatable tbody tr:hover {
+    background: #f8faff !important;
+}
+
+/* =========================================
+   DOCTOR
+========================================= */
+
+.doctor-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 130px;
+}
+
+.doctor-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #eef2ff;
+    color: #4361ee;
+    font-size: 14px;
+}
+
+.doctor-name {
+    color: #1e293b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   DISCOUNT
+========================================= */
+
+.percentage-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 55px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   DATES
+========================================= */
+
+.date-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.date-value i {
+    color: #94a3b8;
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-upcoming {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.action-btn i {
+    font-size: 12px;
+}
+
+.edit-btn {
+    background: rgba(67, 97, 238, 0.1);
+    color: #4361ee;
+}
+
+.edit-btn:hover {
+    background: #4361ee;
+    color: #fff;
+}
+
+.delete-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* =========================================
+   CREATE / UPDATE MODAL
+========================================= */
+
+:host ::ng-deep .CrudModal .modal-content {
+    border: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(15, 23, 42, 0.15);
+}
+
+:host ::ng-deep .CrudModal .modal-header {
+    padding: 18px 22px !important;
+    border-bottom: 1px solid #f1f3f7 !important;
+}
+
+:host ::ng-deep .CrudModal .modal-body {
+    padding: 20px 22px !important;
+}
+
+.modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(67, 97, 238, 0.1);
+    color: #4361ee;
+    font-size: 19px;
+}
+
+.modal-title h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.modal-title p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.offer-form {
+    width: 100%;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 7px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group > label {
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.form-group > label > span {
+    color: #ef4444;
+}
+
+.form-group input:not([type="checkbox"]),
+.form-group select {
+    width: 100%;
+    height: 42px;
+    padding: 9px 11px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    outline: none;
+    background: #fff;
+    color: #334155;
+    font-family: inherit;
+    font-size: 12px;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.08);
+}
+
+.form-group input::placeholder {
+    color: #cbd5e1;
+}
+
+.form-group .invalid-input {
+    border-color: #ef4444 !important;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.hint {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* =========================================
+   PERCENTAGE INPUT
+========================================= */
+
+.percentage-input {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.percentage-input input {
+    flex: 1;
+    min-width: 0;
+}
+
+.percentage-input > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* =========================================
+   ACTIVE SWITCH
+========================================= */
+
+.switch-label {
+    display: flex !important;
+    align-items: center;
+    gap: 11px;
+    padding: 13px 14px;
+    border: 1px solid #e9edf3;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+}
+
+.switch-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 39px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #cbd5e1;
+    transition: 0.2s ease;
+}
+
+.switch::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: 0.2s ease;
+}
+
+.switch-label input:checked + .switch {
+    background: #4361ee;
+}
+
+.switch-label input:checked + .switch::before {
+    transform: translateX(17px);
+}
+
+/* =========================================
+   MODAL BUTTONS
+========================================= */
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f3f7;
+}
+
+.btn-cancel,
+.btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-width: 110px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-cancel {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+}
+
+.btn-submit {
+    border: 1px solid #4361ee;
+    background: #4361ee;
+    color: #fff;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background: #3451d1;
+}
+
+.btn-submit:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   DELETE MODAL
+========================================= */
+
+:host ::ng-deep .DeleteModal .modal-content {
+    border: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+:host ::ng-deep .DeleteModal .modal-header {
+    padding: 17px 20px !important;
+    border-bottom: 1px solid #f1f3f7 !important;
+}
+
+:host ::ng-deep .DeleteModal .modal-body {
+    padding: 20px !important;
+}
+
+/* =========================================
+   RTL / LTR
+========================================= */
+
+.offers-page[dir="rtl"] .page-header,
+.offers-page[dir="rtl"] .filters-grid,
+.offers-page[dir="rtl"] .doctor-cell,
+.offers-page[dir="rtl"] .modal-title {
+    direction: rtl;
+}
+
+.offers-page[dir="ltr"] .page-header,
+.offers-page[dir="ltr"] .filters-grid,
+.offers-page[dir="ltr"] .doctor-cell,
+.offers-page[dir="ltr"] .modal-title {
+    direction: ltr;
+}
+
+.offers-page[dir="rtl"] .filter-group,
+.offers-page[dir="rtl"] .form-group {
+    text-align: right;
+}
+
+.offers-page[dir="ltr"] .filter-group,
+.offers-page[dir="ltr"] .form-group {
+    text-align: left;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .btn-add {
+        width: 100%;
+    }
+
+    .filters-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-actions {
+        width: 100%;
+    }
+
+    .filter-actions button {
+        flex: 1;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-actions button {
+        width: 100%;
+    }
+}
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Status Dot */
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Active */
+.status-active {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-active .status-dot {
+    background: #22c55e;
+}
+
+/* Inactive */
+.status-inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.status-inactive .status-dot {
+    background: #94a3b8;
+}
+
+/* Expired */
+.status-expired {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-expired .status-dot {
+    background: #ef4444;
+}
+
+/* Pending / Upcoming */
+.status-pending {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-pending .status-dot {
+    background: #f59e0b;
+}
+
+.status-upcoming {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.status-upcoming .status-dot {
+    background: #f59e0b;
+}
