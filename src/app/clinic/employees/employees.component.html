@@ -39,13 +39,15 @@
                         class="form-input w-full"
                         [(ngModel)]="searchTerm"
                         [placeholder]="isArabic ? 'ابحث بالاسم أو الهوية أو البريد الإلكتروني' : 'Search by name, identity or email'"
-                        (keyup.enter)="ApplyFilters()">
+                        (keyup.enter)="ApplyFilters()"
+                        (change)="ApplyFilters()">
                 </div>
 
                 <!-- Status -->
                 <div class="w-full sm:w-[190px]">
                     <select
                         class="form-select w-full"
+                        (change)="ApplyFilters()"
                         [(ngModel)]="isActive">
 
                         <option [ngValue]="null">
@@ -62,14 +64,7 @@
                     </select>
                 </div>
 
-                <button
-                    type="button"
-                    class="btn btn-primary h-[42px]"
-                    (click)="ApplyFilters()">
-
-                    <i class="fa fa-search me-1"></i>
-                    {{ 'Search' | translate }}
-                </button>
+               
 
                 <button
                     type="button"
@@ -146,10 +141,10 @@
                 </span>
             </ng-template>
 
-            <!-- Role -->
-            <ng-template slot="role" let-value="data">
+        
+            <ng-template slot="phone" let-value="data">
                 <span class="badge bg-primary/10 text-primary px-3 py-1 rounded-md">
-                    {{ GetRoleName(value.role) }}
+                    {{ value.phoneNumber }}
                 </span>
             </ng-template>
 
@@ -279,6 +274,19 @@
                         [class.invalid-input]="IsInvalid('email')">
                 </div>
 
+                   <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'phoneNumber' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="phoneNumber"
+                        class="form-input"
+                        [class.invalid-input]="IsInvalid('phoneNumber')">
+                </div>
                 <!-- Address -->
                 <div class="form-group md:col-span-2">
                     <label class="form-label">
@@ -310,7 +318,9 @@
         [clearable]="true"
         [placeholder]="isArabic ? 'اختر الصلاحية' : 'Select Role'"
         [notFoundText]="isArabic ? 'لا توجد صلاحيات' : 'No roles found'"
-        [class.invalid-input]="IsInvalid('role')">
+        [class.invalid-input]="IsInvalid('role')"
+        (change)="CheckRole()"
+        >
 
         <ng-template ng-option-tmp let-item="item">
             {{ isArabic ? item.arName : item.name }}
@@ -323,19 +333,31 @@
 </div>
 
 <!-- Doctor -->
-<div class="form-group">
+<div class="form-group" *ngIf="showdoctor">
     <label class="form-label">
         {{ 'Doctor' | translate }}
+        <span>*</span>
     </label>
 
-    <input
-        type="number"
+    <ng-select
+        [items]="doctors"
+        bindLabel="name"
+        bindValue="id"
         formControlName="doctorId"
-        min="1"
-        class="form-input"
-        [placeholder]="isArabic ? 'رقم الدكتور (اختياري)' : 'Doctor ID (optional)'">
-</div>
+        [clearable]="true"
+        [searchable]="true"
+        [placeholder]="isArabic ? 'اختر الطبيب' : 'Select Doctor'"
+        [notFoundText]="isArabic ? 'لا يوجد أطباء' : 'No doctors found'"
+       >
 
+        <ng-template ng-option-tmp let-item="item">
+            <div class="doctor-option">
+                <span class="doctor-option-name">{{ item.name }}</span>
+            </div>
+        </ng-template>
+
+    </ng-select>
+</div>
 <!-- Active Toggle -->
 <div class="form-group md:col-span-2">
     <label class="form-label">

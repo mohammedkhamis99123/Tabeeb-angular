@@ -10,4 +10,6 @@ export interface IEmployee {
   identityNumber: string;
   email: string;
   role: string;
+  phoneNumber:string;
+
 }

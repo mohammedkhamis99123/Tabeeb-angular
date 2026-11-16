@@ -5,6 +5,8 @@ import { IEmployee } from './models/IEmployee.model';
 import { IGetEmployee } from './models/IGetEmployee.model';
 import { EmployeesService } from './services/employees.service';
 import { environment } from 'src/environments/environment.prod';
+import { Roles } from 'src/app/common/enums/roles.enum';
+import { ClinicDoctorsService } from '../doctors/Services/clinic-doctor.service';
 
 
 
@@ -37,38 +39,42 @@ export class EmployeesComponent implements OnInit {
 
     employeeForm!: FormGroup;
 
-    // استبدل هذه القيم بالـ Role IDs الحقيقية من قاعدة البيانات
-    roles = [
-        { id: 'REPLACE_WITH_ADMIN_ROLE_ID', name: 'Admin', arName: 'مدير النظام' },
-        { id: 'REPLACE_WITH_EMPLOYEE_ROLE_ID', name: 'Employee', arName: 'موظف' },
-        { id: 'REPLACE_WITH_RECEPTIONIST_ROLE_ID', name: 'Receptionist', arName: 'استقبال' },
-        { id: 'REPLACE_WITH_SUPERVISOR_ROLE_ID', name: 'Supervisor', arName: 'مشرف' }
-    ];
+  
 
     // يتم ملء القائمة من Doctor Dropdown API عند ربطه
     doctors: any[] = [];
   cols: ({ field: string; title: string; isUnique: boolean; hide: boolean; sort?: undefined; } | { field: string; title: string; sort: boolean; isUnique?: undefined; hide?: undefined; })[];
+  roles: { id: Roles; name: string; arName: string; }[];
+  showdoctor!: boolean;
 
 
 
     constructor(
         private fb: FormBuilder,
         private empService: EmployeesService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private doctorserv:ClinicDoctorsService
     ) {
         this.isArabic = this.translate.currentLang === 'ae';
         this.translate.onLangChange.subscribe(event => {
             this.isArabic = event.lang === 'ae';
         });
 
-
+this.roles = [
+    { id: Roles.Admin, name: 'Admin', arName: 'مدير النظام' },
+    { id: Roles.Employee, name: 'Employee', arName: 'موظف' },
+    { id: Roles.Accountant, name: 'Accountant', arName: 'محاسب' },
+    //{ id: Roles.Doctor, name: 'Doctor', arName: 'طبيب' },
+    { id: Roles.DoctorAssistant, name: 'DoctorAssistant', arName: 'مساعد طبيب' },
+    //{ id: Roles.Customer, name: 'Customer', arName: 'عميل' }
+];
         if(!this.isArabic){
             this.cols = [
                 { field: 'id', title: '#', isUnique: true, hide: false },
                 { field: 'employeeName', title: 'EmployeeName', sort: true },
                 { field: 'identityNumber', title: 'IdentityNumber', sort: true },
                 { field: 'email', title: 'Email', sort: true },
-                { field: 'role', title: 'Role', sort: true },
+                { field: 'phone', title: 'Phone', sort: true },
                 { field: 'isActive', title: 'Status', sort: true },
                 { field: 'actions', title: 'Actions', sort: false }
             ];
@@ -78,7 +84,7 @@ export class EmployeesComponent implements OnInit {
                 { field: 'employeeName', title: 'اسم الموظف', sort: true },
                 { field: 'identityNumber', title: 'رقم الهوية', sort: true },
                 { field: 'email', title: 'البريد الالكترونى', sort: true },
-                { field: 'role', title: ' الدور', sort: true },
+                { field: 'phone', title: 'رقم الجوال', sort: true },
                 { field: 'isActive', title: 'الحالة', sort: true },
                 { field: 'actions', title: ' الاجراءات', sort: false }
             ];
@@ -88,7 +94,20 @@ export class EmployeesComponent implements OnInit {
     ngOnInit(): void {
         this.initForm();
         this.GetEmployees();
+        this.getDoctors();
     }
+  getDoctors() {
+    var clinicId=parseInt(sessionStorage.getItem("SelectedClinic")!);
+
+    this.doctorserv.getClinicDoctors(clinicId).subscribe((result)=>{
+      if(result.isSuccess){
+        this.doctors=[];
+        result.data.forEach((e:any)=>{
+          this.doctors.push({id:e.doctorId,name:this.isArabic ?e.arName :e.enName})
+        })
+      }
+    })
+  }
 
     // --------------------------------------------------
     // Form
@@ -104,7 +123,8 @@ export class EmployeesComponent implements OnInit {
             doctorId: [null],
             role: [null, Validators.required],
             isActive: [true],
-            image: [null]
+            image: [null],
+            phoneNumber:[null,[Validators.required]]
         });
     }
 
@@ -216,7 +236,10 @@ export class EmployeesComponent implements OnInit {
             doctorId: employee.doctorId ?? null,
             role: null,
             isActive: employee.isActive,
-            image: null
+            image: null,
+            phoneNumber:employee.phoneNumber,
+
+          
         });
 
         // الصورة اختيارية عند التعديل
@@ -235,8 +258,13 @@ export class EmployeesComponent implements OnInit {
                         identityNumber: data.identityNumber,
                         email: data.email,
                         doctorId: data.doctorId ?? null,
-                        isActive: data.isActive
+                        isActive: data.isActive,
+                        role:data.role,
+                        phoneNumber:data.phoneNumber
                     });
+                   
+                      this.CheckRole()
+                    
                 }
             },
             error: error => console.error('Get Employee Error:', error)
@@ -300,6 +328,15 @@ export class EmployeesComponent implements OnInit {
     HandleRequest(): void {
         if (this.employeeForm.invalid) {
             this.employeeForm.markAllAsTouched();
+            Object.keys(this.employeeForm.controls).forEach(key => {
+        const control = this.employeeForm.get(key);
+
+        if (control?.invalid) {
+            console.log('Invalid Field:', key);
+            console.log('Errors:', control.errors);
+            console.log('Value:', control.value);
+        }
+    });
             return;
         }
 
@@ -350,7 +387,7 @@ export class EmployeesComponent implements OnInit {
         formData.append('Email', value.email);
         formData.append('IsActive', String(value.isActive));
         formData.append('Role', value.role);
-
+        formData.append('PhoneNumber',value.phoneNumber)
         if (value.doctorId !== null && value.doctorId !== '') {
             formData.append('DoctorId', String(value.doctorId));
         }
@@ -415,5 +452,17 @@ export class EmployeesComponent implements OnInit {
     }
 
     this.imagePreview = URL.createObjectURL(file);
+}
+
+CheckRole(){
+if(this.employeeForm.get("role")?.value==Roles.DoctorAssistant){
+this.employeeForm.get("doctorId")?.addValidators([Validators.required]);
+this.showdoctor=true;
+}else{
+  this.employeeForm.get("doctorId")?.clearValidators();
+  this.showdoctor=false;
+
+}
+this.employeeForm.updateValueAndValidity();
 }
 }
