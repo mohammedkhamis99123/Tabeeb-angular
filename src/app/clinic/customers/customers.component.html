@@ -1,0 +1,574 @@
+<div class="flex justify-center flex-col panel customers-page">
+
+    <!-- Header -->
+    <div class="customers-header">
+
+        <div class="header-content">
+            <div class="header-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <div>
+                <h2 class="header-title">
+                    {{ isArabic ? 'العملاء' : 'Customers' }}
+                </h2>
+
+                <p class="header-description">
+                    {{
+                        isArabic
+                            ? 'إدارة بيانات العملاء والملفات الطبية'
+                            : 'Manage customers and their medical files'
+                    }}
+                </p>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="add-customer-btn"
+            (click)="OpenCreateModal()">
+
+            <i class="fas fa-plus"></i>
+
+            <span>
+                {{ isArabic ? 'إضافة عميل' : 'Add Customer' }}
+            </span>
+
+        </button>
+
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="search-filter-card">
+
+        <div class="search-box">
+
+            <i class="fas fa-search search-icon"></i>
+
+            <input
+                type="text"
+                [(ngModel)]="searchTerm"
+                (keyup.enter)="onSearch()"
+                class="search-input"
+                [placeholder]="isArabic
+                    ? 'ابحث بالاسم أو البريد أو رقم الهوية أو الملف الطبي...'
+                    : 'Search by name, email, identity or medical file...'">
+
+            <button
+                *ngIf="searchTerm"
+                type="button"
+                class="clear-search-btn"
+                (click)="resetSearch()">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <button
+            type="button"
+            class="search-btn"
+            (click)="onSearch()">
+
+            <i class="fas fa-search"></i>
+
+            {{ isArabic ? 'بحث' : 'Search' }}
+
+        </button>
+
+        <button
+            type="button"
+            class="reset-btn"
+            (click)="resetSearch()">
+
+            <i class="fas fa-redo-alt"></i>
+
+            {{ isArabic ? 'إعادة تعيين' : 'Reset' }}
+
+        </button>
+
+    </div>
+
+    <!-- Customers Table -->
+    <div class="customers-table-wrapper">
+
+        <div class="table-header">
+
+            <div>
+                <h3>
+                    {{ isArabic ? 'قائمة العملاء' : 'Customers List' }}
+                </h3>
+
+                <span class="table-count">
+                    {{ isArabic ? 'إجمالي العملاء:' : 'Total Customers:' }}
+                    {{ totalRows }}
+                </span>
+            </div>
+
+        </div>
+
+        <ng-datatable
+            [rows]="customers"
+            [columns]="cols"
+            [loading]="loading"
+            [totalRows]="totalRows"
+            [isServerMode]="true"
+            [page]="page"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            (changeServer)="onchange($event)"
+            skin="bh-table-striped whitespace-nowrap bh-table-hover">
+
+            <!-- Customer Name -->
+            <ng-template slot="customerName" let-value="data">
+
+                <div class="customer-cell">
+
+                    <div class="customer-avatar">
+                        {{ getInitials(value) }}
+                    </div>
+
+                    <div class="customer-info">
+
+                        <span class="customer-name">
+                            {{ getCustomerName(value) }}
+                        </span>
+
+                        <span class="customer-id">
+                            #{{ value.id }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </ng-template>
+
+            <!-- Medical File -->
+            <ng-template slot="medicalfile" let-value="data">
+
+                <div class="medical-file-badge">
+
+                    <i class="fas fa-file-medical"></i>
+
+                    <span>
+                        {{ value.medicalfile || '-' }}
+                    </span>
+
+                </div>
+
+            </ng-template>
+
+            <!-- Identity Number -->
+            <ng-template slot="identityNumber" let-value="data">
+
+                <span class="table-text">
+                    {{ value.identityNumber || '-' }}
+                </span>
+
+            </ng-template>
+
+            <!-- Phone Number -->
+            <ng-template slot="phoneNumber" let-value="data">
+
+                <div class="contact-cell">
+
+                    <i class="fas fa-phone"></i>
+
+                    <span>
+                        {{ value.phoneNumber || '-' }}
+                    </span>
+
+                </div>
+
+            </ng-template>
+
+            <!-- Email -->
+            <ng-template slot="email" let-value="data">
+
+                <div class="contact-cell">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <span class="email-text">
+                        {{ value.email || '-' }}
+                    </span>
+
+                </div>
+
+            </ng-template>
+
+            <!-- Actions -->
+            <ng-template slot="actions" let-value="data">
+
+                <div class="customer-actions">
+
+                    <button
+                        type="button"
+                        class="edit-customer-btn"
+                        (click)="OpenEditModal(value)"
+                        [title]="isArabic ? 'تعديل الملف الطبي' : 'Edit Medical File'">
+
+                        <i class="fas fa-edit"></i>
+
+                    </button>
+
+                </div>
+
+            </ng-template>
+
+        </ng-datatable>
+
+        <!-- Empty State -->
+        <div
+            class="empty-state"
+            *ngIf="!loading && customers.length === 0">
+
+            <div class="empty-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <h3>
+                {{ isArabic ? 'لا يوجد عملاء' : 'No Customers Found' }}
+            </h3>
+
+            <p>
+                {{
+                    isArabic
+                        ? 'لم يتم العثور على أي عملاء مطابقين لبحثك'
+                        : 'No customers match your search'
+                }}
+            </p>
+
+            <button
+                type="button"
+                (click)="OpenCreateModal()">
+
+                <i class="fas fa-plus"></i>
+
+                {{ isArabic ? 'إضافة أول عميل' : 'Add First Customer' }}
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Add / Edit Customer Modal -->
+<ngx-custom-modal
+    #CrudModal
+    class="customers-modal">
+
+    <ng-template #modalHeader>
+
+        <div class="modal-header-content">
+
+            <div class="modal-title-icon">
+                <i [ngClass]="isEditMode ? 'fas fa-file-medical' : 'fas fa-user-plus'"></i>
+            </div>
+
+            <div>
+
+                <h3>
+                    {{
+                        isEditMode
+                            ? (isArabic ? 'تعديل الملف الطبي' : 'Edit Medical File')
+                            : (isArabic ? 'إضافة عميل جديد' : 'Add New Customer')
+                    }}
+                </h3>
+
+                <p>
+                    {{
+                        isEditMode
+                            ? (isArabic
+                                ? 'يمكنك تعديل رقم الملف الطبي فقط'
+                                : 'You can only update the medical file number')
+                            : (isArabic
+                                ? 'أدخل بيانات العميل لإنشاء ملف طبي جديد'
+                                : 'Enter customer information to create a medical file')
+                    }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </ng-template>
+
+    <ng-template #modalBody>
+
+        <form
+            [formGroup]="customerForm"
+            (ngSubmit)="onSubmit()"
+            class="customer-form"
+            novalidate>
+
+            <!-- Personal Information -->
+            <div class="form-section-title">
+
+                <i class="fas fa-user"></i>
+
+                {{ isArabic ? 'البيانات الشخصية' : 'Personal Information' }}
+
+            </div>
+
+            <div class="form-grid">
+
+                <!-- Arabic Name -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'الاسم بالعربي' : 'Arabic Name' }}
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="arName"
+                        class="form-input"
+                        [class.invalid-input]="f['arName'].touched && f['arName'].invalid"
+                        [placeholder]="isArabic ? 'أدخل الاسم بالعربي' : 'Enter Arabic name'">
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['arName'].touched && f['arName'].invalid">
+
+                        {{ getErrorMessage('arName') }}
+
+                    </small>
+
+                </div>
+
+                <!-- English Name -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'الاسم بالإنجليزي' : 'English Name' }}
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="enName"
+                        class="form-input"
+                        [class.invalid-input]="f['enName'].touched && f['enName'].invalid"
+                        [placeholder]="isArabic ? 'أدخل الاسم بالإنجليزي' : 'Enter English name'">
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['enName'].touched && f['enName'].invalid">
+
+                        {{ getErrorMessage('enName') }}
+
+                    </small>
+
+                </div>
+
+                <!-- Identity Number -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'رقم الهوية' : 'Identity Number' }}
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="identityNumber"
+                        class="form-input"
+                        [class.invalid-input]="f['identityNumber'].touched && f['identityNumber'].invalid"
+                        [placeholder]="isArabic ? 'أدخل رقم الهوية' : 'Enter identity number'">
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['identityNumber'].touched && f['identityNumber'].invalid">
+
+                        {{ getErrorMessage('identityNumber') }}
+
+                    </small>
+
+                </div>
+
+                <!-- Medical File -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'رقم الملف الطبي' : 'Medical File Number' }}
+                        <span>*</span>
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i class="fas fa-file-medical"></i>
+
+                        <input
+                            type="number"
+                            min="1"
+                            formControlName="medicalFile"
+                            class="form-input"
+                            [class.invalid-input]="f['medicalFile'].touched && f['medicalFile'].invalid"
+                            [placeholder]="isArabic ? 'أدخل رقم الملف الطبي' : 'Enter medical file number'">
+
+                    </div>
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['medicalFile'].touched && f['medicalFile'].invalid">
+
+                        {{ getErrorMessage('medicalFile') }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section-title contact-section-title">
+
+                <i class="fas fa-address-card"></i>
+
+                {{ isArabic ? 'بيانات التواصل' : 'Contact Information' }}
+
+            </div>
+
+            <div class="form-grid">
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'البريد الإلكتروني' : 'Email Address' }}
+                        <span>*</span>
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i class="fas fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            formControlName="email"
+                            class="form-input"
+                            [class.invalid-input]="f['email'].touched && f['email'].invalid"
+                            placeholder="example@email.com">
+
+                    </div>
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['email'].touched && f['email'].invalid">
+
+                        {{ getErrorMessage('email') }}
+
+                    </small>
+
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'رقم الهاتف' : 'Phone Number' }}
+                        <span>*</span>
+                    </label>
+
+                    <div class="input-with-icon">
+
+                        <i class="fas fa-phone"></i>
+
+                        <input
+                            type="tel"
+                            formControlName="phoneNumber"
+                            class="form-input"
+                            [class.invalid-input]="f['phoneNumber'].touched && f['phoneNumber'].invalid"
+                            [placeholder]="isArabic ? 'أدخل رقم الهاتف' : 'Enter phone number'">
+
+                    </div>
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['phoneNumber'].touched && f['phoneNumber'].invalid">
+
+                        {{ getErrorMessage('phoneNumber') }}
+
+                    </small>
+
+                </div>
+
+                <!-- Address -->
+                <div class="form-group full-width">
+
+                    <label class="form-label">
+                        {{ isArabic ? 'العنوان' : 'Address' }}
+                        <span>*</span>
+                    </label>
+
+                    <textarea
+                        rows="3"
+                        formControlName="address"
+                        class="form-input form-textarea"
+                        [class.invalid-input]="f['address'].touched && f['address'].invalid"
+                        [placeholder]="isArabic ? 'أدخل عنوان العميل' : 'Enter customer address'">
+                    </textarea>
+
+                    <small
+                        class="field-error"
+                        *ngIf="f['address'].touched && f['address'].invalid">
+
+                        {{ getErrorMessage('address') }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- Modal Actions -->
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    [disabled]="submitting"
+                    (click)="CloseModal()">
+
+                    <i class="fas fa-times"></i>
+
+                    {{ isArabic ? 'إلغاء' : 'Cancel' }}
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    [disabled]="submitting">
+
+                    <i
+                        class="fas"
+                        [ngClass]="submitting ? 'fa-spinner fa-spin' : 'fa-save'">
+                    </i>
+
+                    {{
+                        submitting
+                            ? (isArabic ? 'جاري الحفظ...' : 'Saving...')
+                            : (
+                                isEditMode
+                                    ? (isArabic ? 'تحديث الملف الطبي' : 'Update Medical File')
+                                    : (isArabic ? 'حفظ العميل' : 'Save Customer')
+                            )
+                    }}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </ng-template>
+
+</ngx-custom-modal>

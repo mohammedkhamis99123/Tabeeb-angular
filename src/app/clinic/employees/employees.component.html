@@ -11,10 +11,11 @@
             <button
                 type="button"
                 class="btn btn-primary  w-[100%] md:max-w-[150px]"
+                *ngIf="hasAnyPermissionOf([sfc.Permissions.AddEmployee])"
                 (click)="OpenCreateModal()">
 
                 <i class="fa fa-plus me-2"></i>
-                {{ 'AddEmployee' | translate }}
+                {{ 'Create' | translate }}
             </button>
         </div>
 
@@ -166,6 +167,7 @@
                      <div class="flex items-center justify-center">
 
                     <button
+                        *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateEmployee])"
                         type="button"
                         class="btn btn-sm btn-outline-primary"
                         (click)="OpenEditModal(value)">
@@ -223,13 +225,16 @@
                         type="text"
                         formControlName="arName"
                         class="form-input"
-                        [class.invalid-input]="IsInvalid('arName')"
-                        [placeholder]="isArabic ? 'الاسم بالعربي' : 'Arabic name'">
+                        [placeholder]="'ArabicName'|translate">
 
-                    <small *ngIf="IsInvalid('arName')" class="text-danger">
-                        {{ 'Required' | translate }}
-                    </small>
+                        <div class="text-danger" *ngIf="employeeForm.get('arName')?.touched && employeeForm.get('arName')?.invalid">
+                            <span *ngIf="employeeForm.get('arName')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('arName')?.errors?.['maxlength']">{{'maxLength'|translate}} 150</span>
+                            <span class="text-danger" *ngIf="employeeForm.get('arName')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </span>
+                        </div>
                 </div>
+                 
+                
 
                 <!-- English Name -->
                 <div class="form-group">
@@ -242,8 +247,13 @@
                         type="text"
                         formControlName="enName"
                         class="form-input"
-                        [class.invalid-input]="IsInvalid('enName')"
-                        [placeholder]="isArabic ? 'الاسم بالإنجليزي' : 'English name'">
+                        [placeholder]="'EnglishName'|translate">
+
+                            <div class="text-danger" *ngIf="employeeForm.get('enName')?.touched && employeeForm.get('enName')?.invalid">
+                            <span *ngIf="employeeForm.get('enName')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('enName')?.errors?.['maxlength']">{{'maxLength'|translate}} 150</span>
+                            <span class="text-danger" *ngIf="employeeForm.get('enName')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </span>
+                        </div>
                 </div>
 
                 <!-- Identity Number -->
@@ -257,13 +267,17 @@
                         type="text"
                         formControlName="identityNumber"
                         class="form-input"
-                        [class.invalid-input]="IsInvalid('identityNumber')">
+                                       >
+
+                            <div class="text-danger" *ngIf="employeeForm.get('identityNumber')?.touched && employeeForm.get('identityNumber')?.invalid">
+                            <span *ngIf="employeeForm.get('identityNumber')?.errors?.['required']">{{'required'|translate}}</span>
+                        </div>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
                     <label class="form-label">
-                        {{ 'Email' | translate }}
+                        {{ 'email' | translate }}
                         <span class="text-danger">*</span>
                     </label>
 
@@ -271,7 +285,12 @@
                         type="email"
                         formControlName="email"
                         class="form-input"
-                        [class.invalid-input]="IsInvalid('email')">
+                      >
+
+                         <div class="text-danger" *ngIf="employeeForm.get('email')?.touched && employeeForm.get('email')?.invalid">
+                            <span *ngIf="employeeForm.get('email')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('arName')?.errors?.['email']">{{'invalidEmail'|translate}} </span>
+                        </div>
                 </div>
 
                    <!-- Email -->
@@ -285,7 +304,10 @@
                         type="text"
                         formControlName="phoneNumber"
                         class="form-input"
-                        [class.invalid-input]="IsInvalid('phoneNumber')">
+                        >
+                            <div class="text-danger" *ngIf="employeeForm.get('phoneNumber')?.touched && employeeForm.get('phoneNumber')?.invalid">
+                            <span *ngIf="employeeForm.get('phoneNumber')?.errors?.['required']">{{'required'|translate}}</span>
+                        </div>
                 </div>
                 <!-- Address -->
                 <div class="form-group md:col-span-2">
@@ -298,8 +320,13 @@
                         formControlName="addrees"
                         rows="2"
                         class="form-textarea"
-                        [class.invalid-input]="IsInvalid('addrees')">
+                        >
                     </textarea>
+
+                         <div class="text-danger" *ngIf="employeeForm.get('addrees')?.touched && employeeForm.get('addrees')?.invalid">
+                            <span *ngIf="employeeForm.get('addrees')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('addrees')?.errors?.['maxlength']">{{'maxLength'|translate}} 250</span>
+                        </div>
                 </div>
 
        <!-- Role -->
@@ -318,7 +345,7 @@
         [clearable]="true"
         [placeholder]="isArabic ? 'اختر الصلاحية' : 'Select Role'"
         [notFoundText]="isArabic ? 'لا توجد صلاحيات' : 'No roles found'"
-        [class.invalid-input]="IsInvalid('role')"
+
         (change)="CheckRole()"
         >
 
@@ -330,6 +357,10 @@
             {{ isArabic ? item.arName : item.name }}
         </ng-template>
     </ng-select>
+
+      <div class="text-danger" *ngIf="employeeForm.get('role')?.touched && employeeForm.get('role')?.invalid">
+                            <span *ngIf="employeeForm.get('role')?.errors?.['required']">{{'required'|translate}}</span>
+                        </div>
 </div>
 
 <!-- Doctor -->
@@ -357,6 +388,10 @@
         </ng-template>
 
     </ng-select>
+
+     <div class="text-danger" *ngIf="employeeForm.get('doctorId')?.touched && employeeForm.get('doctorId')?.invalid">
+                            <span *ngIf="employeeForm.get('doctorId')?.errors?.['required']">{{'required'|translate}}</span>
+                        </div>
 </div>
 <!-- Active Toggle -->
 <div class="form-group md:col-span-2">
@@ -395,7 +430,7 @@
 <div class="form-group md:col-span-2">
 
     <label class="form-label">
-        {{ isArabic ? 'صورة الموظف' : 'Employee Image' }}
+        {{  'EmployeeImage'|translate }}
 
         <span *ngIf="!isEditMode" class="text-danger">*</span>
     </label>
@@ -475,10 +510,9 @@
 
     </div>
 
-    <small *ngIf="IsInvalid('image')" class="text-danger">
-        {{ isArabic ? 'صورة الموظف مطلوبة' : 'Employee image is required' }}
-    </small>
-
+   <div class="text-danger" *ngIf="employeeForm.get('image')?.touched && employeeForm.get('image')?.invalid">
+                            <span *ngIf="employeeForm.get('image')?.errors?.['required']">{{'required'|translate}}</span>
+                        </div>
 </div>
 
             </div>

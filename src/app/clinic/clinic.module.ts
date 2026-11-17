@@ -11,10 +11,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { OffersComponent } from './offers/offers.component';
 import { DataTableModule } from '@bhplugin/ng-datatable';
 import { EmployeesComponent } from './employees/employees.component';
+import { CustomersComponent } from './customers/customers.component';
 
 
 @NgModule({
-  declarations: [ClinicDoctorsComponent,OffersComponent,EmployeesComponent],
+  declarations: [ClinicDoctorsComponent,OffersComponent,EmployeesComponent,CustomersComponent],
   imports: [
     CommonModule,
     ClinicRoutingModule,

@@ -225,5 +225,14 @@
   "Edit": "تعديل",
   "snapshatUser": "اسم مستخدم سناب شات",
   "instaUser": "مستخدم الانستاجرام",
-  "whatsApp": "رقم واتساب"
+  "whatsApp": "رقم واتساب",
+  "EmployeesManagement": "الموظفين",
+  "EditEmployee": "تعديل موظف",
+  "AddEmployee": "اضافة موظف",
+  "IdentityNumber": "رقم الهوية",
+  "email": "البريد الالكترونى",
+  "phoneNumber": "رقم الهاتف",
+  "Address": "العنوان",
+  "EmployeeImage": "صورة الموظف",
+  "invalidEmail": "بريد الكترونى غير صالح"
 }

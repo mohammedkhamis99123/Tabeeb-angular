@@ -409,3 +409,8 @@ form label > span{
         transform: rotate(360deg);
     }
 }
+
+ .modal-dialog{
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+}

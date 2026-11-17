@@ -225,5 +225,14 @@
   "Edit": "Edit",
   "snapshatUser": "Snapchat User",
   "instaUser": "Instagram User",
-  "whatsApp": "WhatsApp"
+  "whatsApp": "WhatsApp",
+  "EmployeesManagement": "Employees",
+  "EditEmployee": "Edit Employee",
+  "AddEmployee": "Add Employee",
+  "IdentityNumber": "Identity Number ",
+  "email": "Email",
+  "phoneNumber": "Phone Number",
+  "Address": "Address",
+  "EmployeeImage": "Employee Image",
+  "invalidEmail": "Invalid Email"
 }

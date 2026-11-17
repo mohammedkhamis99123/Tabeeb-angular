@@ -7,6 +7,10 @@ import { EmployeesService } from './services/employees.service';
 import { environment } from 'src/environments/environment.prod';
 import { Roles } from 'src/app/common/enums/roles.enum';
 import { ClinicDoctorsService } from '../doctors/Services/clinic-doctor.service';
+import Swal from 'sweetalert2';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
 
 
 
@@ -53,7 +57,9 @@ export class EmployeesComponent implements OnInit {
         private fb: FormBuilder,
         private empService: EmployeesService,
         private translate: TranslateService,
-        private doctorserv:ClinicDoctorsService
+        private doctorserv:ClinicDoctorsService,
+        private currentUserService:CurrentUserService,
+        protected sfc:SystemFacadeService
     ) {
         this.isArabic = this.translate.currentLang === 'ae';
         this.translate.onLangChange.subscribe(event => {
@@ -115,23 +121,20 @@ this.roles = [
 
     initForm(): void {
         this.employeeForm = this.fb.group({
-            arName: ['', [Validators.required, Validators.maxLength(150)]],
-            enName: ['', [Validators.required, Validators.maxLength(150)]],
+            arName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.Arabic)]],
+            enName: ['', [Validators.required, Validators.maxLength(150),,TextLangValidator(Language.English)]],
             addrees: ['', [Validators.required, Validators.maxLength(250)]],
             identityNumber: ['', Validators.required],
             email: ['', [Validators.required, Validators.email, Validators.maxLength(250)]],
             doctorId: [null],
             role: [null, Validators.required],
             isActive: [true],
-            image: [null],
+            image: [null,[Validators.required]],
             phoneNumber:[null,[Validators.required]]
         });
     }
 
-    IsInvalid(controlName: string): boolean {
-        const control = this.employeeForm.get(controlName);
-        return !!control && control.invalid && (control.dirty || control.touched);
-    }
+ 
 
     // --------------------------------------------------
     // Get Employees / Pagination
@@ -361,7 +364,17 @@ this.roles = [
                 if (response?.isSuccess === false) {
                     return;
                 }
-
+                       const toast = Swal.mixin({
+                         toast: true,
+                         position: 'top-end',
+                         showConfirmButton: false,
+                         timer: 3000,
+                         showCloseButton: true,
+                         customClass: { popup: `color-success` },
+                       });
+                       toast.fire({
+                         title:this.translate.instant("SavedSuccessfully")
+                       })
                 this.CloseModal();
                 this.GetEmployees();
             },
@@ -465,4 +478,9 @@ this.showdoctor=true;
 }
 this.employeeForm.updateValueAndValidity();
 }
+
+hasAnyPermissionOf(permissions: number[]): boolean {
+    return this.currentUserService.hasAnyPermissionOf(permissions);
+  }
+
 }
