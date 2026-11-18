@@ -10,14 +10,13 @@
 
             <div>
                 <h2 class="header-title">
-                    {{ isArabic ? 'العملاء' : 'Customers' }}
+                    {{ 'customers'|translate}}
                 </h2>
 
                 <p class="header-description">
                     {{
-                        isArabic
-                            ? 'إدارة بيانات العملاء والملفات الطبية'
-                            : 'Manage customers and their medical files'
+                       'manage'|translate
+                     
                     }}
                 </p>
             </div>
@@ -26,12 +25,13 @@
         <button
             type="button"
             class="add-customer-btn"
+            *ngIf="hasAnyPermissionOf([sfc.Permissions.AddCustomer])"
             (click)="OpenCreateModal()">
 
             <i class="fas fa-plus"></i>
 
             <span>
-                {{ isArabic ? 'إضافة عميل' : 'Add Customer' }}
+                {{  'Create'|translate }}
             </span>
 
         </button>
@@ -40,7 +40,12 @@
 
     <!-- Search & Filters -->
     <div class="search-filter-card">
+                  <span class="flex items-center gap-2 text-primary font-bold whitespace-nowrap">
+                    <i class="fa fa-filter"></i>
+                    {{ 'Filters' | translate }}
+                </span>
 
+                <span class="hidden sm:block w-px h-5 bg-primary/20 shrink-0"></span>
         <div class="search-box">
 
             <i class="fas fa-search search-icon"></i>
@@ -49,6 +54,7 @@
                 type="text"
                 [(ngModel)]="searchTerm"
                 (keyup.enter)="onSearch()"
+                (change)="onSearch()"
                 class="search-input"
                 [placeholder]="isArabic
                     ? 'ابحث بالاسم أو البريد أو رقم الهوية أو الملف الطبي...'
@@ -66,25 +72,16 @@
 
         </div>
 
-        <button
-            type="button"
-            class="search-btn"
-            (click)="onSearch()">
-
-            <i class="fas fa-search"></i>
-
-            {{ isArabic ? 'بحث' : 'Search' }}
-
-        </button>
+   
 
         <button
             type="button"
-            class="reset-btn"
+            class="btn btn-outline-secondary"
             (click)="resetSearch()">
 
             <i class="fas fa-redo-alt"></i>
 
-            {{ isArabic ? 'إعادة تعيين' : 'Reset' }}
+            {{'Reset' |translate}}
 
         </button>
 
@@ -93,7 +90,7 @@
     <!-- Customers Table -->
     <div class="customers-table-wrapper">
 
-        <div class="table-header">
+      <!--  <div class="table-header">
 
             <div>
                 <h3>
@@ -106,7 +103,7 @@
                 </span>
             </div>
 
-        </div>
+        </div>-->
 
         <ng-datatable
             [rows]="customers"
@@ -117,6 +114,7 @@
             [page]="page"
             [pageSize]="pageSize"
             [pageSizeOptions]="[10, 20, 50, 100]"
+            [noDataContent]="Utility.NoDataContent"
             (changeServer)="onchange($event)"
             skin="bh-table-striped whitespace-nowrap bh-table-hover">
 
@@ -207,6 +205,8 @@
                     <button
                         type="button"
                         class="edit-customer-btn"
+                         *ngIf="hasAnyPermissionOf([sfc.Permissions.UpdateCustomer])"
+
                         (click)="OpenEditModal(value)"
                         [title]="isArabic ? 'تعديل الملف الطبي' : 'Edit Medical File'">
 
@@ -276,8 +276,8 @@
                 <h3>
                     {{
                         isEditMode
-                            ? (isArabic ? 'تعديل الملف الطبي' : 'Edit Medical File')
-                            : (isArabic ? 'إضافة عميل جديد' : 'Add New Customer')
+                            ? ('EditMedicalFile'|translate)
+                            : ( 'AddNewCustomer' |translate)
                     }}
                 </h3>
 
@@ -312,7 +312,7 @@
 
                 <i class="fas fa-user"></i>
 
-                {{ isArabic ? 'البيانات الشخصية' : 'Personal Information' }}
+                {{  'PersonalInformation'|translate }}
 
             </div>
 
@@ -322,7 +322,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'الاسم بالعربي' : 'Arabic Name' }}
+                        {{ 'ArabicName'|translate }}
                         <span>*</span>
                     </label>
 
@@ -331,7 +331,7 @@
                         formControlName="arName"
                         class="form-input"
                         [class.invalid-input]="f['arName'].touched && f['arName'].invalid"
-                        [placeholder]="isArabic ? 'أدخل الاسم بالعربي' : 'Enter Arabic name'">
+                        [placeholder]="'EnterArabicname'|translate">
 
                     <small
                         class="field-error"
@@ -347,7 +347,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'الاسم بالإنجليزي' : 'English Name' }}
+                         {{"EnglishName"|translate}}
                         <span>*</span>
                     </label>
 
@@ -356,7 +356,7 @@
                         formControlName="enName"
                         class="form-input"
                         [class.invalid-input]="f['enName'].touched && f['enName'].invalid"
-                        [placeholder]="isArabic ? 'أدخل الاسم بالإنجليزي' : 'Enter English name'">
+                        [placeholder]="'EnterEnglishName'|translate">
 
                     <small
                         class="field-error"
@@ -372,7 +372,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'رقم الهوية' : 'Identity Number' }}
+                        {{ 'IdentityNumber'|translate }}
                         <span>*</span>
                     </label>
 
@@ -381,7 +381,7 @@
                         formControlName="identityNumber"
                         class="form-input"
                         [class.invalid-input]="f['identityNumber'].touched && f['identityNumber'].invalid"
-                        [placeholder]="isArabic ? 'أدخل رقم الهوية' : 'Enter identity number'">
+                        [placeholder]="'EnterIdentityNumber'|translate">
 
                     <small
                         class="field-error"
@@ -397,7 +397,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'رقم الملف الطبي' : 'Medical File Number' }}
+                        {{  'MedicalFileNumber'|translate }}
                         <span>*</span>
                     </label>
 
@@ -411,7 +411,7 @@
                             formControlName="medicalFile"
                             class="form-input"
                             [class.invalid-input]="f['medicalFile'].touched && f['medicalFile'].invalid"
-                            [placeholder]="isArabic ? 'أدخل رقم الملف الطبي' : 'Enter medical file number'">
+                            [placeholder]="'EnterMedicalFileNumber'|translate">
 
                     </div>
 
@@ -432,7 +432,7 @@
 
                 <i class="fas fa-address-card"></i>
 
-                {{ isArabic ? 'بيانات التواصل' : 'Contact Information' }}
+                {{ 'ContactInformation'|translate }}
 
             </div>
 
@@ -442,7 +442,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'البريد الإلكتروني' : 'Email Address' }}
+                        {{  'email'|translate }}
                         <span>*</span>
                     </label>
 
@@ -473,7 +473,7 @@
                 <div class="form-group">
 
                     <label class="form-label">
-                        {{ isArabic ? 'رقم الهاتف' : 'Phone Number' }}
+                        {{  'PhoneNumber'|translate }}
                         <span>*</span>
                     </label>
 
@@ -486,7 +486,7 @@
                             formControlName="phoneNumber"
                             class="form-input"
                             [class.invalid-input]="f['phoneNumber'].touched && f['phoneNumber'].invalid"
-                            [placeholder]="isArabic ? 'أدخل رقم الهاتف' : 'Enter phone number'">
+                            [placeholder]=" 'EnterPhoneNumber'|translate">
 
                     </div>
 
@@ -504,7 +504,7 @@
                 <div class="form-group full-width">
 
                     <label class="form-label">
-                        {{ isArabic ? 'العنوان' : 'Address' }}
+                        {{  'Address'|translate }}
                         <span>*</span>
                     </label>
 
@@ -513,7 +513,7 @@
                         formControlName="address"
                         class="form-input form-textarea"
                         [class.invalid-input]="f['address'].touched && f['address'].invalid"
-                        [placeholder]="isArabic ? 'أدخل عنوان العميل' : 'Enter customer address'">
+                        [placeholder]=" 'EnterCustomerAddress'|translate">
                     </textarea>
 
                     <small
@@ -539,7 +539,7 @@
 
                     <i class="fas fa-times"></i>
 
-                    {{ isArabic ? 'إلغاء' : 'Cancel' }}
+                    {{ 'Cancel'|translate }}
 
                 </button>
 

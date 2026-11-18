@@ -234,5 +234,19 @@
   "phoneNumber": "رقم الهاتف",
   "Address": "العنوان",
   "EmployeeImage": "صورة الموظف",
-  "invalidEmail": "بريد الكترونى غير صالح"
+  "invalidEmail": "بريد الكترونى غير صالح",
+  "customers": "العملاء",
+  "manage": "دارة بيانات العملاء والملفات الطبية",
+  "AddNewCustomer": "اضافة عميل جديد",
+  "EditMedicalFile": "تعديل الملف الطبى",
+  "PersonalInformation": "البيانات الشخصية",
+  "EnterArabicname": "ادخل الاسم باللغة العربية",
+  "EnterIdentityNumber": "ادخل رقم الهوية",
+  "MedicalFileNumber": "رقم الملف الطبى",
+  "EnterMedicalFileNumber": "ادخل رقم الملف الطبى",
+  "ContactInformation": "بيانات التواصل",
+  "PhoneNumber": "رقم الهاتف",
+  "EnterPhoneNumber": "ادخل رقم الهاتف",
+  "EnterCustomerAddress": "ادخل عنوان العميل",
+  "manageEmployees": "قم باداره موظفين العيادة"
 }

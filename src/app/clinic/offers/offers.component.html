@@ -4,20 +4,27 @@
     <!-- Header -->
     <div class="header flex justify-start md:justify-between items-start flex-col md:flex-row md:items-baseline gap-2 flex-wrap">
 
-        <div class="flex justify-between items-center w-full">
+        <div class="flex justify-between items-start md:items-center w-full flex-col gap-2 md:flex-row">
+           
+            <div class="flex justify-center items-center gap-2">
+                   <div class="header-icon">
+                <i class="fas fa-users"></i>
+            </div>
             <div>
-                <h2 class="text-xl font-bold">
+              <h2 class="text-xl font-bold">
                     {{ 'OffersManagement' |translate}}
                 </h2>
                 <p class="text-sm text-slate-500 mt-1">
                     {{'title'|translate}}
                 </p>
             </div>
+            
+            </div>
 
             <button type="button"
                 (click)="OpenCreateModal()"
                 *ngIf="hasAnyPermissionOf([sfc.Permissions.AddOffer])"
-                class="btn btn-primary min-w-[150px]">
+                class="btn btn-primary w-[100%] md:max-w-[150px]">
 
                 <i class="fa-solid fa-plus me-1"></i>
                 {{ 'Create'|translate }}

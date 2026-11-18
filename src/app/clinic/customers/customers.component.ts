@@ -4,6 +4,12 @@ import { ICustomer } from './models/ICustomer.model';
 import { CustomersService } from './services/customers.service';
 import { IGetGeneric } from 'src/app/common/models/IGenericGet';
 import { IUpdateCustomer } from './models/IUpdateCustomer.model';
+import { Utilities } from 'src/app/common/utilities/utiliities';
+import { TranslateService } from '@ngx-translate/core';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
+import Swal from 'sweetalert2';
+import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
 
 
 @Component({
@@ -14,9 +20,9 @@ import { IUpdateCustomer } from './models/IUpdateCustomer.model';
 export class CustomersComponent implements OnInit {
 
     @ViewChild('CrudModal') CrudModal: any;
-
+ 
     customers: ICustomer[] = [];
-
+    
     customerForm!: FormGroup;
 
     loading = false;
@@ -33,11 +39,25 @@ export class CustomersComponent implements OnInit {
     page = 1;
     pageSize = 10;
     totalRows = 0;
-
+    
     // Search
     searchTerm = '';
 
-    cols: any[] = [
+ 
+  Utility: Utilities;
+  cols: ({ field: string; title: string; isUnique: boolean; hide: boolean; sort?: undefined; } | { field: string; title: string; sort: boolean; isUnique?: undefined; hide?: undefined; })[];
+
+    constructor(
+        private fb: FormBuilder,
+        private customersService: CustomersService,
+        private translate:TranslateService,
+        protected sfc:SystemFacadeService,
+        private currentUserService:CurrentUserService
+    ) {
+
+          this.Utility=new Utilities(this.translate);
+          if(translate.currentLang!='ae'){
+       this.cols = [
         {
             field: 'id',
             title: '#',
@@ -75,11 +95,49 @@ export class CustomersComponent implements OnInit {
             sort: false
         }
     ];
+          }else{
+                   this.cols = [
+        {
+            field: 'id',
+            title: '#',
+            isUnique: true,
+            hide: false
+        },
+        {
+            field: 'customerName',
+            title: 'العميل',
+            sort: true
+        },
+        {
+            field: 'medicalfile',
+            title: 'الملف الطبى',
+            sort: true
+        },
+        {
+            field: 'identityNumber',
+            title: 'رقم الهوية',
+            sort: true
+        },
+        {
+            field: 'phoneNumber',
+            title: 'رقم الجوال',
+            sort: false
+        },
+        {
+            field: 'email',
+            title: 'البريد الالكترونى',
+            sort: true
+        },
+        {
+            field: 'actions',
+            title: 'الاجراءات',
+            sort: false
+        }
+    ];
+          }
+   
 
-    constructor(
-        private fb: FormBuilder,
-        private customersService: CustomersService
-    ) {}
+    }
 
     ngOnInit(): void {
         this.initForm();
@@ -98,7 +156,8 @@ export class CustomersComponent implements OnInit {
                 '',
                 [
                     Validators.required,
-                    Validators.maxLength(150)
+                    Validators.maxLength(150) ,
+                    TextLangValidator(Language.Arabic)
                 ]
             ],
 
@@ -106,7 +165,8 @@ export class CustomersComponent implements OnInit {
                 '',
                 [
                     Validators.required,
-                    Validators.maxLength(150)
+                    Validators.maxLength(150),
+                    TextLangValidator(Language.English)
                 ]
             ],
 
@@ -364,21 +424,28 @@ export class CustomersComponent implements OnInit {
 
             next: (response: any) => {
 
-                if (response?.isSuccess === false) {
+                if (response?.isSuccess) {
 
-                    this.showError(response.message);
-
-                    this.submitting = false;
-
-                    return;
-
-                }
+               const toast = Swal.mixin({
+                         toast: true,
+                         position: 'top-end',
+                         showConfirmButton: false,
+                         timer: 3000,
+                         showCloseButton: true,
+                         customClass: { popup: `color-success` },
+                       });
+               
+                       toast.fire({
+                         title: this.translate.instant("SavedSuccessfully"),
+                       }); 
 
                 this.submitting = false;
 
                 this.CrudModal.close();
 
                 this.GetCustomers();
+
+                }
 
             },
 
@@ -433,22 +500,27 @@ export class CustomersComponent implements OnInit {
 
             next: (response: any) => {
 
-                if (response?.isSuccess === false) {
+                if (response?.isSuccess ) {
 
-                    this.showError(response.message);
-
-                    this.submitting = false;
-
-                    return;
-
-                }
+                  const toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            showCloseButton: true,
+                            customClass: { popup: `color-success` },
+                          });
+                  
+                          toast.fire({
+                            title: this.translate.instant("SavedSuccessfully"),
+                          }); 
 
                 this.submitting = false;
 
                 this.CrudModal.close();
 
                 this.GetCustomers();
-
+                }
             },
 
             error: (error) => {
@@ -570,6 +642,12 @@ export class CustomersComponent implements OnInit {
 
         }
 
+        if(control.hasError("invalidLanguage")){
+            return this.isArabic
+            ? 'لغة غير صحيحة'
+            : 'Invalid Language';
+        }
+
         return this.isArabic
             ? 'قيمة غير صحيحة'
             : 'Invalid value';
@@ -604,8 +682,23 @@ export class CustomersComponent implements OnInit {
 
     showError(message: string): void {
 
-        alert(message);
+       const toast = Swal.mixin({
+                 toast: true,
+                 position: 'top-end',
+                 showConfirmButton: false,
+                 timer: 3000,
+                 showCloseButton: true,
+                 customClass: { popup: `color-danger` },
+               });
+       
+               toast.fire({
+                 title: message,
+               }); 
 
     }
+
+    hasAnyPermissionOf(permissions: number[]): boolean {
+    return this.currentUserService.hasAnyPermissionOf(permissions);
+  }
 
 }

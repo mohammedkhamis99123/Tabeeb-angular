@@ -234,5 +234,19 @@
   "phoneNumber": "Phone Number",
   "Address": "Address",
   "EmployeeImage": "Employee Image",
-  "invalidEmail": "Invalid Email"
+  "invalidEmail": "Invalid Email",
+  "customers": "Customers",
+  "manage": "Manage customers and their medical files",
+  "AddNewCustomer": "Add New Customer",
+  "EditMedicalFile": "Edit Medical File",
+  "PersonalInformation": "Personal Information",
+  "EnterArabicname": "Enter Arabic Name",
+  "EnterIdentityNumber": "Enter Identity Number",
+  "MedicalFileNumber": "Medical File Number",
+  "EnterMedicalFileNumber": "Enter Medical File Number",
+  "ContactInformation": "Contact Information",
+  "PhoneNumber": "Phone Number",
+  "EnterPhoneNumber": "Enter Phone Number",
+  "EnterCustomerAddress": "Enter Customer Address",
+  "manageEmployees": "Manage Clinic Employees"
 }
