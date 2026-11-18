@@ -4,6 +4,7 @@ import { ClinicDoctorsComponent } from './doctors/doctors.component';
 import { OffersComponent } from './offers/offers.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { CustomersComponent } from './customers/customers.component';
+import { RolePermissionsComponent } from './role-permission/role-permission.component';
 
 const routes: Routes = [
 
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path:"Customers",
     component:CustomersComponent
+  },
+  {
+    path:"Permissions",
+    component:RolePermissionsComponent
   }
 ];
 

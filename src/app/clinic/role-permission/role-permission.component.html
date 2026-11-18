@@ -1,0 +1,158 @@
+
+<div class="role-permissions-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h2>Role Permissions</h2>
+      <p>Manage permissions for each role in your clinic.</p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="toggleAll(true)"
+        [disabled]="loading">
+        <i class="fa-solid fa-check-double"></i>
+        Select All
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="toggleAll(false)"
+        [disabled]="loading">
+        <i class="fa-solid fa-xmark"></i>
+        Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- Role Selection -->
+  <div class="role-card">
+    <div class="role-select-wrapper">
+      <label for="roleSelect">Select Role</label>
+
+      <select
+        id="roleSelect"
+        class="role-select"
+        [(ngModel)]="selectedRole"
+        (ngModelChange)="onRoleChange()">
+
+        <option *ngFor="let role of roles" [ngValue]="role">
+          {{ role }}
+        </option>
+
+      </select>
+    </div>
+
+    <div class="permissions-summary">
+      <div class="summary-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+
+      <div>
+        <strong>{{ selectedPermissionsCount }}</strong>
+        <span> / {{ totalPermissionsCount }} permissions selected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="loading">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+    <span>Loading permissions...</span>
+  </div>
+
+  <!-- Permission Groups -->
+  <div class="permissions-grid" *ngIf="!loading">
+
+    <div
+      class="permission-group"
+      *ngFor="let group of permissionGroups">
+
+      <div class="group-header">
+
+        <div class="group-title">
+          <div class="group-icon">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+
+          <div>
+            <h3>{{ group.title }}</h3>
+         
+          </div>
+        </div>
+
+        <label class="select-group">
+          <input
+            type="checkbox"
+            [checked]="isGroupSelected(group)"
+            [indeterminate]="isGroupIndeterminate(group)"
+            (change)="toggleGroup(group, $any($event.target).checked)">
+
+          <span>Select All</span>
+        </label>
+
+      </div>
+
+      <div class="permissions-list">
+
+        <label
+          class="permission-item"
+          *ngFor="let permission of group.permissions"
+          [class.permission-selected]="permission.selected">
+
+          <input
+            type="checkbox"
+            [(ngModel)]="permission.selected">
+
+          <span class="custom-checkbox">
+            <i class="fa-solid fa-check"></i>
+          </span>
+
+          <span class="permission-name">
+            {{ permission.name }}
+          </span>
+
+        </label>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="permissions-footer" *ngIf="!loading">
+
+    <div class="footer-info">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>
+        {{ selectedPermissionsCount }} permissions selected for
+        <strong>{{ selectedRole }}</strong>
+      </span>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="savePermissions()"
+      [disabled]="saving || !selectedRole">
+
+      <i
+        class="fa-solid"
+        [class.fa-spinner]="saving"
+        [class.fa-spin]="saving"
+        [class.fa-floppy-disk]="!saving">
+      </i>
+
+      {{ saving ? 'Saving...' : 'Save Permissions' }}
+
+    </button>
+
+  </div>
+
+</div>
+
