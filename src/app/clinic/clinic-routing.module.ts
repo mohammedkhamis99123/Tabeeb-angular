@@ -5,6 +5,7 @@ import { OffersComponent } from './offers/offers.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { CustomersComponent } from './customers/customers.component';
 import { RolePermissionsComponent } from './role-permission/role-permission.component';
+import { myClinicComponent } from './my-clinic/my-clinic.component';
 
 const routes: Routes = [
 
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path:"Permissions",
     component:RolePermissionsComponent
+  },
+  {
+    path:"MyClinic",
+    component:myClinicComponent
   }
 ];
 

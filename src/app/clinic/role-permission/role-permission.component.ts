@@ -7,6 +7,8 @@ import { Roles } from 'src/app/common/enums/roles.enum';
 import { IRolePermissionGroup } from './models/IRolePermissionGroup.model';
 import { RolePermissionsService } from './services/role-permissions.service';
 import { Permission } from 'src/app/common/enums/Permission.enum';
+import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -28,7 +30,8 @@ roles = Object.values(Roles).filter(
   saving = false;
 
   constructor(
-    private rolePermissionsService: RolePermissionsService
+    private rolePermissionsService: RolePermissionsService,
+    protected translate:TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -189,7 +192,18 @@ roles = Object.values(Roles).filter(
   savePermissions(): void {
 
     if (!this.selectedRole) {
-      alert('Please select a role.');
+      const toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            showCloseButton: true,
+                            customClass: { popup: `color-danger` },
+                          });
+                  
+                          toast.fire({
+                            title: this.translate.instant("SelectRole"),
+                          });
       return;
     }
 
@@ -212,7 +226,18 @@ roles = Object.values(Roles).filter(
       .pipe(finalize(() => this.saving = false))
       .subscribe({
         next: () => {
-          alert('Role permissions updated successfully.');
+          const toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            showCloseButton: true,
+                            customClass: { popup: `color-success` },
+                          });
+                  
+                          toast.fire({
+                            title: this.translate.instant("SavedSuccessfully"),
+                          });
         },
         error: error => {
           console.error('Error updating role permissions:', error);

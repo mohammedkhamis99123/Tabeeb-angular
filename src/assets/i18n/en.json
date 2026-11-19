@@ -248,5 +248,10 @@
   "PhoneNumber": "Phone Number",
   "EnterPhoneNumber": "Enter Phone Number",
   "EnterCustomerAddress": "Enter Customer Address",
-  "manageEmployees": "Manage Clinic Employees"
+  "manageEmployees": "Manage Clinic Employees",
+  "SelectRole": "Select Role",
+  "RolePermissions": "Role Permissions",
+  "TitleOfPermissions": "Manage permissions for each role in your clinic.",
+  "SelectAll": "Select All",
+  "ClearAll": "Clear All"
 }

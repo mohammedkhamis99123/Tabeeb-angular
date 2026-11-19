@@ -13,10 +13,16 @@ import { DataTableModule } from '@bhplugin/ng-datatable';
 import { EmployeesComponent } from './employees/employees.component';
 import { CustomersComponent } from './customers/customers.component';
 import { RolePermissionsComponent } from './role-permission/role-permission.component';
+import { myClinicComponent } from './my-clinic/my-clinic.component';
 
 
 @NgModule({
-  declarations: [ClinicDoctorsComponent,OffersComponent,EmployeesComponent,CustomersComponent,RolePermissionsComponent],
+  declarations: [ClinicDoctorsComponent
+    ,OffersComponent
+    ,EmployeesComponent
+    ,CustomersComponent
+    ,RolePermissionsComponent,
+    myClinicComponent],
   imports: [
     CommonModule,
     ClinicRoutingModule,

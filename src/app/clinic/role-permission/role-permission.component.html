@@ -4,8 +4,8 @@
   <!-- Page Header -->
   <div class="page-header">
     <div>
-      <h2>Role Permissions</h2>
-      <p>Manage permissions for each role in your clinic.</p>
+      <h2>{{"RolePermissions"|translate}}</h2>
+      <p>{{"TitleOfPermissions"|translate}}</p>
     </div>
 
     <div class="header-actions">
@@ -15,7 +15,7 @@
         (click)="toggleAll(true)"
         [disabled]="loading">
         <i class="fa-solid fa-check-double"></i>
-        Select All
+         {{"SelectAll"|translate}}
       </button>
 
       <button
@@ -24,7 +24,7 @@
         (click)="toggleAll(false)"
         [disabled]="loading">
         <i class="fa-solid fa-xmark"></i>
-        Clear All
+        ْ{{"ClearAll"|translate}}
       </button>
     </div>
   </div>
@@ -32,7 +32,7 @@
   <!-- Role Selection -->
   <div class="role-card">
     <div class="role-select-wrapper">
-      <label for="roleSelect">Select Role</label>
+      <label for="roleSelect">{{"SelectRole"|translate}}</label>
 
       <select
         id="roleSelect"

@@ -1,0 +1,665 @@
+
+<div class="my-clinic-page" dir="rtl">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="fa-solid fa-hospital"></i>
+      </div>
+
+      <div>
+        <h1>إعدادات العيادة</h1>
+        <p>إدارة بيانات العيادة ومعلومات التواصل والصور</p>
+      </div>
+    </div>
+
+   
+  </header>
+
+  <!-- Tabs -->
+  <nav class="clinic-tabs">
+
+    <button type="button"
+            class="tab-button"
+            [class.active]="activeTab === 'basic'"
+            [class.has-error]="hasTabError('basic')"
+            (click)="activeTab = 'basic'">
+
+      <i class="fa-solid fa-hospital-user"></i>
+      <span>البيانات الأساسية</span>
+    </button>
+
+    <button type="button"
+            class="tab-button"
+            [class.active]="activeTab === 'owner'"
+            [class.has-error]="hasTabError('owner')"
+            (click)="activeTab = 'owner'">
+
+      <i class="fa-solid fa-user-doctor"></i>
+      <span>بيانات المالك</span>
+    </button>
+
+    <button type="button"
+            class="tab-button"
+            [class.active]="activeTab === 'social'"
+            (click)="activeTab = 'social'">
+
+      <i class="fa-solid fa-share-nodes"></i>
+      <span>التواصل الاجتماعي</span>
+    </button>
+
+    <button type="button"
+            class="tab-button"
+            [class.active]="activeTab === 'media'"
+            (click)="activeTab = 'media'">
+
+      <i class="fa-solid fa-images"></i>
+      <span>صور العيادة</span>
+    </button>
+
+  </nav>
+
+  <!-- ================= BASIC INFORMATION ================= -->
+  <form [formGroup]="clinicForm"
+        (ngSubmit)="onSaveClinic()"
+        *ngIf="activeTab === 'basic'">
+
+    <section class="content-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>البيانات الأساسية</h2>
+          <p>أدخل بيانات العيادة والعنوان والموقع الجغرافي</p>
+        </div>
+        <span class="section-number">01</span>
+      </div>
+
+      <div class="form-grid">
+
+        <!-- Arabic Name -->
+        <div class="form-field">
+          <label>اسم العيادة بالعربي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="arName"
+                 placeholder="مثال: عيادة النور"
+                 [class.invalid]="clinicForm.get('arName')?.invalid && clinicForm.get('arName')?.touched">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('arName')?.hasError('required') && clinicForm.get('arName')?.touched">
+            اسم العيادة بالعربي مطلوب
+          </small>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('arName')?.hasError('maxlength')">
+            الحد الأقصى 200 حرف
+          </small>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('arName')?.hasError('textLang')">
+            يرجى إدخال الاسم باللغة العربية
+          </small>
+        </div>
+
+        <!-- English Name -->
+        <div class="form-field">
+          <label>اسم العيادة بالإنجليزي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="enName"
+                 placeholder="Clinic Name"
+                 dir="ltr"
+                 [class.invalid]="clinicForm.get('enName')?.invalid && clinicForm.get('enName')?.touched">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('enName')?.hasError('required') && clinicForm.get('enName')?.touched">
+            Clinic name is required
+          </small>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('enName')?.hasError('maxlength')">
+            Maximum length is 200 characters
+          </small>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('enName')?.hasError('textLang')">
+            Please enter the name in English
+          </small>
+        </div>
+
+        <!-- City -->
+        <div class="form-field">
+          <label>المدينة <span>*</span></label>
+
+          <select formControlName="cityId"
+                  [class.invalid]="clinicForm.get('cityId')?.invalid && clinicForm.get('cityId')?.touched">
+
+            <option [ngValue]="null">اختر المدينة</option>
+
+            <option *ngFor="let city of cities"
+                    [ngValue]="city.id">
+              {{ city.name }}
+            </option>
+
+          </select>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('cityId')?.invalid && clinicForm.get('cityId')?.touched">
+            برجاء اختيار المدينة
+          </small>
+        </div>
+
+        <!-- Arabic Street -->
+        <div class="form-field">
+          <label>اسم الشارع بالعربي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="streetArName"
+                 placeholder="اسم الشارع"
+                 [class.invalid]="clinicForm.get('streetArName')?.invalid && clinicForm.get('streetArName')?.touched">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('streetArName')?.hasError('required') && clinicForm.get('streetArName')?.touched">
+            اسم الشارع مطلوب
+          </small>
+        </div>
+
+        <!-- English Street -->
+        <div class="form-field">
+          <label>اسم الشارع بالإنجليزي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="streetEnName"
+                 placeholder="Street Name"
+                 dir="ltr"
+                 [class.invalid]="clinicForm.get('streetEnName')?.invalid && clinicForm.get('streetEnName')?.touched">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('streetEnName')?.hasError('required') && clinicForm.get('streetEnName')?.touched">
+            Street name is required
+          </small>
+        </div>
+
+      </div>
+
+      <div class="form-field full-width">
+        <label>الوصف بالعربي <span>*</span></label>
+
+        <textarea rows="4"
+                  formControlName="arDescription"
+                  placeholder="اكتب وصفاً مختصراً عن العيادة"></textarea>
+
+        <small class="error-message"
+               *ngIf="clinicForm.get('arDescription')?.invalid && clinicForm.get('arDescription')?.touched">
+          وصف العيادة بالعربي مطلوب
+        </small>
+      </div>
+
+      <div class="form-field full-width">
+        <label>الوصف بالإنجليزي <span>*</span></label>
+
+        <textarea rows="4"
+                  formControlName="enDescription"
+                  placeholder="Write a short description about the clinic"
+                  dir="ltr"></textarea>
+
+        <small class="error-message"
+               *ngIf="clinicForm.get('enDescription')?.invalid && clinicForm.get('enDescription')?.touched">
+          English description is required
+        </small>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label>الملف التعريفي بالعربي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="profileAr"
+                 placeholder="الملف التعريفي">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('profileAr')?.invalid && clinicForm.get('profileAr')?.touched">
+            الملف التعريفي بالعربي مطلوب
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label>الملف التعريفي بالإنجليزي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="profileEn"
+                 placeholder="Profile"
+                 dir="ltr">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('profileEn')?.invalid && clinicForm.get('profileEn')?.touched">
+            English profile is required
+          </small>
+        </div>
+
+      </div>
+
+      <!-- Location -->
+      <div class="location-section">
+
+        <div class="section-heading">
+          <div>
+            <h2>موقع العيادة</h2>
+            <p>حدد موقع العيادة على الخريطة أو أدخل الإحداثيات</p>
+          </div>
+          <i class="fa-solid fa-location-dot location-icon"></i>
+        </div>
+
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label>Latitude</label>
+
+            <input type="text"
+                   formControlName="latitude"
+                   dir="ltr"
+                   (input)="applyCoordinatesInput()">
+          </div>
+
+          <div class="form-field">
+            <label>Longitude</label>
+
+            <input type="text"
+                   formControlName="langitude"
+                   dir="ltr"
+                   (input)="applyCoordinatesInput()">
+          </div>
+
+        </div>
+
+        <button type="button"
+                class="location-btn"
+                (click)="useCurrentLocation()">
+          <i class="fa-solid fa-crosshairs"></i>
+          استخدام موقعي الحالي
+        </button>
+
+        <div #mapContainer class="clinic-map"></div>
+
+      </div>
+
+      <div class="form-footer">
+        <button type="button"
+                class="next-btn"
+                (click)="activeTab = 'owner'">
+          التالي: بيانات المالك
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+
+    </section>
+  </form>
+
+  <!-- ================= OWNER INFORMATION ================= -->
+  <form [formGroup]="clinicForm"
+        *ngIf="activeTab === 'owner'">
+
+    <section class="content-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>بيانات مالك العيادة</h2>
+          <p>بيانات الشخص المسؤول عن إدارة العيادة</p>
+        </div>
+        <span class="section-number">02</span>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label>اسم المالك بالعربي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="ownerArName"
+                 placeholder="اسم المالك">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('ownerArName')?.invalid && clinicForm.get('ownerArName')?.touched">
+            اسم المالك بالعربي مطلوب
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label>اسم المالك بالإنجليزي <span>*</span></label>
+
+          <input type="text"
+                 formControlName="ownerEnName"
+                 placeholder="Owner Name"
+                 dir="ltr">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('ownerEnName')?.invalid && clinicForm.get('ownerEnName')?.touched">
+            اسم المالك بالإنجليزي مطلوب
+          </small>
+        </div>
+
+        <div class="form-field full-width">
+          <label>البريد الإلكتروني <span>*</span></label>
+
+          <input type="email"
+                 formControlName="ownerEmail"
+                 placeholder="example@email.com"
+                 dir="ltr">
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('ownerEmail')?.hasError('required') && clinicForm.get('ownerEmail')?.touched">
+            البريد الإلكتروني مطلوب
+          </small>
+
+          <small class="error-message"
+                 *ngIf="clinicForm.get('ownerEmail')?.hasError('email') && clinicForm.get('ownerEmail')?.touched">
+            البريد الإلكتروني غير صحيح
+          </small>
+        </div>
+
+      </div>
+
+      <div class="form-footer">
+        <button type="button"
+                class="back-btn"
+                (click)="activeTab = 'basic'">
+          <i class="fa-solid fa-arrow-right"></i>
+          السابق
+        </button>
+
+        <button type="button"
+                class="next-btn"
+                (click)="activeTab = 'social'">
+          التالي: التواصل الاجتماعي
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+
+    </section>
+  </form>
+
+  <!-- ================= SOCIAL INFORMATION ================= -->
+  <form [formGroup]="clinicForm"
+        *ngIf="activeTab === 'social'">
+
+    <section class="content-card">
+
+      <div class="section-heading">
+        <div>
+          <h2>وسائل التواصل الاجتماعي</h2>
+          <p>أضف حسابات العيادة وأرقام التواصل الخاصة بها</p>
+        </div>
+        <span class="section-number">03</span>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label>
+            <i class="fa-brands fa-snapchat social-snap"></i>
+            Snapchat
+          </label>
+
+          <input type="text"
+                 formControlName="snapshatUser"
+                 placeholder="Snapchat username"
+                 dir="ltr">
+        </div>
+
+        <div class="form-field">
+          <label>
+            <i class="fa-brands fa-instagram social-instagram"></i>
+            Instagram
+          </label>
+
+          <input type="text"
+                 formControlName="instgramUser"
+                 placeholder="Instagram username"
+                 dir="ltr">
+        </div>
+
+        <div class="form-field full-width">
+          <label>
+            <i class="fa-brands fa-whatsapp social-whatsapp"></i>
+            WhatsApp
+          </label>
+
+          <input type="text"
+                 formControlName="whatsappNumber"
+                 placeholder="رقم الواتساب"
+                 dir="ltr">
+        </div>
+
+      </div>
+
+      <div class="form-footer">
+        <button type="button"
+                class="back-btn"
+                (click)="activeTab = 'owner'">
+          <i class="fa-solid fa-arrow-right"></i>
+          السابق
+        </button>
+
+        <button type="button"
+                class="next-btn"
+                (click)="activeTab = 'media'">
+          التالي: صور العيادة
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+
+    </section>
+  </form>
+
+  <!-- ================= CLINIC MEDIA ================= -->
+  <section class="content-card media-section"
+           *ngIf="activeTab === 'media'">
+
+    <div class="section-heading">
+      <div>
+        <h2>صور العيادة</h2>
+        <p>يمكنك عرض الصور الحالية أو استبدالها أو حذفها</p>
+      </div>
+      <span class="section-number">04</span>
+    </div>
+
+    <div class="media-grid">
+
+      <!-- Logo -->
+      <div class="media-card">
+
+        <div class="media-card-header">
+          <div class="media-icon">
+            <i class="fa-solid fa-image"></i>
+          </div>
+
+          <div>
+            <h3>Clinic Logo</h3>
+            <p>شعار العيادة</p>
+          </div>
+        </div>
+
+        <div class="image-preview logo-preview">
+
+          <img *ngIf="logoPreview"
+               [src]="logoPreview"
+               alt="Clinic Logo">
+
+          <div *ngIf="!logoPreview" class="empty-image">
+            <i class="fa-regular fa-image"></i>
+            <span>لا يوجد شعار</span>
+          </div>
+
+        </div>
+
+        <div class="media-actions">
+
+          <label class="upload-btn">
+            <i class="fa-solid fa-camera"></i>
+            تغيير الصورة
+
+            <input type="file"
+                   accept="image/png,image/jpeg,image/webp"
+                   hidden
+                   (change)="onFileSelected($event, 'LogoImage')">
+          </label>
+
+          <button type="button"
+                  class="remove-btn"
+                  *ngIf="logoPreview"
+                  (click)="removeImage('LogoImage')">
+            <i class="fa-solid fa-trash"></i>
+            حذف
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Banner -->
+      <div class="media-card">
+
+        <div class="media-card-header">
+          <div class="media-icon">
+            <i class="fa-solid fa-panorama"></i>
+          </div>
+
+          <div>
+            <h3>Clinic Banner</h3>
+            <p>صورة غلاف العيادة</p>
+          </div>
+        </div>
+
+        <div class="image-preview banner-preview">
+
+          <img *ngIf="bannerPreview"
+               [src]="bannerPreview"
+               alt="Clinic Banner">
+
+          <div *ngIf="!bannerPreview" class="empty-image">
+            <i class="fa-regular fa-image"></i>
+            <span>لا توجد صورة غلاف</span>
+          </div>
+
+        </div>
+
+        <div class="media-actions">
+
+          <label class="upload-btn">
+            <i class="fa-solid fa-camera"></i>
+            تغيير الصورة
+
+            <input type="file"
+                   accept="image/png,image/jpeg,image/webp"
+                   hidden
+                   (change)="onFileSelected($event, 'BannerImage')">
+          </label>
+
+          <button type="button"
+                  class="remove-btn"
+                  *ngIf="bannerPreview"
+                  (click)="removeImage('BannerImage')">
+            <i class="fa-solid fa-trash"></i>
+            حذف
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Invoice Logo -->
+      <div class="media-card">
+
+        <div class="media-card-header">
+          <div class="media-icon">
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+
+          <div>
+            <h3>Invoice Logo</h3>
+            <p>شعار الفواتير</p>
+          </div>
+        </div>
+
+        <div class="image-preview invoice-preview">
+
+          <img *ngIf="invoicePreview"
+               [src]="invoicePreview"
+               alt="Invoice Logo">
+
+          <div *ngIf="!invoicePreview" class="empty-image">
+            <i class="fa-regular fa-image"></i>
+            <span>لا يوجد شعار للفواتير</span>
+          </div>
+
+        </div>
+
+        <div class="media-actions">
+
+          <label class="upload-btn">
+            <i class="fa-solid fa-camera"></i>
+            تغيير الصورة
+
+            <input type="file"
+                   accept="image/png,image/jpeg,image/webp"
+                   hidden
+                   (change)="onFileSelected($event, 'InvoiceImage')">
+          </label>
+
+          <button type="button"
+                  class="remove-btn"
+                  *ngIf="invoicePreview"
+                  (click)="removeImage('InvoiceImage')">
+            <i class="fa-solid fa-trash"></i>
+            حذف
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="media-footer">
+
+      <button type="button"
+              class="back-btn"
+              (click)="activeTab = 'social'">
+        <i class="fa-solid fa-arrow-right"></i>
+        السابق
+      </button>
+
+      <button type="button"
+              class="save-images-btn"
+              [disabled]="isUploadingImages()"
+              (click)="uploadSelectedImages()">
+
+        <i class="fa-solid fa-floppy-disk"></i>
+
+        {{ isUploadingImages() ? 'جاري الحفظ...' : 'حفظ تعديلات الصور' }}
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- General Save -->
+  <div class="bottom-save-area"
+       *ngIf="activeTab !== 'media'">
+
+    <button type="button"
+            class="main-save-btn"
+            (click)="onSaveClinic()">
+
+      <i class="fa-solid fa-floppy-disk"></i>
+      حفظ بيانات العيادة
+
+    </button>
+
+  </div>
+
+</div>
+

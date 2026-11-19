@@ -248,5 +248,10 @@
   "PhoneNumber": "رقم الهاتف",
   "EnterPhoneNumber": "ادخل رقم الهاتف",
   "EnterCustomerAddress": "ادخل عنوان العميل",
-  "manageEmployees": "قم باداره موظفين العيادة"
+  "manageEmployees": "قم باداره موظفين العيادة",
+  "SelectRole": "يرجى اختبار الدور",
+  "RolePermissions": "صلاحيات الادوار",
+  "TitleOfPermissions": "قم باداره صلاحيات الادوار في عيادتك",
+  "SelectAll": "اختيار الكل",
+  "ClearAll": "مسح الكل"
 }
