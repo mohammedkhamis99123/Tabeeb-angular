@@ -272,7 +272,7 @@
 
 :host ::ng-deep .CrudModal .modal-body {
     padding: 26px;
-    max-height: 78vh;
+    max-height: inherit;
     overflow-y: auto;
 }
 
@@ -514,4 +514,81 @@
         height: 75px;
         min-width: 75px;
     }
+}
+
+
+/* Main Modal */
+.CrudModal {
+    max-height: 85vh !important;
+    overflow: hidden !important;
+}
+
+/* Modal Body */
+.employee-modal-body {
+    max-height: calc(85vh - 150px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 24px;
+    overscroll-behavior: contain;
+}
+
+/* Form */
+.employee-form {
+    width: 100%;
+}
+
+/* Footer */
+.employee-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+/* Scrollbar */
+.employee-modal-body::-webkit-scrollbar {
+    width: 7px;
+}
+
+.employee-modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.employee-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .employee-modal-body {
+        max-height: calc(90vh - 140px);
+        padding: 16px;
+    }
+
+    .employee-modal-footer {
+        padding: 12px 16px;
+    }
+}
+
+.CrudModal .modal-content {
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+.CrudModal .modal-header,
+.CrudModal .modal-footer {
+    flex-shrink: 0 !important;
+}
+
+.CrudModal .modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
 }

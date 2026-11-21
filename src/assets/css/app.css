@@ -414,3 +414,8 @@ form label > span{
     max-height: 90vh !important;
     overflow-y: auto !important;
 }
+
+.modal-body >div{
+    max-height: inherit !important;
+}
+

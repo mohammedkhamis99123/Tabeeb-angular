@@ -152,6 +152,7 @@ export class ClinicComponent implements AfterViewInit {
       SnapshatUser :new FormControl(''),
       InstgramUser :new FormControl(''),
       WhatsappNumber :new FormControl(''),
+      ActivateOnlineBooking:new FormControl(true)
   
     });
 
@@ -410,7 +411,8 @@ ResetValidation() {
         IsActive: val.isActive,
         SnapshatUser :val.snapshatUser,
         InstgramUser :val.instgramUser,
-        WhatsappNumber:val.whatsappNumber
+        WhatsappNumber:val.whatsappNumber,
+        ActivateOnlineBooking:val.activateOnlineBooking
       })
 
       this.logoPreview =val.logoPath? environment.ImageServer+"/Images/"+ val.logoPath : null;

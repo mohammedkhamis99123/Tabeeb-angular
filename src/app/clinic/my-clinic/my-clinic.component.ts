@@ -205,7 +205,7 @@ imagesForm!: FormGroup;
 
       snapshatUser: [''],
       instgramUser: [''],
-      whatsappNumber: ['']
+      whatsappNumber: [''],
 
     });
 

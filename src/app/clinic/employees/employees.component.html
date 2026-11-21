@@ -62,7 +62,7 @@
                         [(ngModel)]="isActive">
 
                         <option [ngValue]="null">
-                            {{ 'AllStatuses' | translate }}
+                            {{ 'AllStatus' | translate }}
                         </option>
 
                         <option [ngValue]="true">
@@ -299,7 +299,7 @@
 
                          <div class="text-danger" *ngIf="employeeForm.get('email')?.touched && employeeForm.get('email')?.invalid">
                             <span *ngIf="employeeForm.get('email')?.errors?.['required']">{{'required'|translate}}</span>
-                            <span *ngIf="employeeForm.get('arName')?.errors?.['email']">{{'invalidEmail'|translate}} </span>
+                            <span *ngIf="employeeForm.get('email')?.errors?.['email']">{{'invalidEmail'|translate}} </span>
                         </div>
                 </div>
 
@@ -338,7 +338,45 @@
                             <span *ngIf="employeeForm.get('addrees')?.errors?.['maxlength']">{{'maxLength'|translate}} 250</span>
                         </div>
                 </div>
+     <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label">
+                        {{ 'Salary' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
 
+                    <input
+                        type="number"
+                        formControlName="salary"
+                        step="1"
+                        class="form-input"
+                      >
+
+                         <div class="text-danger" *ngIf="employeeForm.get('salary')?.touched && employeeForm.get('salary')?.invalid">
+                            <span *ngIf="employeeForm.get('salary')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('salary')?.errors?.['min']">{{'min'|translate}} </span>
+                        </div>
+                </div>
+
+                   <div class="form-group">
+                    <label class="form-label">
+                        {{ 'workHours' | translate }}
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        formControlName="workHours"
+                        step="1"
+                        class="form-input"
+                      >
+
+                         <div class="text-danger" *ngIf="employeeForm.get('workHours')?.touched && employeeForm.get('workHours')?.invalid">
+                            <span *ngIf="employeeForm.get('workHours')?.errors?.['required']">{{'required'|translate}}</span>
+                            <span *ngIf="employeeForm.get('workHours')?.errors?.['min']">{{'minValue'|translate}} 1 </span>
+                            <span *ngIf="employeeForm.get('workHours')?.errors?.['max']">{{'max'|translate}} 24</span>
+                        </div>
+                </div>
        <!-- Role -->
 <div class="form-group">
     <label class="form-label">
@@ -406,7 +444,7 @@
 <!-- Active Toggle -->
 <div class="form-group md:col-span-2">
     <label class="form-label">
-        {{ 'Status' | translate }}
+        {{ 'status' | translate }}
     </label>
 
     <div class="active-toggle-card">
@@ -527,7 +565,14 @@
 
             </div>
 
-            <!-- Modal Footer -->
+        
+
+        </form>
+
+    </ng-template>
+     
+    <ng-template #modalFooter>
+           <!-- Modal Footer -->
             <div class="flex justify-end gap-2 pt-4 border-t">
 
                 <button
@@ -552,8 +597,5 @@
                 </button>
 
             </div>
-
-        </form>
-
     </ng-template>
 </ngx-custom-modal>

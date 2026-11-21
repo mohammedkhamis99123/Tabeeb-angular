@@ -11,5 +11,7 @@ export interface IEmployee {
   email: string;
   role: string;
   phoneNumber:string;
+  salary:number;
+  workHours:number
 
 }

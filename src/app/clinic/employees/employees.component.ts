@@ -130,7 +130,9 @@ this.roles = [
             role: [null, Validators.required],
             isActive: [true],
             image: [null,[Validators.required]],
-            phoneNumber:[null,[Validators.required]]
+            phoneNumber:[null,[Validators.required]],
+            salary:[null,[Validators.required,Validators.min(1)]],
+            workHours:[8,[Validators.required,Validators.min(1),Validators.max(24)]]
         });
     }
 
@@ -241,6 +243,9 @@ this.roles = [
             isActive: employee.isActive,
             image: null,
             phoneNumber:employee.phoneNumber,
+            salary:employee.salary,
+            workHours:employee.workHours
+
 
           
         });
@@ -263,7 +268,9 @@ this.roles = [
                         doctorId: data.doctorId ?? null,
                         isActive: data.isActive,
                         role:data.role,
-                        phoneNumber:data.phoneNumber
+                        phoneNumber:data.phoneNumber,
+                             salary:employee.salary,
+                            workHours:employee.workHours
                     });
                    
                       this.CheckRole()
@@ -401,6 +408,8 @@ this.roles = [
         formData.append('IsActive', String(value.isActive));
         formData.append('Role', value.role);
         formData.append('PhoneNumber',value.phoneNumber)
+         formData.append('Salary',value.salary)
+         formData.append('workHours',value.workHours)
         if (value.doctorId !== null && value.doctorId !== '') {
             formData.append('DoctorId', String(value.doctorId));
         }
