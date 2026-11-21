@@ -1,0 +1,332 @@
+
+<div class="clinic-dashboard">
+
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-title">
+      <div class="clinic-logo">
+        <i class="fa-solid fa-hospital"></i>
+      </div>
+      <div>
+        <h1>{{ clinicName }}</h1>
+        <p>Clinic Dashboard · Overview</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <span class="clinic-status">
+        <span></span>
+        Active Clinic
+      </span>
+
+      <button class="header-icon">
+        <i class="fa-regular fa-bell"></i>
+      </button>
+
+      <div class="admin-avatar">CA</div>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+
+    <!-- Welcome -->
+    <section class="welcome-section">
+      <div>
+        <h2>Good Morning 👋</h2>
+        <p>Here's what's happening in your clinic today.</p>
+      </div>
+
+      <div class="welcome-date">
+        <i class="fa-regular fa-calendar"></i>
+        <span>{{ today | date:'EEEE, dd MMMM yyyy' }}</span>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-grid">
+
+      <div class="stat-card" *ngFor="let stat of stats">
+        <div class="stat-card-top">
+          <div class="stat-icon" [ngClass]="stat.color">
+            <i class="fa-solid" [ngClass]="stat.icon"></i>
+          </div>
+
+          <span class="stat-change">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            {{ stat.change }}
+          </span>
+        </div>
+
+        <div class="stat-details">
+          <span>{{ stat.title }}</span>
+          <div class="stat-value">
+            <h3>{{ stat.value }}</h3>
+            <small *ngIf="stat.suffix">{{ stat.suffix }}</small>
+          </div>
+          <p>{{ stat.note }}</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Revenue + Appointment Status -->
+    <section class="charts-grid">
+
+      <div class="dashboard-card revenue-card">
+
+        <div class="card-header">
+          <div>
+            <h3>Revenue Overview</h3>
+            <p>Monitor your clinic's financial performance</p>
+          </div>
+
+          <select
+            [value]="selectedPeriod"
+            (change)="changePeriod($any($event.target).value)">
+            <option>This Week</option>
+            <option>This Month</option>
+            <option>This Year</option>
+          </select>
+        </div>
+
+        <div class="revenue-summary">
+          <h2>SAR 38,450</h2>
+          <span>
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            15.3%
+          </span>
+          <small>Revenue compared to previous period</small>
+        </div>
+
+        <div class="chart-container">
+          <apx-chart
+            [series]="revenueChart.series"
+            [chart]="revenueChart.chart"
+            [colors]="revenueChart.colors"
+            [stroke]="revenueChart.stroke"
+            [fill]="revenueChart.fill"
+            [dataLabels]="revenueChart.dataLabels"
+            [xaxis]="revenueChart.xaxis"
+            [yaxis]="revenueChart.yaxis"
+            [grid]="revenueChart.grid"
+            [tooltip]="revenueChart.tooltip">
+          </apx-chart>
+        </div>
+
+      </div>
+
+      <div class="dashboard-card">
+
+        <div class="card-header">
+          <div>
+            <h3>Appointment Status</h3>
+            <p>Today's appointment distribution</p>
+          </div>
+
+          <button class="more-button">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+        </div>
+
+        <div class="chart-container donut-chart">
+          <apx-chart
+            [series]="appointmentStatusChart.series"
+            [chart]="appointmentStatusChart.chart"
+            [labels]="appointmentStatusChart.labels"
+            [colors]="appointmentStatusChart.colors"
+            [legend]="appointmentStatusChart.legend"
+            [dataLabels]="appointmentStatusChart.dataLabels"
+            [stroke]="appointmentStatusChart.stroke"
+            [plotOptions]="appointmentStatusChart.plotOptions"
+            [tooltip]="appointmentStatusChart.tooltip">
+          </apx-chart>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Patients Growth + Monthly Appointments -->
+    <section class="charts-grid">
+
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div>
+            <h3>Patients Growth</h3>
+            <p>New patient registrations during the year</p>
+          </div>
+
+          <span class="growth-badge">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            Growing
+          </span>
+        </div>
+
+        <div class="chart-container">
+          <apx-chart
+            [series]="patientsChart.series"
+            [chart]="patientsChart.chart"
+            [colors]="patientsChart.colors"
+            [stroke]="patientsChart.stroke"
+            [markers]="patientsChart.markers"
+            [dataLabels]="patientsChart.dataLabels"
+            [xaxis]="patientsChart.xaxis"
+            [yaxis]="patientsChart.yaxis"
+            [grid]="patientsChart.grid"
+            [tooltip]="patientsChart.tooltip">
+          </apx-chart>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div>
+            <h3>Monthly Appointments</h3>
+            <p>Appointments throughout the year</p>
+          </div>
+
+          <button class="more-button">
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+        </div>
+
+        <div class="chart-container">
+          <apx-chart
+            [series]="monthlyAppointmentsChart.series"
+            [chart]="monthlyAppointmentsChart.chart"
+            [colors]="monthlyAppointmentsChart.colors"
+            [plotOptions]="monthlyAppointmentsChart.plotOptions"
+            [dataLabels]="monthlyAppointmentsChart.dataLabels"
+            [xaxis]="monthlyAppointmentsChart.xaxis"
+            [yaxis]="monthlyAppointmentsChart.yaxis"
+            [grid]="monthlyAppointmentsChart.grid"
+            [tooltip]="monthlyAppointmentsChart.tooltip">
+          </apx-chart>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Appointments + Doctors -->
+    <section class="bottom-grid">
+
+      <!-- Today's Appointments -->
+      <div class="dashboard-card appointments-card">
+
+        <div class="card-header">
+          <div>
+            <h3>Today's Appointments</h3>
+            <p>Manage your daily appointments</p>
+          </div>
+
+          <button class="view-all">
+            View All
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>PATIENT</th>
+                <th>DOCTOR</th>
+                <th>TIME</th>
+                <th>TYPE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let appointment of appointments">
+
+                <td>
+                  <div class="patient-cell">
+                    <div class="patient-avatar">
+                      {{ appointment.initials }}
+                    </div>
+                    <strong>{{ appointment.patient }}</strong>
+                  </div>
+                </td>
+
+                <td>{{ appointment.doctor }}</td>
+                <td>{{ appointment.time }}</td>
+                <td>{{ appointment.type }}</td>
+
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="getStatusClass(appointment.status)">
+                    {{ appointment.status }}
+                  </span>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Top Doctors -->
+      <div class="dashboard-card doctors-card">
+
+        <div class="card-header">
+          <div>
+            <h3>Top Doctors</h3>
+            <p>Best performing doctors</p>
+          </div>
+
+          <button class="view-all">
+            View All
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="doctor-list">
+
+          <div class="doctor-item" *ngFor="let doctor of topDoctors">
+
+            <div class="doctor-avatar">
+              {{ doctor.initials }}
+            </div>
+
+            <div class="doctor-info">
+              <strong>{{ doctor.name }}</strong>
+              <span>{{ doctor.specialty }}</span>
+
+              <div class="doctor-progress">
+                <div class="progress-track">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="doctor.percentage">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="doctor-rating">
+              <span>
+                <i class="fa-solid fa-star"></i>
+                {{ doctor.rating }}
+              </span>
+              <small>{{ doctor.appointments }} bookings</small>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <span>© 2026 Tabeeb. All rights reserved.</span>
+      <span>Clinic ID: {{ clinicId ?? 'Not selected' }}</span>
+    </footer>
+
+  </main>
+</div>
+

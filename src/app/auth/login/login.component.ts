@@ -7,7 +7,6 @@ import { AppService } from 'src/app/app.service';
 import { LoginService } from './Services/login.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ILogin } from './Models/Login.model';
-import { setPostSignalSetFn } from '@angular/core/primitives/signals';
 
 @Component({
   selector: 'app-login',

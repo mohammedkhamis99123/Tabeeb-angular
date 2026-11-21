@@ -6,9 +6,18 @@ import { EmployeesComponent } from './employees/employees.component';
 import { CustomersComponent } from './customers/customers.component';
 import { RolePermissionsComponent } from './role-permission/role-permission.component';
 import { myClinicComponent } from './my-clinic/my-clinic.component';
+import { ClinicDashboardComponent } from './index/index.component';
 
 const routes: Routes = [
-
+{
+  path:"",
+  redirectTo:"Index",
+  pathMatch:'full'
+},
+{
+  path:"Index",
+  component:ClinicDashboardComponent
+},
   {
     path:"Doctors",
     component:ClinicDoctorsComponent

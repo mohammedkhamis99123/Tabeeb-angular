@@ -14,6 +14,8 @@ import { EmployeesComponent } from './employees/employees.component';
 import { CustomersComponent } from './customers/customers.component';
 import { RolePermissionsComponent } from './role-permission/role-permission.component';
 import { myClinicComponent } from './my-clinic/my-clinic.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ClinicDashboardComponent } from './index/index.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { myClinicComponent } from './my-clinic/my-clinic.component';
     ,EmployeesComponent
     ,CustomersComponent
     ,RolePermissionsComponent,
-    myClinicComponent],
+    myClinicComponent,
+  ClinicDashboardComponent
+],
   imports: [
     CommonModule,
     ClinicRoutingModule,
@@ -32,7 +36,8 @@ import { myClinicComponent } from './my-clinic/my-clinic.component';
     ReactiveFormsModule,
     RowActionsMenuComponent,
     NgSelectModule,
-    DataTableModule
+    DataTableModule,
+     NgApexchartsModule
 ]
 })
 export class ClinicModule { }

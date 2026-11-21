@@ -1,6 +1,6 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SuperAdminIndexComponent } from './super-admin-index/super-admin-index.component';
+import { SuperAdminDashboardComponent  } from './super-admin-index/super-admin-index.component';
 import { SpecializationComponent } from './specialization/specialization.component';
 import { CountryComponent } from './country/country.component';
 import { CityComponent } from './city/city.component';
@@ -38,7 +38,7 @@ const routes: Routes = [
   },
   {
     path:"Index",
-    component:SuperAdminIndexComponent
+    component:SuperAdminDashboardComponent
   },
   {
     path:"Subscription",

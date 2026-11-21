@@ -1,1 +1,370 @@
-<p>super-admin-index works!</p>
+
+<div class="dashboard-wrapper">
+
+
+
+    <!-- Topbar -->
+  
+    <div class="dashboard-content">
+
+      <!-- Welcome Section -->
+      <section class="welcome-section">
+        <div>
+          <h2>Dashboard Overview</h2>
+          <p>Monitor your platform performance and manage your business.</p>
+        </div>
+
+        <div class="welcome-actions">
+          <button class="secondary-button" (click)="exportReport()">
+            <i class="fa-solid fa-download"></i>
+            Export Report
+          </button>
+
+          <button class="primary-button">
+            <i class="fa-solid fa-plus"></i>
+            Add New Clinic
+          </button>
+        </div>
+      </section>
+
+      <!-- Statistics -->
+      <section class="stats-grid">
+
+        <div class="stat-card" *ngFor="let stat of stats">
+
+          <div class="stat-top">
+            <div class="stat-icon" [ngClass]="stat.color">
+              <i class="fa-solid" [ngClass]="stat.icon"></i>
+            </div>
+
+            <span class="stat-change">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              {{ stat.change }}
+            </span>
+          </div>
+
+          <div class="stat-info">
+            <span>{{ stat.title }}</span>
+            <h3>{{ stat.value }}</h3>
+            <p>{{ stat.description }}</p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Revenue + Subscription -->
+      <section class="charts-grid">
+
+        <div class="dashboard-card revenue-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Revenue Overview</h3>
+              <p>Track your platform revenue</p>
+            </div>
+
+            <select
+              [value]="selectedPeriod"
+              (change)="changePeriod($any($event.target).value)">
+              <option value="7 Days">Last 7 Days</option>
+              <option value="30 Days">Last 30 Days</option>
+              <option value="12 Months">Last 12 Months</option>
+            </select>
+          </div>
+
+          <div class="revenue-summary">
+            <h2>SAR 42,850</h2>
+            <span>
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              12.8%
+            </span>
+            <small>Compared to previous period</small>
+          </div>
+
+          <div class="chart-container">
+            <apx-chart
+              [series]="revenueChart.series"
+              [chart]="revenueChart.chart"
+              [xaxis]="revenueChart.xaxis!"
+              [yaxis]="revenueChart.yaxis!"
+              [stroke]="revenueChart.stroke!"
+              [dataLabels]="revenueChart.dataLabels!"
+              [grid]="revenueChart.grid!"
+              [tooltip]="revenueChart.tooltip!"
+              [fill]="revenueChart.fill!"
+              [colors]="revenueChart.colors!">
+            </apx-chart>
+          </div>
+
+        </div>
+
+        <div class="dashboard-card subscription-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Subscription Overview</h3>
+              <p>Current subscription distribution</p>
+            </div>
+
+            <button class="more-button">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+          </div>
+
+          <div class="chart-container donut-container">
+            <apx-chart
+              [series]="subscriptionChart.series"
+              [chart]="subscriptionChart.chart"
+              [labels]="subscriptionChart.labels!"
+              [colors]="subscriptionChart.colors!"
+              [legend]="subscriptionChart.legend!"
+              [dataLabels]="subscriptionChart.dataLabels!"
+              [plotOptions]="subscriptionChart.plotOptions!"
+              [tooltip]="subscriptionChart.tooltip!"
+              [responsive]="subscriptionChart.responsive!">
+            </apx-chart>
+          </div>
+
+          <div class="subscription-footer">
+            <div>
+              <span class="legend-dot purple-dot"></span>
+              <span>Active</span>
+              <strong>125</strong>
+            </div>
+            <div>
+              <span class="legend-dot green-dot"></span>
+              <span>Trial</span>
+              <strong>85</strong>
+            </div>
+            <div>
+              <span class="legend-dot orange-dot"></span>
+              <span>Expired</span>
+              <strong>38</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Clinic Growth + Appointment Chart -->
+      <section class="charts-grid secondary-charts">
+
+        <div class="dashboard-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Clinic Growth</h3>
+              <p>New clinics registered throughout the year</p>
+            </div>
+
+            <span class="chart-badge">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              +18.5%
+            </span>
+          </div>
+
+          <div class="chart-container">
+            <apx-chart
+              [series]="clinicGrowthChart.series"
+              [chart]="clinicGrowthChart.chart"
+              [xaxis]="clinicGrowthChart.xaxis!"
+              [yaxis]="clinicGrowthChart.yaxis!"
+              [stroke]="clinicGrowthChart.stroke!"
+              [dataLabels]="clinicGrowthChart.dataLabels!"
+              [grid]="clinicGrowthChart.grid!"
+              [tooltip]="clinicGrowthChart.tooltip!"
+              [colors]="clinicGrowthChart.colors!">
+            </apx-chart>
+          </div>
+
+        </div>
+
+        <div class="dashboard-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Monthly Appointments</h3>
+              <p>Appointment activity across the platform</p>
+            </div>
+
+            <button class="more-button">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+          </div>
+
+          <div class="chart-container">
+            <apx-chart
+              [series]="appointmentsChart.series"
+              [chart]="appointmentsChart.chart"
+              [xaxis]="appointmentsChart.xaxis!"
+              [yaxis]="appointmentsChart.yaxis!"
+              [plotOptions]="appointmentsChart.plotOptions!"
+              [dataLabels]="appointmentsChart.dataLabels!"
+              [grid]="appointmentsChart.grid!"
+              [tooltip]="appointmentsChart.tooltip!"
+              [colors]="appointmentsChart.colors!">
+            </apx-chart>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Recent Clinics + Activities -->
+      <section class="bottom-grid">
+
+        <!-- Recent Clinics -->
+        <div class="dashboard-card clinics-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Recent Clinics</h3>
+              <p>Recently registered clinics on Tabeeb</p>
+            </div>
+
+            <button class="text-button">
+              View All
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>CLINIC</th>
+                  <th>DOCTORS</th>
+                  <th>PATIENTS</th>
+                  <th>PLAN</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let clinic of clinics">
+
+                  <td>
+                    <div class="clinic-cell">
+                      <div class="clinic-avatar">
+                        {{ clinic.initials }}
+                      </div>
+
+                      <div>
+                        <strong>{{ clinic.name }}</strong>
+                        <span>{{ clinic.location }}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{{ clinic.doctors }}</td>
+                  <td>{{ clinic.patients | number }}</td>
+
+                  <td>
+                    <span class="plan-label">{{ clinic.plan }}</span>
+                  </td>
+
+                  <td>
+                    <span
+                      class="status-badge"
+                      [ngClass]="getStatusClass(clinic.status)">
+                      {{ clinic.status }}
+                    </span>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- Activities -->
+        <div class="dashboard-card activities-card">
+
+          <div class="card-header">
+            <div>
+              <h3>Recent Activities</h3>
+              <p>Latest platform activities</p>
+            </div>
+
+            <button class="more-button">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+          </div>
+
+          <div class="activity-list">
+
+            <div
+              class="activity-item"
+              *ngFor="let activity of activities">
+
+              <div class="activity-icon" [ngClass]="activity.color">
+                <i class="fa-solid" [ngClass]="activity.icon"></i>
+              </div>
+
+              <div class="activity-content">
+                <strong>{{ activity.title }}</strong>
+                <p>{{ activity.description }}</p>
+                <span>{{ activity.time }}</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- Top Clinics -->
+      <section class="dashboard-card top-clinics-card">
+
+        <div class="card-header">
+          <div>
+            <h3>Top Performing Clinics</h3>
+            <p>Clinics with the highest number of appointments</p>
+          </div>
+
+          <button class="text-button">
+            View All
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <div class="top-clinic-list">
+
+          <div class="top-clinic-item" *ngFor="let clinic of topClinics">
+
+            <div class="top-clinic-info">
+              <strong>{{ clinic.name }}</strong>
+              <span>{{ clinic.appointments | number }} appointments</span>
+            </div>
+
+            <div class="progress-wrapper">
+              <div class="progress-track">
+                <div
+                  class="progress-value"
+                  [style.width.%]="clinic.percentage">
+                </div>
+              </div>
+              <strong>{{ clinic.percentage }}%</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <footer class="dashboard-footer">
+        <span>© 2026 Tabeeb. All rights reserved.</span>
+        <span>Super Admin Dashboard</span>
+      </footer>
+
+    </div>
+
+
+
+</div>

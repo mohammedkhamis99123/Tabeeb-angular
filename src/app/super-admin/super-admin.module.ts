@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SuperAdminRoutingModule } from './super-admin-routing.module';
-import { SuperAdminIndexComponent } from './super-admin-index/super-admin-index.component';
+import { SuperAdminDashboardComponent } from './super-admin-index/super-admin-index.component';
 import { SpecializationComponent } from './specialization/specialization.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,11 +15,12 @@ import { SubscriptionPackageComponent } from './supscription-package/supscriptio
 import { ClinicComponent } from './clinic/clinic.component';
 import { SubscriptionComponent } from './subscriptions/subscriptions.component';
 import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
   declarations: [
-    SuperAdminIndexComponent,
+    SuperAdminDashboardComponent,
     SpecializationComponent,
     CountryComponent,
     CityComponent,
@@ -36,7 +37,8 @@ import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerModule } from 'ngx-e
     ReactiveFormsModule,
     DataTableModule,
     RowActionsMenuComponent,
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    NgApexchartsModule
     
   ]
 })
