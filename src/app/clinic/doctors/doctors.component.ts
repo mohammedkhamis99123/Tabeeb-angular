@@ -117,7 +117,7 @@ export class ClinicDoctorsComponent implements OnInit {
             arName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.Arabic)]],
             enName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.English)]],
             email: ['', [Validators.required, Validators.email]],
-            identityNumber: ['', Validators.required],
+            identityNumber: ['', Validators.required,Validators.pattern("^[12]\d{9}$")],
             specializationId: [null, Validators.required],
             sessionDuration: [30, [Validators.required, Validators.min(1)]],
             sessionPrice: [1, [Validators.required, Validators.min(1)]],

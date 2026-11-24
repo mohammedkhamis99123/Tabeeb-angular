@@ -20,7 +20,7 @@ export class LoginComponent {
      store: any;
      isOpen=false;
     currYear: number = new Date().getFullYear();
-    LoginForm!: FormGroup<{ Email: FormControl<string | null>; Password: FormControl<string | null>; RememberMe: FormControl<string | null>; }>;
+    LoginForm!: FormGroup<{ Email: FormControl<string | null>; Password: FormControl<string | null>; RememberMe: FormControl<boolean | null>; }>;
     constructor(
         public translate: TranslateService,
         public storedata: Store<any>,
@@ -37,7 +37,7 @@ export class LoginComponent {
     this.LoginForm=new FormGroup({
             Email:new FormControl('',[Validators.required,Validators.email]),
             Password:new FormControl('',[Validators.required]),
-            RememberMe:new FormControl('')
+            RememberMe:new FormControl(true)
         })
     }
     async initStore() {

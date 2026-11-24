@@ -1,4 +1,24 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { TabeebProfileService } from './services/tabeeb-profile.service';
+import {
+  ClinicDoctorDto,
+  ClinicDoctorWorktimeDto,
+  ClinicDtoWithEvaluation,
+  SubscriptionPackageDto,
+  TabeebProfileDto
+} from '../clinic-profile/models/TabeebProfileDto.model';
+import { environment } from 'src/environments/environment';
+import { TranslateService } from '@ngx-translate/core';
+
+export interface ScreenshotItem {
+  id: number;
+  title: string;
+  desc: string;
+  tag: string;
+  image: string;
+}
 
 @Component({
   selector: 'app-tabeeb-profile',
@@ -6,351 +26,344 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
   templateUrl: './tabeeb-profile.component.html',
   styleUrl: './tabeeb-profile.component.css'
 })
-export class TabeebProfileComponent {
+export class TabeebProfileComponent implements OnInit {
+  private profileService = inject(TabeebProfileService);
+  protected TranslateServ=inject(TranslateService)
+  profile: TabeebProfileDto | null = null;
+  mobileMenuOpen = false;
+  isLoading = true;
+  errorMessage = '';
 
- // بيانات الإحصائيات مع القيمة الرقمية النهائية واللاحقة (مثل + أو K)
-  stats = [
-    { label: 'عيادة نشطة', target: 250, current: 0, suffix: '+' },
-    { label: 'طبيب واستشاري', target: 600, current: 0, suffix: '+' },
-    { label: 'مريض مستفيد', target: 45, current: 0, suffix: 'K+' },
-    { label: 'موعد مؤكد', target: 120, current: 0, suffix: 'K+' }
-  ];
+  // Modal مواعيد الدكتور
+  selectedDoctor: ClinicDoctorDto | null = null;
+  showWorktimeModal = false;
 
-  @ViewChildren('statItem') statElements!: QueryList<ElementRef>;
-  private hasAnimated = false;
+  // فهارس السلايدرز الموحدة
+  screenshotSlideIndex = 0;
+  clinicSlideIndex = 0;
+  doctorSlideIndex = 0;
+  packageSlideIndex = 0;
+  testimonialSlideIndex = 0;
 
-  ngAfterViewInit() {
-    this.initScrollCounter();
-  }
+  // فلترة الأطباء حسب العيادة
+  selectedDoctorClinicFilter: string = 'ALL';
 
-  // مراقبة الـ Scroll وتشغيل العداد عند ظهور الإحصائيات
-  initScrollCounter() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !this.hasAnimated) {
-          this.hasAnimated = true;
-          this.startCounters();
-        }
-      });
-    }, { threshold: 0.3 });
-
-    // مراقبة سكشن الإحصائيات
-    const statsSection = document.getElementById('stats-section');
-    if (statsSection) {
-      observer.observe(statsSection);
-    }
-  }
-
-  startCounters() {
-    this.stats.forEach(stat => {
-      let start = 0;
-      const duration = 2000; // مدة العداد بالميلي ثانية (2 ثانية)
-      const stepTime = Math.abs(Math.floor(duration / stat.target));
-      
-      const timer = setInterval(() => {
-        start += Math.ceil(stat.target / 50); // سرعة الزيادة
-        if (start >= stat.target) {
-          stat.current = stat.target;
-          clearInterval(timer);
-        } else {
-          stat.current = start;
-        }
-      }, 30);
-    });
-  }
-
-  featuredClinics = [
+  screenshots: ScreenshotItem[] = [
     {
       id: 1,
-      name: 'عيادة النور التخصصية',
-      specialty: 'أسنان وتجميل',
-      city: 'الرياض',
-      rating: 4.9,
-         doctorsCount:10,
-      description:"kdkdkdkdkdkdkdk",
-      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&auto=format&fit=crop&q=80'
+      title: 'لوحة التحكم التحليلية',
+      desc: 'متابعة لحظية للإحصائيات، الإيرادات، ومواعيد اليوم في واجهة واحدة.',
+      tag: 'إحصائيات حية',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&auto=format&fit=crop&q=80'
     },
     {
       id: 2,
-      name: 'مجمّع الشفاء الطبي',
-      specialty: 'باطنة أطفال وجلدية',
-      city: 'جدة',
-      rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80'
+      title: 'جدولة المواعيد الذكية',
+      desc: 'تنظيم حجوزات المرضى وتنبيهات المواعيد بدون تعارض.',
+      tag: 'حجز سريع',
+      image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=700&auto=format&fit=crop&q=80'
     },
     {
       id: 3,
-      name: 'عيادات الحياة للعيون',
-      specialty: 'جراحة وجص العيون',
-      city: 'الدمام',
-      rating: 5.0,
-      image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80'
+      title: 'السجل الطبي والمرضى',
+      desc: 'ملف طبي متكامل لكل مريض يتضمن الزيارات والتشخيصات والوصفات.',
+      tag: 'سجلات آمنة',
+      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&auto=format&fit=crop&q=80'
     },
     {
-      id: 1,
-      name: 'عيادة النور التخصصية',
-      specialty: 'أسنان وتجميل',
-      city: 'الرياض',
-      rating: 4.9,
-      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 2,
-      name: 'مجمّع الشفاء الطبي',
-      specialty: 'باطنة أطفال وجلدية',
-      city: 'جدة',
-      rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 3,
-      name: 'عيادات الحياة للعيون',
-      specialty: 'جراحة وجص العيون',
-      city: 'الدمام',
-      rating: 5.0,
-         doctorsCount:10,
-      description:"kdkdkdkdkdkdkdk",
-      image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 1,
-      name: 'عيادة النور التخصصية',
-      specialty: 'أسنان وتجميل',
-      city: 'الرياض',
-      rating: 4.9,
-         doctorsCount:10,
-      description:"kdkdkdkdkdkdkdk",
-      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 2,
-      name: 'مجمّع الشفاء الطبي',
-      specialty: 'باطنة أطفال وجلدية',
-      city: 'جدة',
-      rating: 4.8,
-         doctorsCount:10,
-      description:"kdkdkdkdkdkdkdk",
-      image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 3,
-      name: 'عيادات الحياة للعيون',
-      specialty: 'جراحة وجص العيون',
-      city: 'الدمام',
-      rating: 5.0,
-      doctorsCount:10,
-      description:"kdkdkdkdkdkdkdk",
-      image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&auto=format&fit=crop&q=80'
-    }
-  ];
-
-  appScreenshots = [
-    {
-      title: 'لوحة التحكم الرئيسية',
-      desc: 'إحصائيات فورية ومتابعة دقيقة لحجوزات اليوم.',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-      title: 'إدارة المواعيد والتقويم',
-      desc: 'جدولة سهلة ومنظمة لكل طبيب مع تنبيهات تلقائية.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80'
-    },
-    {
-      title: 'فواتير إلكترونية متوافقة مع زاتكا',
-      desc: 'إصدار فواتير احترافية مع QR Code بنقرة واحدة.',
-      image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&auto=format&fit=crop&q=80'
+      id: 4,
+      title: 'إدارة الفواتير والتقارير',
+      desc: 'إصدار الفواتير ومراجعة تقارير الأداء المالي بضغطة زر.',
+      tag: 'تقارير مالية',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&auto=format&fit=crop&q=80'
     }
   ];
 
   testimonials = [
     {
-      quote: "منصة طبيب غيرت طريقة إدارة مجمعنا بالكامل. نظام الحجوزات والفواتير المتوافقة مع زاتكا وفر علينا ساعات من العمل اليدوي.",
-      name: "د. خالد السبيعي",
-      clinic: "مدير مجمع الأمل الطبي",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+      id: 1,
+      name: 'د. أحمد علي',
+      role: 'مدير عيادة النور',
+      comment: 'منصة رائعة وسهلة الاستخدام، ساعدتنا في تنظيم المواعيد والمرضى بشكل كبير.',
+      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=240&auto=format&fit=crop&q=80'
     },
     {
-      quote: "سهولة الاستخدام والدعم الفني السريع جعلتنا نعتمد عليهم كلياً. أنصح كل طبيب يرغب بتطوير عيادته بالانضمام فوراً.",
-      name: "د. منى الغامدي",
-      clinic: "استشاري طب الأسنان",
-      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80"
+      id: 2,
+      name: 'د. سارة محمد',
+      role: 'مديرة مجمع الحياة الطبي',
+      comment: 'دعم فني ممتاز وتجربة احترافية بكل المقاييس مع وضوح كامل في التقارير.',
+      image: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=240&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 3,
+      name: 'د. خالد محمود',
+      role: 'استشاري باطنة',
+      comment: 'أفضل نظام لإدارة العيادات، يختصر وقت الاستقبال ويجعل متابعة الحالات أسهل.',
+      image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=240&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 4,
+      name: 'د. نورة العتيبي',
+      role: 'مديرة مركز الابتسامة',
+      comment: 'واجهة عربية أنيقة وسريعة، وفريق العمل تعامل مع النظام من أول يوم.',
+      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=240&auto=format&fit=crop&q=80'
     }
   ];
 
-  pricingPlans = [
-    {
-      name: 'الباقة الأساسية',
-      price: '299',
-      period: 'شهرياً',
-      desc: 'مثالية للعيادات الفردية الصغيرة لبدء التحول الرقمي.',
-      features: ['إدارة المواعيد الأساسية', 'ملفات المرضى الإلكترونية', 'دعم فني عبر البريد', 'تحديثات مجانية'],
-      popular: false
-    },
-    {
-      name: 'الباقة الاحترافية',
-      price: '599',
-      period: 'شهرياً',
-      desc: 'الخيار الأفضل للمجمعات الطبية والعيادات المتعددة.',
-      features: ['كل مميزات الأساسية', 'نظام الفواتير والـ QR المتوافق مع زاتكا', 'تقارير أداء مالية متقدمة', 'أطباء غير محدودين', 'دعم فني أولوية عالية'],
-      popular: true
-    },
-    {
-      name: 'باقة المؤسسات',
-      price: '1199',
-      period: 'شهرياً',
-      desc: 'للمستشفيات والمجموعات الكبرى التي تحتاج تخصيص كامل.',
-      features: ['ربط خاص بـ API', 'إدارة فروع متعددة', 'مدير حساب مخصص', 'تدريب كامل للكادر الطبي'],
-      popular: false
+  ngOnInit(): void {
+    this.loadProfile();
+  }
+
+  loadProfile(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.profileService.getTabeebProfileInfo().subscribe({
+      next: (response:any) => {
+        this.profile = response.data;
+        this.screenshotSlideIndex = 0;
+        this.clinicSlideIndex = 0;
+        this.doctorSlideIndex = 0;
+        this.packageSlideIndex = 0;
+        this.testimonialSlideIndex = 0;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading Tabeeb profile:', error);
+        this.errorMessage = 'حدث خطأ أثناء تحميل بيانات المنصة';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // ===== دالة موحدة لعرض 3 بطاقات لكل سلايدر =====
+  private getWindowItems<T>(items: T[], startIndex: number, count = 3): T[] {
+    if (!items || items.length === 0) return [];
+    if (items.length <= count) return items;
+
+    const result: T[] = [];
+    for (let i = 0; i < count; i++) {
+      result.push(items[(startIndex + i) % items.length]);
     }
-  ];
-  mobileMenuOpen = false;
-activeFeatureIndex = 0;
-annualBilling = false;
-submittedSuccess = false;
-quickDemoSent = false;
-
-quickDemo = {
-  name: '',
-  phone: ''
-};
-
-contactForm = {
-  fullName: '',
-  contactInfo: '',
-  message: ''
-};
-
-featureTabs = [
-  {
-    id: 'appointments',
-    badge: 'الاستقبال والمواعيد',
-    title: 'إدارة الحجوزات وجداول الأطباء',
-    subtitle: 'تنظيم الحجز وحالات الانتظار وتقليل وقت الانتظار',
-    description: 'تابع مواعيد اليوم والفترات القادمة لكل طبيب أو عيادة، مع وضوح حالة المريض من لحظة الحجز حتى انتهاء الكشف.',
-    points: [
-      'جدولة المواعيد حسب الطبيب والتخصص',
-      'متابعة حالات الانتظار والحضور والإنهاء',
-      'تقليل تعارض المواعيد وسهولة إعادة الجدولة',
-      'عرض سريع لجدول كل طبيب خلال اليوم'
-    ]
-  },
-  {
-    id: 'records',
-    badge: 'الملفات الطبية',
-    title: 'السجلات الطبية وتاريخ الزيارات',
-    subtitle: 'ملف متكامل لكل مريض يسهل الرجوع إليه',
-    description: 'احتفظ ببيانات المرضى وسجل زياراتهم وتشخيصاتهم وملاحظاتهم الطبية في ملف واحد منظم وسريع البحث.',
-    points: [
-      'بحث فوري بملف المريض أو رقم الجوال',
-      'سجل زيارات وتشخيصات متسلسل',
-      'ملاحظات وملفات مرفقة لكل زيارة',
-      'خصوصية وحوكمة وصول واضحة'
-    ]
-  },
-  {
-    id: 'billing',
-    badge: 'الحسابات والفواتير',
-    title: 'الفواتير والتحصيل المالي',
-    subtitle: 'متابعة دقيقة للرسوم والمدفوعات والتقارير',
-    description: 'أصدر الفواتير بوضوح وتابع المدفوعات والمستحقات اليومية أو الشهرية لكل عيادة أو فرع.',
-    points: [
-      'إصدار فواتير الخدمات والكشوفات بسهولة',
-      'تتبع المدفوعات وحالات السداد',
-      'ملخصات مالية يومية وشهرية',
-      'وضوح الحسابات بين الأقسام والأطباء'
-    ]
-  },
-  {
-    id: 'team',
-    badge: 'الفريق والصلاحيات',
-    title: 'إدارة الكادر الطبي والصلاحيات',
-    subtitle: 'توزيع أدوار واضح بين الإدارة والطبيب والاستقبال',
-    description: 'حدد صلاحيات كل مستخدم حسب دوره الوظيفي لضمان انسيابية العمل وحماية البيانات الحساسة.',
-    points: [
-      'صلاحيات مخصصة للاستقبال والأطباء والإدارة',
-      'إدارة التخصصات والعيادات والمواعيد',
-      'تنظيم فرق العمل بسهولة',
-      'تجربة استخدام مريحة لكل مستخدم'
-    ]
-  }
-];
-
-getAnnualPrice(monthlyPrice: number | string): number | string {
-  const num = Number(monthlyPrice);
-  if (Number.isNaN(num)) return monthlyPrice;
-  return Math.round(num * 0.8);
-}
-
-onQuickDemoSubmit(): void {
-  if (!this.quickDemo.name.trim() || !this.quickDemo.phone.trim()) return;
-  this.quickDemoSent = true;
-  this.quickDemo = { name: '', phone: '' };
-}
-
-onContactSubmit(): void {
-  if (!this.contactForm.fullName.trim() || !this.contactForm.contactInfo.trim() || !this.contactForm.message.trim()) return;
-  this.submittedSuccess = true;
-  this.contactForm = { fullName: '', contactInfo: '', message: '' };
-}
-
-slideIndex = 0;
-
-get visibleScreenshots() {
-  if (!this.appScreenshots?.length) return [];
-  const list = this.appScreenshots;
-  if (list.length <= 3) return list;
-  return [
-    list[this.slideIndex % list.length],
-    list[(this.slideIndex + 1) % list.length],
-    list[(this.slideIndex + 2) % list.length]
-  ];
-}
-
-prevSlide(): void {
-  if (!this.appScreenshots?.length) return;
-  this.slideIndex = (this.slideIndex - 1 + this.appScreenshots.length) % this.appScreenshots.length;
-}
-
-nextSlide(): void {
-  if (!this.appScreenshots?.length) return;
-  this.slideIndex = (this.slideIndex + 1) % this.appScreenshots.length;
-}
-
-selectPlan(planName: string): void {
-  const el = document.getElementById('contact');
-  el?.scrollIntoView({ behavior: 'smooth' });
-}
-
-clinicSlideIndex = 0;
-
-get visibleClinics() {
-  const list = this.featuredClinics ?? [];
-  if (list.length <= 3) {
-    return list;
+    return result;
   }
 
-  return [
-    list[this.clinicSlideIndex % list.length],
-    list[(this.clinicSlideIndex + 1) % list.length],
-    list[(this.clinicSlideIndex + 2) % list.length]
-  ];
-}
+  // 1) سلايدر اللقطات
+  get visibleScreenshots(): ScreenshotItem[] {
+    return this.getWindowItems(this.screenshots, this.screenshotSlideIndex, 3);
+  }
+  goToScreenshotSlide(index: number): void {
+    this.screenshotSlideIndex = index;
+  }
 
-nextClinicSlide(): void {
-  const len = this.featuredClinics?.length ?? 0;
-  if (!len) return;
-  this.clinicSlideIndex = (this.clinicSlideIndex + 1) % len;
-}
+ 
+  get visibleClinics(): ClinicDtoWithEvaluation[] {
+    return this.getWindowItems(this.clinicsList, this.clinicSlideIndex, 3);
+  }
+  goToClinicSlide(index: number): void {
+    this.clinicSlideIndex = index;
+  }
+  getClinicRating(clinic: ClinicDtoWithEvaluation | null | undefined): string {
+    if (!clinic) return '5.0';
+    const c = clinic as unknown as Record<string, unknown>;
+    const score = c['evaluation'] ?? c['rate'];
+    return score !== undefined && score !== null && score !== '' ? String(score) : '5.0';
+  }
 
-prevClinicSlide(): void {
-  const len = this.featuredClinics?.length ?? 0;
-  if (!len) return;
-  this.clinicSlideIndex = (this.clinicSlideIndex - 1 + len) % len;
-}
 
-goToClinicSlide(index: number): void {
-  const len = this.featuredClinics?.length ?? 0;
-  if (!len) return;
-  this.clinicSlideIndex = index % len;
-}
+
+ 
+
+  get visibleDoctors(): ClinicDoctorDto[] {
+    return this.getWindowItems(this.filteredDoctors, this.doctorSlideIndex, 3);
+  }
+
+  selectDoctorClinicFilter(clinicName: string): void {
+    this.selectedDoctorClinicFilter = clinicName;
+    this.doctorSlideIndex = 0;
+  }
+
+  goToDoctorSlide(index: number): void {
+    this.doctorSlideIndex = index;
+  }
+
+  // 4) سلايدر الباقات (profile.subscriptionPackages)
+  get packagesList(): SubscriptionPackageDto[] {
+    return this.profile?.subscriptionPackages ?? [];
+  }
+  get visiblePackages(): SubscriptionPackageDto[] {
+    return this.getWindowItems(this.packagesList, this.packageSlideIndex, 3);
+  }
+  goToPackageSlide(index: number): void {
+    this.packageSlideIndex = index;
+  }
+  isPopularPackage(index: number): boolean {
+    if (this.packagesList.length >= 3) {
+      return index === 1;
+    }
+    return index === 0;
+  }
+
+  // 5) سلايدر آراء العملاء
+  get visibleTestimonials() {
+    return this.getWindowItems(this.testimonials, this.testimonialSlideIndex, 3);
+  }
+  goToTestimonialSlide(index: number): void {
+    this.testimonialSlideIndex = index;
+  }
+
+  // ===== Modal مواعيد الدكتور =====
+  openWorktimes(doctor: ClinicDoctorDto): void {
+    this.selectedDoctor = doctor;
+    this.showWorktimeModal = true;
+  }
+
+  closeWorktimes(): void {
+    this.showWorktimeModal = false;
+    this.selectedDoctor = null;
+  }
+
+  getDayName(day: number): string {
+    const days = [
+      'الأحد',
+      'الإثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت'
+    ];
+    return days[day] ?? 'غير محدد';
+  }
+
+  formatTime(time: string): string {
+    if (!time) return '--:--';
+    const [hours, minutes] = time.split(':');
+    const hour = Number(hours);
+    const period = hour >= 12 ? 'مساءً' : 'صباحاً';
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${minutes} ${period}`;
+  }
+
+  getDoctorWorktimes(doctor: ClinicDoctorDto | null): ClinicDoctorWorktimeDto[] {
+    return doctor?.worktimeDtos ?? [];
+  }
+
+  getDoctorInitials(doctor: ClinicDoctorDto | null): string {
+    if (!doctor) return 'ط';
+    const name = doctor.arName || doctor.enName || 'ط';
+    return name.trim().charAt(0);
+  }
+
+  getClinicImage(path?: string | null): string {
+    if (!path) {
+      return 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=700&auto=format&fit=crop&q=80';
+    }
+    if (path.startsWith('http')) return path;
+    return `${environment.ServerUrl.replace('/api', '')}/${path.replace(/^\/+/, '')}`;
+  }
+
+  getDoctorImage(path?: string | null): string {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return `${environment.ImageServer}/${path}`;
+  }
+
+  selectPlan(pkg: SubscriptionPackageDto): void {
+    const contactEl = document.getElementById('contact');
+    if (contactEl) {
+      contactEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  // نصوص البحث الفوري للعيادات والأطباء
+  clinicSearchQuery: string = '';
+  doctorSearchQuery: string = '';
+
+  onClinicSearchChange(value: string): void {
+    this.clinicSearchQuery = value;
+    this.clinicSlideIndex = 0;
+  }
+
+  onDoctorSearchChange(value: string): void {
+    this.doctorSearchQuery = value;
+    this.doctorSlideIndex = 0;
+  }
+
+  clearClinicFilters(): void {
+    this.clinicSearchQuery = '';
+    this.clinicSlideIndex = 0;
+  }
+
+  clearDoctorFilters(): void {
+    this.doctorSearchQuery = '';
+    this.selectedDoctorClinicFilter = 'ALL';
+    this.doctorSlideIndex = 0;
+  }
+
+  // 2) سلايدر العيادات (profile.clinics + بحث)
+  get clinicsList(): ClinicDtoWithEvaluation[] {
+    const all = this.profile?.clinics ?? [];
+    const q = this.clinicSearchQuery.trim().toLowerCase();
+    if (!q) return all;
+
+    return all.filter((c) => {
+      const arName = (c.arName ?? '').toLowerCase();
+      const enName = (c.enName ?? '').toLowerCase();
+      const cityAr = (c.cityArName ?? '').toLowerCase();
+      const cityEn = (c.cityEnName ?? '').toLowerCase();
+      const countryAr = (c.countryArName ?? '').toLowerCase();
+      const countryEn = (c.countryEnName ?? '').toLowerCase();
+
+      return (
+        arName.includes(q) ||
+        enName.includes(q) ||
+        cityAr.includes(q) ||
+        cityEn.includes(q) ||
+        countryAr.includes(q) ||
+        countryEn.includes(q)
+      );
+    });
+  }
+
+  // 3) سلايدر الأطباء (profile.doctors + فلترة العيادة + بحث)
+  get doctorsList(): ClinicDoctorDto[] {
+    return this.profile?.doctors ?? [];
+  }
+
+  get clinicFilterOptions(): string[] {
+    const names = this.doctorsList
+      .map((d) => d.clinicArName || d.clinicEnName)
+      .filter((n): n is string => !!n);
+    return Array.from(new Set(names));
+  }
+
+  get filteredDoctors(): ClinicDoctorDto[] {
+    const q = this.doctorSearchQuery.trim().toLowerCase();
+
+    return this.doctorsList.filter((d) => {
+      const clinicLabel = d.clinicArName || d.clinicEnName || '';
+      const matchesClinic =
+        this.selectedDoctorClinicFilter === 'ALL' ||
+        clinicLabel === this.selectedDoctorClinicFilter;
+
+      if (!matchesClinic) return false;
+      if (!q) return true;
+
+      const docAr = (d.arName ?? '').toLowerCase();
+      const docEn = (d.enName ?? '').toLowerCase();
+      const specAr = (d.specializationArName ?? '').toLowerCase();
+      const specEn = (d.specializationEnName ?? '').toLowerCase();
+      const clinicAr = (d.clinicArName ?? '').toLowerCase();
+      const clinicEn = (d.clinicEnName ?? '').toLowerCase();
+
+      return (
+        docAr.includes(q) ||
+        docEn.includes(q) ||
+        specAr.includes(q) ||
+        specEn.includes(q) ||
+        clinicAr.includes(q) ||
+        clinicEn.includes(q)
+      );
+    });
+  }
 }

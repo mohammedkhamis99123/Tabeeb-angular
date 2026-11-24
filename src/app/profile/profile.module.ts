@@ -7,6 +7,7 @@ import { ClinicProfileComponent } from './clinic-profile/clinic-profile.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ReservationsComponent } from './reservations/reservations.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ReservationsComponent } from './reservations/reservations.component';
     ProfileRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    TranslateModule
   ]
 })
 export class ProfileModule { }

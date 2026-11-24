@@ -140,6 +140,8 @@
                 </div>
                 <div *ngIf="countryForm.get('ISOCode')?.touched&&countryForm.get('ISOCode')?.invalid">
                     <div class="text-danger" *ngIf="countryForm.get('ISOCode')?.errors?.['required']">{{"required"|translate}}</div>
+                      <div class="text-danger" *ngIf="countryForm.get('ISOCode')?.errors?.['pattern']">{{"InvalidISOCode"|translate}} </div>
+
                     <div class="text-danger" *ngIf="countryForm.get('ISOCode')?.errors?.['maxlength']">{{"maxLength"|translate}} 5 {{"Character"|translate}} </div>
                 </div>
 

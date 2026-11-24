@@ -12,6 +12,7 @@ import { Utilities } from 'src/app/common/utilities/utiliities';
 import { CurrentUserService } from 'src/app/common/services/current-user.service';
 import { SystemFacadeService } from 'src/app/common/services/system-facade.service';
 import { SupscriptionPackageService } from './services/supscription-package.service';
+import { Language, TextLangValidator } from 'src/app/common/validators/textValidator';
 
 @Component({
   selector: 'app-subscription-package',
@@ -82,10 +83,10 @@ export class SubscriptionPackageComponent {
 
     // بناء الفورم بالخصائص المطلوبة للباقات
     this.packageForm = new FormGroup({
-      ArName: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      EnName: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      ArDescription: new FormControl('',[Validators.maxLength(500)]),
-      EnDescription: new FormControl('',[Validators.maxLength(500)]),
+      ArName: new FormControl('', [Validators.required, Validators.maxLength(200),TextLangValidator(Language.Arabic)]),
+      EnName: new FormControl('', [Validators.required, Validators.maxLength(200),TextLangValidator(Language.English)]),
+      ArDescription: new FormControl('',[Validators.maxLength(500),TextLangValidator(Language.Arabic)]),
+      EnDescription: new FormControl('',[Validators.maxLength(500),TextLangValidator(Language.English)]),
       Price: new FormControl(1, [
         Validators.required, 
         Validators.min(1),

@@ -259,5 +259,6 @@
   "workHours": "Work Hours",
   "minValue": "Minimum Value",
   "Role": "Role",
-  "status": "Status"
+  "status": "Status",
+  "InvalidISOCode": "Invalid ISO Code"
 }

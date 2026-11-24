@@ -80,7 +80,7 @@ export class CountryComponent {
     this.countryForm = new FormGroup({
       ArName: new FormControl('', [Validators.required, TextLangValidator(Language.Arabic), Validators.maxLength(200)]),
       EnName: new FormControl('', [Validators.required, TextLangValidator(Language.English), Validators.maxLength(200)]),
-      ISOCode: new FormControl('', [Validators.required, Validators.maxLength(5)])
+      ISOCode: new FormControl('', [Validators.required, Validators.maxLength(5),Validators.pattern("^[a-zA-Z]{2,5}$")])
     });
   }
 

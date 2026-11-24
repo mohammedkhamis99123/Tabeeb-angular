@@ -149,6 +149,8 @@
                 <div *ngIf="packageForm.get('ArName')?.touched&&packageForm.get('ArName')?.invalid">
                     <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['required']">{{"required"|translate}}</div>
                     <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['maxlength']">{{"maxLength"|translate}} 200 {{"Character"|translate}} </div>
+                    <div class="text-danger" *ngIf="packageForm.get('ArName')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </div>
+
                 </div>
 
                 <!-- English Name -->
@@ -161,6 +163,8 @@
                 <div *ngIf="packageForm.get('EnName')?.touched&&packageForm.get('EnName')?.invalid">
                     <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['required']">{{'required'|translate}}</div>
                     <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['maxlength']">{{"maxLength"|translate}} 200 {{"Character"|translate}} </div>
+                    <div class="text-danger" *ngIf="packageForm.get('EnName')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </div>
+
                 </div>
 
                 <!-- Price & Duration Row -->
@@ -175,7 +179,7 @@
                             <div *ngIf="packageForm.get('Price')?.errors?.['required']">{{"required"|translate}}</div>
                             <div *ngIf="packageForm.get('Price')?.errors?.['min']">{{"min"|translate}}</div>
                              <div *ngIf="packageForm.get('Price')?.errors?.['max']">{{"max"|translate}} 1000000</div>
-
+                   
                             <div *ngIf="packageForm.get('Price')?.errors?.['pattern']">{{"pattern"|translate}}</div>
                         </div>
                     </div>
@@ -198,6 +202,7 @@
                     <label for="ArDescription">{{"ArabicDescription"|translate}}</label>
                     <textarea id="ArDescription" formControlName="ArDescription" rows="2" class="form-input"></textarea>
                      <div class="text-danger" *ngIf="packageForm.get('ArDescription')?.errors?.['maxlength']">{{"maxLength"|translate}} 500 {{"Character"|translate}} </div>
+                      <div class="text-danger" *ngIf="packageForm.get('ArDescription')?.errors?.['invalidLanguage']">{{"OnlyAllowedArabic"|translate}} </div>
 
                 </div>
 
@@ -206,6 +211,7 @@
                     <label for="EnDescription">{{"EnglishDescription"|translate}}</label>
                     <textarea id="EnDescription" formControlName="EnDescription" rows="2" class="form-input"></textarea>
                     <div class="text-danger" *ngIf="packageForm.get('EnDescription')?.errors?.['maxlength']">{{"maxLength"|translate}} 500 {{"Character"|translate}} </div>
+                    <div class="text-danger" *ngIf="packageForm.get('EnDescription')?.errors?.['invalidLanguage']">{{"OnlyAllowedEnglish"|translate}} </div>
 
                 </div>
 

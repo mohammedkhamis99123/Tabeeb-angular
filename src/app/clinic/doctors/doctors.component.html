@@ -397,6 +397,10 @@
                     *ngIf="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.hasError('required')">
                     {{ isArabic ? 'رقم الهوية مطلوب' : 'Identity number is required' }}
                 </small>
+                  <small class="field-error"
+                    *ngIf="doctorForm.get('identityNumber')?.touched && doctorForm.get('identityNumber')?.hasError('pattern')">
+                    {{ isArabic ? 'رقم الهوية غير صالح' : 'Invalid Identity number' }}
+                </small>
             </div>
 <!-- Specialization -->
 <div class="form-group">

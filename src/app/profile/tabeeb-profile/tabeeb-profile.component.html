@@ -3,20 +3,18 @@
   class="min-h-screen bg-[#F7FAFF] text-[#0F294A] font-sans overflow-x-hidden selection:bg-[#0284C7] selection:text-white">
 
   <!-- 1. Navbar -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between gap-4">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between gap-4 py-4">
 
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 shrink-0">
-        <div class="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200/70 flex items-center justify-center overflow-hidden p-1">
+        <div class="  flex items-center justify-center overflow-hidden p-1">
           <img
             src="../../../assets/images/Logo.jpg"
             alt="Tabeeb Logo"
-            class="w-full h-full object-contain">
+            class="w-[95px]">
         </div>
-        <div class="flex items-baseline gap-1">
-          <span class="text-2xl font-black tracking-tight text-[#0284C7]">Tabeeb</span>
-        </div>
+     
       </a>
 
       <!-- Nav Links -->
@@ -25,6 +23,7 @@
         <a href="#features" class="hover:text-[#0284C7] transition">المميزات</a>
         <a href="#screenshots" class="hover:text-[#0284C7] transition">النظام</a>
         <a href="#clinics" class="hover:text-[#0284C7] transition">العيادات</a>
+        <a href="#doctors" class="hover:text-[#0284C7] transition">الأطباء</a>
         <a href="#pricing" class="hover:text-[#0284C7] transition">الباقات</a>
         <a href="#contact" class="hover:text-[#0284C7] transition">تواصل معنا</a>
       </nav>
@@ -38,7 +37,7 @@
         </a>
 
         <a
-          href="#contact"
+          href="#pricing"
           class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-sm transition">
           <span>ابدأ الآن</span>
           <span aria-hidden="true">←</span>
@@ -63,10 +62,37 @@
       <a (click)="mobileMenuOpen = false" href="#features" class="block py-1.5 hover:text-[#0284C7]">المميزات</a>
       <a (click)="mobileMenuOpen = false" href="#screenshots" class="block py-1.5 hover:text-[#0284C7]">النظام</a>
       <a (click)="mobileMenuOpen = false" href="#clinics" class="block py-1.5 hover:text-[#0284C7]">العيادات</a>
+      <a (click)="mobileMenuOpen = false" href="#doctors" class="block py-1.5 hover:text-[#0284C7]">الأطباء</a>
       <a (click)="mobileMenuOpen = false" href="#pricing" class="block py-1.5 hover:text-[#0284C7]">الباقات</a>
       <a (click)="mobileMenuOpen = false" href="#contact" class="block py-1.5 hover:text-[#0284C7]">تواصل معنا</a>
     </div>
   </header>
+
+  <!-- حالة التحميل / الخطأ -->
+  @if (isLoading) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
+        <div class="h-24 rounded-2xl bg-white border border-slate-200/80"></div>
+        <div class="h-24 rounded-2xl bg-white border border-slate-200/80"></div>
+        <div class="h-24 rounded-2xl bg-white border border-slate-200/80"></div>
+        <div class="h-24 rounded-2xl bg-white border border-slate-200/80"></div>
+      </div>
+    </div>
+  }
+
+  @if (errorMessage && !isLoading) {
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+      <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 flex items-center justify-between gap-4 text-sm font-bold">
+        <span>{{ errorMessage }}</span>
+        <button
+          type="button"
+          (click)="loadProfile()"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-xl text-xs font-extrabold cursor-pointer">
+          إعادة المحاولة
+        </button>
+      </div>
+    </div>
+  }
 
   <!-- 2. Hero Section -->
   <section id="hero" class="relative pt-10 pb-14 lg:py-16 px-4 sm:px-6 bg-gradient-to-b from-[#EAF4FF] via-[#F4F9FF] to-[#F7FAFF]">
@@ -97,10 +123,10 @@
           </a>
 
           <a
-            href="#screenshots"
+            href="#doctors"
             class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-[#0F294A] border border-slate-200 px-6 py-3.5 rounded-xl text-sm font-extrabold transition">
-            <span class="w-5 h-5 rounded-full bg-sky-100 text-[#0284C7] inline-flex items-center justify-center text-[10px]">▶</span>
-            <span>اكتشف النظام</span>
+            <span class="w-5 h-5 rounded-full bg-sky-100 text-[#0284C7] inline-flex items-center justify-center text-[10px]">🩺</span>
+            <span>تصفح الأطباء</span>
           </a>
         </div>
 
@@ -117,103 +143,83 @@
         </div>
       </div>
 
-      <!-- Left Column: Dashboard Mockup Frame -->
+      <!-- Left Column: Visual Showcase Frame (تغيير الـ div الذي يعمل كصورة في الهيرو) -->
       <div class="lg:col-span-7 order-2">
-        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-sky-900/10 overflow-hidden">
-          <!-- Mockup Top Bar -->
-          <div class="bg-[#0F294A] text-white px-4 py-2.5 flex items-center justify-between text-xs">
+        <div class="relative bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-sky-900/10 p-4 sm:p-5 overflow-hidden">
+
+          <!-- Frame Header -->
+          <div class="flex items-center justify-between gap-3 pb-3.5 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <span class="font-extrabold text-sky-300">Tabeeb</span>
-              <span class="text-slate-300 font-bold">لوحة التحكم</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <span class="text-xs font-extrabold text-slate-500 mr-2">Tabeeb Medical Platform</span>
             </div>
-            <div class="flex items-center gap-3 text-[11px] text-slate-200">
-              <span>🔔</span>
-              <span>د. أحمد محمد</span>
+
+            <span class="inline-flex items-center gap-1.5 bg-sky-50 text-[#0284C7] border border-sky-200/70 px-3 py-1 rounded-full text-[11px] font-extrabold">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
+              <span>إدارة سحابية متكاملة</span>
+            </span>
+          </div>
+
+          <!-- Visual Image Card inside Hero -->
+          <div class="relative mt-4 h-64 sm:h-76 rounded-2xl overflow-hidden bg-[#0F294A]">
+            <img
+              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1100&auto=format&fit=crop&q=85"
+              alt="منصة طبيب لإدارة العيادات والمجمعات الطبية"
+              class="w-full h-full object-cover opacity-90">
+
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A] via-[#0F294A]/40 to-transparent"></div>
+
+            <!-- Floating Card Top Right -->
+            <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-xs text-[#0F294A] px-3.5 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+              <span class="w-10 h-10 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center text-lg font-black">🏥</span>
+              <div class="text-right">
+                <div class="text-xs font-black text-[#0F294A]">شبكة عيادات وأطباء معتمدة</div>
+                <div class="text-[11px] font-bold text-slate-500">تنظيم المواعيد والملفات الطبية بسهولة</div>
+              </div>
+            </div>
+
+            <!-- Bottom Overlay Content -->
+            <div class="absolute inset-x-0 bottom-0 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
+              <div>
+                <span class="inline-block bg-[#0284C7] text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-lg mb-1.5">
+                  تجربة طبية متكاملة
+                </span>
+                <h2 class="text-lg sm:text-xl font-black leading-snug">
+                  ربط ذكي بين العيادة والطبيب والمريض في مكان واحد
+                </h2>
+              </div>
+
+              <a
+                href="#clinics"
+                class="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-sky-50 text-[#0F294A] px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition shrink-0">
+                <span>استعرض العيادات</span>
+                <span aria-hidden="true">←</span>
+              </a>
             </div>
           </div>
 
-          <div class="grid sm:grid-cols-12">
-            <!-- Mockup Sidebar -->
-            <aside class="hidden sm:block sm:col-span-3 bg-[#F8FBFF] border-l border-slate-100 p-3 space-y-1.5 text-xs font-bold">
-              <div class="bg-[#0284C7] text-white px-3 py-2 rounded-lg">لوحة التحكم</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">المواعيد</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">المرضى</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">الأطباء</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">الفواتير</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">التقارير</div>
-              <div class="text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-100">الإعدادات</div>
-            </aside>
-
-            <!-- Mockup Main Content -->
-            <div class="sm:col-span-9 p-4 space-y-4 bg-white">
-              <!-- Mini KPIs -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
-                <div class="bg-[#F4F9FF] border border-sky-100 rounded-xl p-2.5">
-                  <div class="text-lg font-black text-[#0F294A]">8</div>
-                  <div class="text-[11px] text-slate-500 font-bold">عيادة</div>
-                </div>
-                <div class="bg-[#F4F9FF] border border-sky-100 rounded-xl p-2.5">
-                  <div class="text-lg font-black text-[#0F294A]">42</div>
-                  <div class="text-[11px] text-slate-500 font-bold">طبيب</div>
-                </div>
-                <div class="bg-[#F4F9FF] border border-sky-100 rounded-xl p-2.5">
-                  <div class="text-lg font-black text-[#0F294A]">2,480</div>
-                  <div class="text-[11px] text-slate-500 font-bold">مريض مسجل</div>
-                </div>
-                <div class="bg-[#F4F9FF] border border-sky-100 rounded-xl p-2.5">
-                  <div class="text-lg font-black text-[#0284C7]">128</div>
-                  <div class="text-[11px] text-slate-500 font-bold">موعد اليوم</div>
-                </div>
-              </div>
-
-              <!-- Appointments & Chart Preview -->
-              <div class="grid md:grid-cols-12 gap-3 items-stretch">
-                <div class="md:col-span-6 bg-[#F8FBFF] border border-slate-100 rounded-xl p-3">
-                  <div class="text-xs font-black text-[#0F294A] mb-2.5">المواعيد القادمة</div>
-                  <div class="space-y-2 text-[11px]">
-                    <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-100">
-                      <span class="font-bold text-[#0F294A]">مريض جديد</span>
-                      <span class="text-slate-400">10:00</span>
-                    </div>
-                    <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-100">
-                      <span class="font-bold text-[#0F294A]">متابعة علاج</span>
-                      <span class="text-slate-400">10:30</span>
-                    </div>
-                    <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-slate-100">
-                      <span class="font-bold text-[#0F294A]">كشف عام</span>
-                      <span class="text-slate-400">11:00</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="md:col-span-6 bg-[#F8FBFF] border border-slate-100 rounded-xl p-3 flex flex-col justify-between">
-                  <div class="flex items-center justify-between">
-                    <span class="text-xs font-black text-[#0F294A]">إحصائيات المواعيد</span>
-                    <span class="text-[11px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">+18%</span>
-                  </div>
-                  <svg viewBox="0 0 240 90" class="w-full h-24 mt-2">
-                    <defs>
-                      <linearGradient id="tabeebArea" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#0284C7" stop-opacity="0.28"/>
-                        <stop offset="100%" stop-color="#0284C7" stop-opacity="0.02"/>
-                      </linearGradient>
-                    </defs>
-                    <path d="M10 72 L52 54 L94 60 L136 36 L178 44 L225 18 L225 82 L10 82 Z" fill="url(#tabeebArea)"/>
-                    <polyline fill="none" stroke="#0284C7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="10,72 52,54 94,60 136,36 178,44 225,18"/>
-                    <circle cx="136" cy="36" r="3.5" fill="#0284C7"/>
-                  </svg>
-                  <div class="flex justify-between text-[10px] text-slate-400 font-bold">
-                    <span>يناير</span>
-                    <span>فبراير</span>
-                    <span>مارس</span>
-                    <span>أبريل</span>
-                    <span>مايو</span>
-                    <span>يونيو</span>
-                  </div>
-                </div>
-              </div>
+          <!-- Bottom Live Metrics Strip -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 text-center">
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
+              <div class="text-lg font-black text-[#0F294A]">{{ profile?.clinicsCount ?? 0 }}</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">عيادة</div>
+            </div>
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
+              <div class="text-lg font-black text-[#0F294A]">{{ profile?.doctorsCount ?? 0 }}</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">طبيب</div>
+            </div>
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
+              <div class="text-lg font-black text-[#0F294A]">{{ profile?.customersCount ?? 0 }}</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">مريض</div>
+            </div>
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
+              <div class="text-lg font-black text-[#0284C7]">{{ profile?.reservationsCount ?? 0 }}</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">حجز</div>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -225,29 +231,33 @@
     <div class="max-w-7xl mx-auto bg-white border border-slate-200/80 rounded-2xl shadow-sm py-6 px-4 sm:px-8">
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y lg:divide-y-0 lg:divide-x lg:divide-x-reverse divide-slate-100 text-center">
         <div class="pt-2 lg:pt-0">
-          <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">+50,000</div>
+          <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.customersCount ?? 0 }}</div>
           <div class="text-xs font-bold text-slate-600 mt-1">مريض يدبرون مواعيدهم</div>
         </div>
         <div class="pt-4 lg:pt-0 lg:pr-6">
-          <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">+500</div>
+          <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.clinicsCount ?? 0 }}</div>
           <div class="text-xs font-bold text-slate-600 mt-1">عيادة تستخدم النظام</div>
         </div>
         <div class="pt-4 lg:pt-0 lg:pr-6">
-          <div class="text-base sm:text-lg font-black text-[#0F294A]">أمان وخصوصية عالية</div>
-          <div class="text-xs font-bold text-slate-500 mt-1">معايير عالمية</div>
+          <div class="text-2xl sm:text-3xl font-black text-[#0F294A]">{{ profile?.doctorsCount ?? 0 }}</div>
+          <div class="text-xs font-bold text-slate-500 mt-1">طبيب متخصص على المنصة</div>
         </div>
         <div class="pt-4 lg:pt-0 lg:pr-6">
-          <div class="text-base sm:text-lg font-black text-[#0F294A]">دعم فني متميز</div>
-          <div class="text-xs font-bold text-slate-500 mt-1">24/7</div>
+          <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.reservationsCount ?? 0 }}</div>
+          <div class="text-xs font-bold text-slate-500 mt-1">إجمالي الحجوزات والمواعيد</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 4. Features Grid (6 Horizontal Cards) -->
+  <!-- 4. Features Grid -->
   <section id="features" class="py-16 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+          <span>إمكانيات متكاملة</span>
+        </div>
         <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">مميزات منصة طبيب</h2>
       </div>
 
@@ -303,53 +313,71 @@
     </div>
   </section>
 
-  <!-- 5. Screenshots Carousel Section -->
-  <section id="screenshots" class="py-16 px-4 sm:px-6 bg-white border-y border-slate-200/70">
+  <!-- 5. Screenshots Slider Section (Dots فقط) -->
+  <section id="screenshots" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-y border-slate-200/70">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-10">
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">لقطات من النظام</h2>
+
+      <div class="mb-10">
+        <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+          <span>جولة داخل المنصة</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
+          لقطات من <span class="text-[#0284C7]">النظام</span>
+        </h2>
+        <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
+          واجهات عصرية ومبسطة مصممة لسرعة إنجاز العمل اليومي داخل العيادة أو المجمع الطبي.
+        </p>
       </div>
 
-      <div class="relative flex items-center gap-3">
-        <button
-          type="button"
-          (click)="prevSlide()"
-          class="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm hover:border-[#0284C7] text-[#0F294A] flex items-center justify-center shrink-0 cursor-pointer"
-          aria-label="السابق">
-          ›
-        </button>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (shot of visibleScreenshots; track shot.id) {
+          <article class="bg-white border border-slate-200/85 rounded-3xl p-3.5 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 group flex flex-col">
+            <div class="relative h-52 rounded-2xl overflow-hidden bg-slate-100">
+              <img
+                [src]="shot.image"
+                [alt]="shot.title"
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
-        <div class="grid md:grid-cols-3 gap-5 flex-1">
-          @for (shot of visibleScreenshots; track shot.title) {
-            <div class="bg-[#F8FBFF] border border-slate-200/80 rounded-2xl p-3 shadow-2xs hover:shadow-md transition">
-              <div class="h-44 sm:h-48 rounded-xl overflow-hidden bg-slate-100">
-                <img
-                  [src]="shot.image"
-                  [alt]="shot.title"
-                  loading="lazy"
-                  class="w-full h-full object-cover">
-              </div>
-              <div class="pt-3 px-1">
-                <div class="font-black text-sm text-[#0F294A]">{{ shot.title }}</div>
-                <div class="text-xs text-slate-500 mt-1 line-clamp-1">{{ shot.desc }}</div>
-              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/55 via-transparent to-transparent"></div>
+
+              <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
+                {{ shot.tag }}
+              </span>
             </div>
+
+            <div class="p-4 pb-2 flex-1 flex flex-col">
+              <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
+                {{ shot.title }}
+              </h3>
+              <p class="text-xs text-slate-500 leading-6 mt-1.5 line-clamp-2 flex-1">
+                {{ shot.desc }}
+              </p>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (screenshots.length > 1) {
+        <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+          @for (shot of screenshots; track shot.id; let idx = $index) {
+            <button
+              type="button"
+              (click)="goToScreenshotSlide(idx)"
+              class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+              [ngClass]="screenshotSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+              [attr.aria-label]="'الانتقال إلى اللقطة ' + (idx + 1)">
+            </button>
           }
         </div>
+      }
 
-        <button
-          type="button"
-          (click)="nextSlide()"
-          class="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm hover:border-[#0284C7] text-[#0F294A] flex items-center justify-center shrink-0 cursor-pointer"
-          aria-label="التالي">
-          ‹
-        </button>
-      </div>
     </div>
   </section>
 
   <!-- 6. Suitable for All Clinic Types -->
-  <section id="clinics" class="py-16 px-4 sm:px-6">
+  <section class="py-16 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
         <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">مناسب لجميع أنواع العيادات</h2>
@@ -395,239 +423,531 @@
     </div>
   </section>
 
+<!-- 7. Clinics Slider Section (Dots فقط + Search) -->
+  <section id="clinics" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-y border-slate-200/70">
+    <div class="max-w-7xl mx-auto">
 
-  <!-- Clinics Slider Section -->
-<section id="clinics" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-y border-slate-200/70">
-  <div class="max-w-7xl mx-auto">
-
-    <!-- Section Header + Slider Controls -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-      <div>
-        <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
-          <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-          <span>شبكة العيادات المعتمدة</span>
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+            <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+            <span>شبكة العيادات المعتمدة</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
+            عيادات ومجمعات تثق في <span class="text-[#0284C7]">طبيب</span>
+          </h2>
+          <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
+            استعرض نخبة من العيادات والمجمعات الطبية المشتركة على المنصة، وابحث بالاسم أو المدينة.
+          </p>
         </div>
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-          عيادات ومجمعات تثق في <span class="text-[#0284C7]">طبيب</span>
-        </h2>
-        <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-          استعرض نخبة من العيادات والمجمعات الطبية المشتركة على المنصة، واحجز موعدك مباشرة عبر ملف كل عيادة.
-        </p>
-      </div>
 
-      <!-- Prev / Next Buttons -->
-      <div class="flex items-center gap-2.5 self-start md:self-auto">
-        <button
-          type="button"
-          (click)="prevClinicSlide()"
-          class="w-11 h-11 rounded-xl bg-white hover:bg-[#0284C7] border border-slate-200 hover:border-[#0284C7] text-[#0F294A] hover:text-white shadow-2xs flex items-center justify-center text-lg font-black transition cursor-pointer"
-          aria-label="العيادات السابقة">
-          ›
-        </button>
-        <button
-          type="button"
-          (click)="nextClinicSlide()"
-          class="w-11 h-11 rounded-xl bg-white hover:bg-[#0284C7] border border-slate-200 hover:border-[#0284C7] text-[#0F294A] hover:text-white shadow-2xs flex items-center justify-center text-lg font-black transition cursor-pointer"
-          aria-label="العيادات التالية">
-          ‹
-        </button>
-      </div>
-    </div>
-
-    <!-- Slider Cards Grid -->
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (clinic of visibleClinics; track clinic.id) {
-        <article class="bg-white border border-slate-200/85 rounded-3xl p-3.5 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 group flex flex-col">
-
-          <!-- Clinic Image + City Badge + Rating -->
-          <div class="relative h-52 rounded-2xl overflow-hidden bg-slate-100">
-            <img
-              [src]="clinic.image"
-              [alt]="clinic.name"
-              loading="lazy"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/55 via-transparent to-transparent"></div>
-
-            <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
-              📍 {{ clinic.city }}
-            </span>
-
-            <span class="absolute top-3 left-3 bg-[#0F294A]/90 backdrop-blur-xs text-amber-400 text-xs font-black px-3 py-1.5 rounded-xl shadow-2xs">
-              ★ {{ clinic.rating }}
-            </span>
-
-            <span class="absolute bottom-3 right-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
-              {{ clinic.specialty }}
-            </span>
-          </div>
-
-          <!-- Card Body -->
-          <div class="p-4 pb-2 flex-1 flex flex-col">
-            <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
-              {{ clinic.name }}
-            </h3>
-
-            <p class="text-xs text-slate-500 leading-6 mt-1.5 line-clamp-2">
-              {{ clinic.description || 'رعاية طبية متكاملة وحجز فوري للمواعيد مع نخبة من الأطباء المتخصصين.' }}
-            </p>
-
-            <!-- Meta Info -->
-            <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-100">
-              <span class="inline-flex items-center gap-1">
-                <span>🩺</span>
-                <span>{{ clinic.doctorsCount || 8 }} أطباء</span>
-              </span>
-              <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
-                <span>●</span>
-                <span>متاح للحجز</span>
-              </span>
-            </div>
-
-            <!-- Action Button -->
-            <button
-              type="button"
-              routerLink="/clinic-profile"
-              [queryParams]="{ id: clinic.id }"
-              class="mt-4 w-full bg-[#0F294A] hover:bg-[#0284C7] text-white py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
-              <span>استعراض العيادة والحجز</span>
-              <span aria-hidden="true">←</span>
-            </button>
-          </div>
-
-        </article>
-      }
-    </div>
-
-    <!-- Slider Dots Indicator -->
-    <div *ngIf="featuredClinics.length > 1" class="flex items-center justify-center gap-2 mt-8">
-      @for (clinic of featuredClinics; track clinic.id; let idx = $index) {
-        <button
-          type="button"
-          (click)="goToClinicSlide(idx)"
-          class="h-2.5 rounded-full transition-all cursor-pointer"
-          [ngClass]="clinicSlideIndex === idx ? 'w-7 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-          [attr.aria-label]="'الانتقال إلى العيادة ' + (idx + 1)">
-        </button>
-      }
-    </div>
-
-  </div>
-</section>
-  <!-- 7. Pricing Plans -->
-  <section id="pricing" class="py-16 px-4 sm:px-6 bg-white border-y border-slate-200/70">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">خطط وأسعار مرنة</h2>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6 items-center">
-        @for (plan of pricingPlans; track plan.name) {
-          <div
-            class="relative rounded-2xl p-7 text-center border transition"
-            [ngClass]="plan.popular
-              ? 'bg-[#EAF4FF] border-[#0284C7] shadow-xl md:scale-105 z-10'
-              : 'bg-[#F8FBFF] border-slate-200/90'">
-
-            @if (plan.popular) {
-              <div class="w-full bg-[#0284C7] text-white text-xs font-black py-1.5 rounded-t-xl -mt-7 mb-5">
-                الأكثر طلباً
-              </div>
+        <!-- حقل بحث العيادات -->
+        <div class="w-full lg:w-88">
+          <div class="relative flex items-center">
+            <span class="absolute right-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
+            <input
+              type="text"
+              [value]="clinicSearchQuery"
+              (input)="onClinicSearchChange($any($event.target).value)"
+              placeholder="ابحث باسم العيادة أو المدينة..."
+              class="w-full bg-white border border-slate-200/90 focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl pr-10 pl-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
+            @if (clinicSearchQuery) {
+              <button
+                type="button"
+                (click)="clearClinicFilters()"
+                class="absolute left-2.5 w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
+                aria-label="مسح البحث">
+                ✕
+              </button>
             }
+          </div>
+        </div>
+      </div>
 
-            <h3 class="text-lg font-black text-[#0F294A]">{{ plan.name }}</h3>
-            <p class="text-xs text-slate-500 mt-1">{{ plan.desc }}</p>
+      @if (visibleClinics.length > 0) {
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (clinic of visibleClinics; track clinic.arName + clinic.enName + $index) {
+            <article class="bg-white border border-slate-200/85 rounded-3xl p-3.5 shadow-sm hover:shadow-xl hover:border-sky-300 transition-all duration-300 group flex flex-col">
 
-            <div class="my-5">
-              <span class="text-3xl sm:text-4xl font-black text-[#0F294A]">${{ plan.price }}</span>
-              <span class="text-xs font-bold text-slate-500 mr-1">/ {{ plan.period }}</span>
-            </div>
+              <!-- Clinic Image + City & Country Badge + Rating -->
+              <div class="relative h-52 rounded-2xl overflow-hidden bg-slate-100">
+                <img
+                  [src]="getClinicImage(clinic.bannerPath)"
+                  [alt]="clinic.arName || clinic.enName"
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
 
-            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 text-right max-w-56 mx-auto mb-7">
-              @for (feature of plan.features; track feature) {
-                <li class="flex items-center gap-2">
-                  <span class="text-[#0284C7] font-black">✓</span>
-                  <span>{{ feature }}</span>
-                </li>
-              }
-            </ul>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/60 via-transparent to-transparent"></div>
 
+                <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
+                  📍 {{ clinic.cityArName || clinic.cityEnName || 'مدينة' }}
+                  @if (clinic.countryArName || clinic.countryEnName) {
+                    <span> - {{ clinic.countryArName || clinic.countryEnName }}</span>
+                  }
+                </span>
+
+                <span class="absolute top-3 left-3 bg-[#0F294A]/90 backdrop-blur-xs text-amber-400 text-xs font-black px-3 py-1.5 rounded-xl shadow-2xs">
+                  ★ {{ getClinicRating(clinic) }}
+                </span>
+
+                <span class="absolute bottom-3 right-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
+                  {{ clinic.enName || 'Clinic' }}
+                </span>
+              </div>
+
+              <!-- Card Body -->
+              <div class="p-4 pb-2 flex-1 flex flex-col">
+                <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
+                  {{ clinic.arName || clinic.enName }}
+                </h3>
+
+                <p class="text-xs text-slate-500 leading-6 mt-1.5 line-clamp-2">
+                  {{clinic.arDescription}}
+                </p>
+
+                <!-- Social & Status Row -->
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-100">
+  <div class="flex items-center gap-2">
+    @if (clinic.whatsappNumber) {
+      <a
+        [href]="'https://wa.me/' + clinic.whatsappNumber"
+        target="_blank"
+        rel="noopener"
+        [attr.title]="'واتساب: ' + clinic.whatsappNumber"
+        aria-label="واتساب"
+        class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-200/70 flex items-center justify-center transition">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.76 14.08c-.24.68-1.4 1.3-1.92 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.18-4.94-4.37-.15-.19-1.18-1.57-1.18-3s.76-2.13 1.03-2.42c.27-.29.59-.36.79-.36.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.03.9 2.18.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.12.63-.07.17-.2.73-.85.92-1.14.2-.29.39-.24.66-.15.27.1 1.71.81 2 .95.29.15.49.22.56.34.07.12.07.7-.17 1.38z"/>
+        </svg>
+      </a>
+    }
+
+    @if (clinic.instgramUser) {
+      <a
+        [href]="'https://instagram.com/' + clinic.instgramUser"
+        target="_blank"
+        rel="noopener"
+        [attr.title]="'إنستجرام: @' + clinic.instgramUser"
+        aria-label="إنستجرام"
+        class="w-8 h-8 rounded-xl bg-sky-50 text-[#0284C7] hover:bg-[#0284C7] hover:text-white border border-sky-200/70 flex items-center justify-center transition">
+        <svg class="w-4 h-4 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" class="fill-current stroke-none"/>
+        </svg>
+      </a>
+    }
+
+    @if (clinic.snapshatUser) {
+      <a
+        [href]="'https://www.snapchat.com/add/' + clinic.snapshatUser"
+        target="_blank"
+        rel="noopener"
+        [attr.title]="'سناب شات: ' + clinic.snapshatUser"
+        aria-label="سناب شات"
+        class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-400 hover:text-[#0F294A] border border-amber-200/80 flex items-center justify-center transition">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.5c-3.1 0-5.1 2.1-5.1 5 0 .9.2 1.8.4 2.4-.3.1-.7.2-1.1.2-.5 0-.9-.2-1.1-.4-.2-.2-.5-.3-.8-.2-.4.1-.7.5-.6 1 .1.7.8 1.3 1.8 1.6.2.1.3.2.2.4-.5 1.3-1.6 2.5-3.3 3.1-.4.1-.6.5-.5.9.1.4.5.6.9.6.8 0 1.6-.2 2.3-.5.2.6.6 1.1 1.2 1.4.7.4 1.6.4 2.5.4.8 0 1.6 0 2.5.4.9.4 1.7.4 2.5.4.9 0 1.8 0 2.5-.4.6-.3 1-.8 1.2-1.4.7.3 1.5.5 2.3.5.4 0 .8-.2.9-.6.1-.4-.1-.8-.5-.9-1.7-.6-2.8-1.8-3.3-3.1-.1-.2 0-.3.2-.4 1-.3 1.7-.9 1.8-1.6.1-.5-.2-.9-.6-1-.3-.1-.6 0-.8.2-.2.2-.6.4-1.1.4-.4 0-.8-.1-1.1-.2.2-.6.4-1.5.4-2.4 0-2.9-2-5-5.1-5z"/>
+        </svg>
+      </a>
+    }
+  </div>
+
+  <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md shrink-0">
+    <span>●</span>
+    <span>متاح</span>
+  </span>
+</div>
+
+                <!-- Action Button: الانتقال إلى أطباء العيادة -->
+                <a
+                  href="#doctors"
+                  (click)="selectDoctorClinicFilter(clinic.arName || clinic.enName || 'ALL')"
+                  class="mt-4 w-full bg-[#0F294A] hover:bg-[#0284C7] text-white py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
+                  <span>🩺 أطباء العيادة ومواعيدهم</span>
+                  <span aria-hidden="true">←</span>
+                </a>
+              </div>
+
+            </article>
+          }
+        </div>
+      } @else if (!isLoading) {
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-10 text-center space-y-3">
+          <div class="text-sm font-bold text-slate-500">
+            @if (clinicSearchQuery) {
+              <span>لا توجد نتائج مطابقة لبحثك عن "{{ clinicSearchQuery }}".</span>
+            } @else {
+              <span>لا توجد عيادات متاحة للعرض حالياً.</span>
+            }
+          </div>
+          @if (clinicSearchQuery) {
             <button
               type="button"
-              (click)="selectPlan(plan.name)"
-              class="w-full py-3 rounded-xl font-extrabold text-sm transition cursor-pointer"
-              [ngClass]="plan.popular
-                ? 'bg-[#0284C7] hover:bg-[#0369A1] text-white shadow-sm'
-                : 'bg-white hover:bg-slate-50 text-[#0F294A] border border-slate-200'">
-              {{ plan.name || 'اختر الباقة' }}
+              (click)="clearClinicFilters()"
+              class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer transition">
+              <span>إظهار جميع العيادات</span>
             </button>
+          }
+        </div>
+      }
+
+      @if (clinicsList.length > 1) {
+        <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+          @for (clinic of clinicsList; track clinic.arName + $index; let idx = $index) {
+            <button
+              type="button"
+              (click)="goToClinicSlide(idx)"
+              class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+              [ngClass]="clinicSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+              [attr.aria-label]="'الانتقال إلى العيادة ' + (idx + 1)">
+            </button>
+          }
+        </div>
+      }
+
+    </div>
+  </section>
+
+<!-- 8. Doctors Slider Section (من profile.doctors + Search + فلتر العيادة + Dots فقط) -->
+  <section id="doctors" class="py-16 lg:py-20 px-4 sm:px-6 bg-white border-b border-slate-200/70">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Section Header + Search & Clinic Filter -->
+      <div class="flex flex-col gap-6 mb-10">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div>
+            <div class="inline-flex items-center gap-2 bg-[#F4F9FF] border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+              <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+              <span>فريق الأطباء المتخصصين</span>
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
+              نخبة من <span class="text-[#0284C7]">الأطباء</span> في خدمتك
+            </h2>
+            <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
+              ابحث باسم الطبيب أو التخصص أو العيادة واطلع على مواعيد عمله مباشرة.
+            </p>
+          </div>
+
+          <!-- حقل بحث الأطباء -->
+          <div class="w-full lg:w-88">
+            <div class="relative flex items-center">
+              <span class="absolute right-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
+              <input
+                type="text"
+                [value]="doctorSearchQuery"
+                (input)="onDoctorSearchChange($any($event.target).value)"
+                placeholder="ابحث باسم الطبيب، التخصص، أو العيادة..."
+                class="w-full bg-[#F8FBFF] border border-slate-200/90 focus:bg-white focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl pr-10 pl-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
+              @if (doctorSearchQuery) {
+                <button
+                  type="button"
+                  (click)="onDoctorSearchChange('')"
+                  class="absolute left-2.5 w-6 h-6 rounded-lg bg-slate-200/70 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
+                  aria-label="مسح البحث">
+                  ✕
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- فلاتر العيادات -->
+        @if (clinicFilterOptions.length > 0) {
+          <div class="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              (click)="selectDoctorClinicFilter('ALL')"
+              class="px-3.5 py-2 rounded-xl text-xs font-extrabold border transition cursor-pointer"
+              [ngClass]="selectedDoctorClinicFilter === 'ALL'
+                ? 'bg-[#0284C7] text-white border-[#0284C7] shadow-2xs'
+                : 'bg-[#F8FBFF] text-[#0F294A] border-slate-200 hover:border-sky-300'">
+              الكل ({{ doctorsList.length }})
+            </button>
+
+            @for (clinicName of clinicFilterOptions; track clinicName) {
+              <button
+                type="button"
+                (click)="selectDoctorClinicFilter(clinicName)"
+                class="px-3.5 py-2 rounded-xl text-xs font-extrabold border transition cursor-pointer"
+                [ngClass]="selectedDoctorClinicFilter === clinicName
+                  ? 'bg-[#0284C7] text-white border-[#0284C7] shadow-2xs'
+                  : 'bg-[#F8FBFF] text-[#0F294A] border-slate-200 hover:border-sky-300'">
+                {{ clinicName }}
+              </button>
+            }
           </div>
         }
       </div>
+
+      <!-- Doctors Cards Grid -->
+      @if (visibleDoctors.length > 0) {
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (doctor of visibleDoctors; track doctor.doctorId + '-' + doctor.clinicId + '-' + $index) {
+            <article class="bg-[#F8FBFF] border border-slate-200/85 rounded-3xl p-4 shadow-sm hover:shadow-xl hover:border-sky-300 hover:bg-white transition-all duration-300 group flex flex-col justify-between">
+
+              <div>
+                <div class="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-[#0F294A] to-[#0284C7]">
+                  @if (getDoctorImage(doctor.imagePath)) {
+                    <img
+                      [src]="getDoctorImage(doctor.imagePath)"
+                      [alt]="doctor.arName || doctor.enName"
+                      loading="lazy"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/70 via-transparent to-transparent"></div>
+                  } @else {
+                    <div class="w-full h-full flex items-center justify-center">
+                      <div class="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-xs border border-white/25 text-white flex items-center justify-center text-3xl font-black">
+                        {{ getDoctorInitials(doctor) }}
+                      </div>
+                    </div>
+                  }
+
+                  <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0284C7] border border-slate-200/70 text-xs font-extrabold px-3 py-1 rounded-xl shadow-2xs">
+                    🩺 {{ doctor.specializationArName || doctor.specializationEnName || 'طبيب متخصص' }}
+                  </span>
+
+                  @if (doctor.sessionPrice) {
+                    <span class="absolute top-3 left-3 bg-[#0F294A]/90 backdrop-blur-xs text-white text-xs font-black px-3 py-1 rounded-xl shadow-2xs">
+                      {{ doctor.sessionPrice }} ر.س
+                    </span>
+                  }
+
+                  <span class="absolute bottom-3 right-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
+                    🏥 {{ doctor.clinicArName || doctor.clinicEnName }}
+                  </span>
+                </div>
+
+                <div class="p-3 pb-1">
+                  <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
+                    د. {{ doctor.arName || doctor.enName }}
+                  </h3>
+                  @if (doctor.enName && doctor.arName) {
+                    <div class="text-xs font-bold text-slate-400 mt-0.5">{{ doctor.enName }}</div>
+                  }
+
+                  <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-200/70">
+                    <span class="inline-flex items-center gap-1">
+                      <span>⏱️</span>
+                      <span>مدة الكشف: {{ doctor.sessionDuration || 30 }} دقيقة</span>
+                    </span>
+
+                    <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+                      <span>●</span>
+                      <span>{{ getDoctorWorktimes(doctor).length }} أيام عمل</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                (click)="openWorktimes(doctor)"
+                class="mt-4 w-full bg-[#0F294A] hover:bg-[#0284C7] text-white py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
+                <span>🕒 مواعيد الدكتور</span>
+                <span aria-hidden="true">←</span>
+              </button>
+
+            </article>
+          }
+        </div>
+      } @else if (!isLoading) {
+        <div class="bg-[#F8FBFF] border border-slate-200/80 rounded-3xl p-10 text-center space-y-3">
+          <div class="text-sm font-bold text-slate-500">
+            @if (doctorSearchQuery || selectedDoctorClinicFilter !== 'ALL') {
+              <span>لا توجد نتائج مطابقة للبحث أو العيادة المحددة.</span>
+            } @else {
+              <span>لا يوجد أطباء متاحون للعرض حالياً.</span>
+            }
+          </div>
+          @if (doctorSearchQuery || selectedDoctorClinicFilter !== 'ALL') {
+            <button
+              type="button"
+              (click)="clearDoctorFilters()"
+              class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer transition">
+              <span>إعادة ضبط الفلاتر</span>
+            </button>
+          }
+        </div>
+      }
+
+      @if (filteredDoctors.length > 1) {
+        <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+          @for (doctor of filteredDoctors; track doctor.doctorId + '-' + $index; let idx = $index) {
+            <button
+              type="button"
+              (click)="goToDoctorSlide(idx)"
+              class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+              [ngClass]="doctorSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+              [attr.aria-label]="'الانتقال إلى الطبيب ' + (idx + 1)">
+            </button>
+          }
+        </div>
+      }
+
     </div>
   </section>
 
-  <!-- 8. Testimonials -->
-  <section id="testimonials" class="py-16 px-4 sm:px-6">
+  <!-- 9. Pricing Plans Slider (Dots فقط) -->
+  <section id="pricing" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-b border-slate-200/70">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-10">
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">آراء عملائنا</h2>
+
+      <div class="mb-10">
+        <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+          <span>باقات الاشتراك</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
+          خطط وأسعار <span class="text-[#0284C7]">مرنة</span>
+        </h2>
+        <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
+          اختر الباقة المناسبة لحجم عيادتك أو مجمعك الطبي مع إمكانية الترقية في أي وقت.
+        </p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-5">
-        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-start gap-3.5">
-          <img
-            src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=160&auto=format&fit=crop&q=80"
-            alt="د. أحمد علي"
-            loading="lazy"
-            class="w-12 h-12 rounded-full object-cover shrink-0">
-          <div class="text-right">
-            <div class="text-amber-400 text-xs mb-1">★★★★★</div>
-            <p class="text-xs text-slate-600 leading-6">
-              “منصة رائعة وسهلة الاستخدام، ساعدتنا في تنظيم العمل بشكل كبير.”
-            </p>
-            <div class="font-black text-xs text-[#0F294A] mt-2">✓ د. أحمد علي</div>
-            <div class="text-[11px] text-slate-400">مدير عيادة النور</div>
-          </div>
-        </div>
+      @if (visiblePackages.length > 0) {
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          @for (pkg of visiblePackages; track pkg.arName + pkg.enName + $index; let idx = $index) {
+            <article
+              class="rounded-3xl p-6 border transition-all duration-300 flex flex-col justify-between"
+              [ngClass]="isPopularPackage(idx)
+                ? 'bg-[#EAF4FF] border-[#0284C7] shadow-xl'
+                : 'bg-white border-slate-200/85 hover:shadow-lg hover:border-sky-300'">
 
-        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-start gap-3.5">
-          <img
-            src="https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=160&auto=format&fit=crop&q=80"
-            alt="د. سارة محمد"
-            loading="lazy"
-            class="w-12 h-12 rounded-full object-cover shrink-0">
-          <div class="text-right">
-            <p class="text-xs text-slate-600 leading-6">
-              “دعم فني ممتاز وتجربة احترافية بكل المقاييس.”
-            </p>
-            <div class="font-black text-xs text-[#0F294A] mt-2">✓ د. سارة محمد</div>
-            <div class="text-[11px] text-slate-400">مديرة مجمع الحياة</div>
-          </div>
-        </div>
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-4">
+                  <span class="bg-sky-50 text-[#0284C7] border border-sky-200/70 text-xs font-extrabold px-3 py-1 rounded-xl">
+                    {{ pkg.durationInDays }} يوم
+                  </span>
 
-        <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-start gap-3.5">
-          <img
-            src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=160&auto=format&fit=crop&q=80"
-            alt="د. خالد محمود"
-            loading="lazy"
-            class="w-12 h-12 rounded-full object-cover shrink-0">
-          <div class="text-right">
-            <p class="text-xs text-slate-600 leading-6">
-              “أفضل نظام لإدارة العيادات، أنصح به بشدة.”
-            </p>
-            <div class="font-black text-xs text-[#0F294A] mt-2">✓ د. خالد محمود</div>
-            <div class="text-[11px] text-slate-400">طبيب عام</div>
-          </div>
+                  @if (isPopularPackage(idx)) {
+                    <span class="bg-[#0284C7] text-white text-xs font-black px-3 py-1 rounded-xl">
+                      الأكثر طلباً
+                    </span>
+                  }
+                </div>
+
+                <h3 class="text-xl font-black text-[#0F294A]">
+                  {{ pkg.arName || pkg.enName }}
+                </h3>
+                @if (pkg.enName && pkg.arName) {
+                  <div class="text-xs font-bold text-slate-400 mt-0.5">{{ pkg.enName }}</div>
+                }
+
+                <p class="text-xs sm:text-sm text-slate-600 leading-6 mt-3">
+                  {{ pkg.arDescription || pkg.enDescription || 'باقة متكاملة لإدارة العيادة والمواعيد والمرضى بكفاءة عالية.' }}
+                </p>
+
+                <div class="my-6 py-4 px-4 rounded-2xl bg-[#F8FBFF] border border-sky-100 flex items-baseline justify-between">
+                  <div>
+                    <span class="text-3xl font-black text-[#0F294A]">{{ pkg.price }}</span>
+                    <span class="text-xs font-extrabold text-[#0284C7] mr-1.5">ر.س</span>
+                  </div>
+                  <span class="text-xs font-bold text-slate-500">لمدة {{ pkg.durationInDays }} يوم</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                (click)="selectPlan(pkg)"
+                class="w-full py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                [ngClass]="isPopularPackage(idx)
+                  ? 'bg-[#0284C7] hover:bg-[#0369A1] text-white shadow-sm'
+                  : 'bg-[#0F294A] hover:bg-[#0284C7] text-white'">
+                <span>اشترك في {{ pkg.arName || pkg.enName }}</span>
+                <span aria-hidden="true">←</span>
+              </button>
+            </article>
+          }
         </div>
-      </div>
+      } @else if (!isLoading) {
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-10 text-center text-sm font-bold text-slate-500">
+          لا توجد باقات اشتراك متاحة حالياً.
+        </div>
+      }
+
+      @if (packagesList.length > 1) {
+        <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+          @for (pkg of packagesList; track pkg.arName + $index; let idx = $index) {
+            <button
+              type="button"
+              (click)="goToPackageSlide(idx)"
+              class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+              [ngClass]="packageSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+              [attr.aria-label]="'الانتقال إلى الباقة ' + (idx + 1)">
+            </button>
+          }
+        </div>
+      }
+
     </div>
   </section>
 
-  <!-- 9. Bottom CTA Banner with Pulse Line -->
-  <section id="contact" class="px-4 sm:px-6 pb-16">
+  <!-- 10. Testimonials Slider (Dots فقط) -->
+  <section id="testimonials" class="py-16 lg:py-20 px-4 sm:px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+
+      <div class="mb-10">
+        <div class="inline-flex items-center gap-2 bg-[#F4F9FF] border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
+          <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
+          <span>شركاء النجاح</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
+          آراء <span class="text-[#0284C7]">عملائنا</span>
+        </h2>
+        <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
+          تجارب حقيقية لأطباء ومديري عيادات ومجمعات طبية يعتمدون على منصة طبيب يومياً.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (item of visibleTestimonials; track item.id) {
+          <article class="bg-[#F8FBFF] border border-slate-200/85 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:border-sky-300 hover:bg-white transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-amber-400 text-sm tracking-wider">★★★★★</div>
+                <span class="text-xs font-extrabold text-[#0284C7] bg-sky-50 px-2.5 py-1 rounded-lg">موثق</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 leading-7">
+                “{{ item.comment }}”
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3.5 mt-6 pt-4 border-t border-slate-200/70">
+              <img
+                [src]="item.image"
+                [alt]="item.name"
+                loading="lazy"
+                class="w-12 h-12 rounded-2xl object-cover shrink-0 border border-sky-100">
+              <div>
+                <div class="font-black text-sm text-[#0F294A]">{{ item.name }}</div>
+                <div class="text-xs text-slate-500 mt-0.5">{{ item.role }}</div>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (testimonials.length > 1) {
+        <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+          @for (item of testimonials; track item.id; let idx = $index) {
+            <button
+              type="button"
+              (click)="goToTestimonialSlide(idx)"
+              class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+              [ngClass]="testimonialSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+              [attr.aria-label]="'الانتقال إلى الرأي ' + (idx + 1)">
+            </button>
+          }
+        </div>
+      }
+
+    </div>
+  </section>
+
+  <!-- 11. Bottom CTA Banner -->
+  <section id="contact" class="px-4 sm:px-6 py-14 bg-[#F7FAFF]">
     <div class="max-w-6xl mx-auto bg-gradient-to-l from-[#E8F3FF] to-[#F3F8FF] border border-sky-200/80 rounded-3xl px-6 py-8 sm:px-10 relative overflow-hidden">
-      <!-- Subtle ECG Pulse Background -->
       <svg viewBox="0 0 800 120" class="w-full h-20 text-sky-200/80 absolute inset-x-0 top-1/2 -translate-y-1/2 pointer-events-none" fill="none">
         <path stroke="currentColor" stroke-width="2" d="M0 60 H260 L290 25 L320 95 L345 45 L365 60 H800"/>
       </svg>
@@ -639,7 +959,7 @@
           </div>
           <div>
             <h2 class="text-xl sm:text-2xl font-black text-[#0F294A]">جاهز للبدء؟</h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">انضم إلى آلاف العيادات التي تدير أعمالها مع طبيب</p>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">انضم إلى العيادات والمجمعات التي تدير أعمالها مع طبيب</p>
           </div>
         </div>
 
@@ -653,50 +973,198 @@
     </div>
   </section>
 
-  <!-- 10. Dark Navy Footer -->
-  <footer class="bg-[#0F294A] text-slate-300 pt-12 pb-6 px-4 sm:px-6">
+  <!-- 12. Dark Navy Footer -->
+ <!-- 12. Dark Navy Footer -->
+  <footer class="bg-[#0F294A] text-slate-300 pt-14 pb-7 px-4 sm:px-6 border-t border-sky-950">
     <div class="max-w-7xl mx-auto">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-white/10">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-white/10">
 
-        <div>
-          <div class="text-2xl font-black text-white">Tabeeb</div>
-          <p class="text-xs text-slate-400 mt-1">شريكك الذكي في إدارة العيادات</p>
+        <!-- Brand + Logo -->
+        <div class="lg:col-span-4 space-y-3">
+          <a href="#hero" class="inline-flex items-center gap-3">
+            <div class="  p-1.5  flex items-center justify-center overflow-hidden shrink-0">
+              <img
+                src="../../../assets/images/Logo.jpg"
+                alt="Tabeeb Logo"
+                class="w-[95px]">
+            </div>
+            <div>
+              <div class="text-2xl font-black tracking-tight text-white">Tabeeb</div>
+              <div class="text-[11px] font-bold text-sky-300">منصة الإدارة الطبية الذكية</div>
+            </div>
+          </a>
+
+          <p class="text-xs text-slate-400 leading-6 max-w-xs">
+            شريكك الذكي في إدارة العيادات والمجمعات الطبية، تنظيم الحجوزات، متابعة الأطباء، وإدارة الملفات الطبية بكفاءة وأمان.
+          </p>
         </div>
 
-        <div>
-          <h4 class="text-white font-black text-sm mb-3">روابط سريعة</h4>
-          <ul class="space-y-2 text-xs text-slate-300">
+        <!-- Quick Links -->
+        <div class="lg:col-span-3">
+          <h4 class="text-white font-black text-sm mb-3.5">روابط سريعة</h4>
+          <ul class="space-y-2.5 text-xs text-slate-300">
             <li><a href="#hero" class="hover:text-sky-300 transition">الرئيسية</a></li>
             <li><a href="#features" class="hover:text-sky-300 transition">المميزات</a></li>
-            <li><a href="#pricing" class="hover:text-sky-300 transition">الأسعار</a></li>
+            <li><a href="#clinics" class="hover:text-sky-300 transition">العيادات</a></li>
+            <li><a href="#doctors" class="hover:text-sky-300 transition">الأطباء</a></li>
+            <li><a href="#pricing" class="hover:text-sky-300 transition">الباقات</a></li>
           </ul>
         </div>
 
-        <div>
-          <h4 class="text-white font-black text-sm mb-3">مساعدة</h4>
-          <ul class="space-y-2 text-xs text-slate-300">
+        <!-- Help & Support -->
+        <div class="lg:col-span-2">
+          <h4 class="text-white font-black text-sm mb-3.5">مساعدة</h4>
+          <ul class="space-y-2.5 text-xs text-slate-300">
             <li><a href="#pricing" class="hover:text-sky-300 transition">الأسئلة الشائعة</a></li>
             <li><a href="#contact" class="hover:text-sky-300 transition">الدعم الفني</a></li>
-            <li><a href="#contact" class="hover:text-sky-300 transition">تواصل معنا</a></li>
+            <li><a href="mailto:support@tabeeb.org" class="hover:text-sky-300 transition">تواصل معنا</a></li>
           </ul>
         </div>
 
-        <div>
-          <h4 class="text-white font-black text-sm mb-3">تابعنا</h4>
+        <!-- Social & Contact -->
+        <div class="lg:col-span-3">
+          <h4 class="text-white font-black text-sm mb-3.5">تابعنا وتواصل معنا</h4>
           <div class="flex items-center gap-2.5">
-            <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">f</a>
-            <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">𝕏</a>
-            <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">▶</a>
-            <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">in</a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">f</a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">𝕏</a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">▶</a>
+            <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">in</a>
           </div>
+          <p class="text-[11px] text-slate-400 mt-4">
+            support&#64;tabeeb.org
+          </p>
         </div>
 
       </div>
 
-      <div class="pt-5 text-center sm:text-right text-xs text-slate-400">
-        جميع الحقوق محفوظة © 2026 Tabeeb
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+        <span>جميع الحقوق محفوظة © 2026 Tabeeb</span>
+        <span>إدارة عيادتك بذكاء واحترافية</span>
       </div>
     </div>
   </footer>
+
+  <!-- Modal مواعيد الدكتور -->
+  @if (showWorktimeModal && selectedDoctor) {
+    <div
+      class="fixed inset-0 z-50 bg-[#0F294A]/65 backdrop-blur-xs flex items-center justify-center p-4"
+      (click)="closeWorktimes()">
+      <div
+        class="bg-white border border-slate-200/90 rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden"
+        (click)="$event.stopPropagation()">
+
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-l from-[#0F294A] to-[#0284C7] text-white px-6 py-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            @if (getDoctorImage(selectedDoctor.imagePath)) {
+              <img
+                [src]="getDoctorImage(selectedDoctor.imagePath)"
+                [alt]="selectedDoctor.arName || selectedDoctor.enName"
+                class="w-13 h-13 rounded-2xl object-cover border-2 border-white/30 shrink-0" style="width: 150px;">
+            } @else {
+              <div class="w-13 h-13 rounded-2xl bg-white/15 border border-white/25 text-white flex items-center justify-center text-xl font-black shrink-0">
+                {{ getDoctorInitials(selectedDoctor) }}
+              </div>
+            }
+
+            <div>
+              <div class="text-xs font-bold text-sky-200">
+                🏥 {{ selectedDoctor.clinicArName || selectedDoctor.clinicEnName }}
+              </div>
+              <h3 class="text-lg sm:text-xl font-black mt-0.5">
+                د. {{ selectedDoctor.arName || selectedDoctor.enName }}
+              </h3>
+              <div class="text-xs font-bold text-sky-100 mt-0.5">
+                {{ selectedDoctor.specializationArName || selectedDoctor.specializationEnName }}
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            (click)="closeWorktimes()"
+            class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center font-black transition cursor-pointer shrink-0"
+            aria-label="إغلاق النافذة">
+            ✕
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 max-h-[75vh] overflow-y-auto space-y-5">
+
+          <!-- معلومات الكشف السريعة -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
+              <div class="text-[11px] font-bold text-slate-500">سعر الكشف</div>
+              <div class="text-base font-black text-[#0284C7] mt-0.5">
+                {{ selectedDoctor.sessionPrice ?? 0 }} ر.س
+              </div>
+            </div>
+
+            <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
+              <div class="text-[11px] font-bold text-slate-500">مدة الجلسة</div>
+              <div class="text-base font-black text-[#0F294A] mt-0.5">
+                {{ selectedDoctor.sessionDuration || 30 }} دقيقة
+              </div>
+            </div>
+
+            <div class="col-span-2 sm:col-span-1 bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
+              <div class="text-[11px] font-bold text-slate-500">أيام العمل</div>
+              <div class="text-base font-black text-emerald-700 mt-0.5">
+                {{ getDoctorWorktimes(selectedDoctor).length }} أيام
+              </div>
+            </div>
+          </div>
+
+          <!-- جدول أوقات العمل (dayOfWeek, startAt, endAt) -->
+          <div>
+            <div class="text-xs font-extrabold text-slate-500 mb-3">مواعيد العيادة الأسبوعية:</div>
+
+            @if (getDoctorWorktimes(selectedDoctor).length > 0) {
+              <div class="grid sm:grid-cols-2 gap-3">
+                @for (wt of getDoctorWorktimes(selectedDoctor); track $index) {
+                  <div class="bg-white border border-slate-200/85 rounded-2xl p-4 flex items-center justify-between gap-3 hover:border-sky-300 hover:shadow-xs transition">
+                    <div>
+                      <div class="text-xs font-extrabold text-[#0284C7]">
+                        {{ getDayName(wt.dayOfWeek) }}
+                      </div>
+                      <div class="text-sm font-black text-[#0F294A] mt-1">
+                        {{ formatTime(wt.startAt) }}
+                        <span class="text-slate-400 mx-1">إلى</span>
+                        {{ formatTime(wt.endAt) }}
+                      </div>
+                    </div>
+
+                    <span class="w-10 h-10 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center text-base font-black shrink-0">
+                      🕒
+                    </span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="bg-[#F8FBFF] border border-slate-200/80 rounded-2xl p-6 text-center text-xs sm:text-sm font-bold text-slate-500">
+                لا توجد مواعيد عمل مسجلة لهذا الطبيب في هذه العيادة حالياً.
+              </div>
+            }
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="bg-[#F8FBFF] border-t border-slate-200/70 px-6 py-3.5 flex items-center justify-between gap-3">
+          <span class="text-xs font-bold text-slate-500">
+            {{ selectedDoctor.clinicArName || selectedDoctor.clinicEnName }}
+          </span>
+          <button
+            type="button"
+            (click)="closeWorktimes()"
+            class="bg-[#0F294A] hover:bg-[#0284C7] text-white px-5 py-2 rounded-xl text-xs font-extrabold transition cursor-pointer">
+            إغلاق
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
 
 </div>

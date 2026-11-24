@@ -259,5 +259,6 @@
   "workHours": "عدد ساعات العمل",
   "minValue": "اقل قيمة",
   "Role": "الدور",
-  "status": "الحالة"
+  "status": "الحالة",
+  "InvalidISOCode": "كود غير صالح"
 }
