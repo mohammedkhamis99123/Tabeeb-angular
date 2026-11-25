@@ -260,5 +260,6 @@
   "minValue": "Minimum Value",
   "Role": "Role",
   "status": "Status",
-  "InvalidISOCode": "Invalid ISO Code"
+  "InvalidISOCode": "Invalid ISO Code",
+  "InvalidIdentity": "Invalid Identity"
 }

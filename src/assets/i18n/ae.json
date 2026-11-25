@@ -260,5 +260,6 @@
   "minValue": "اقل قيمة",
   "Role": "الدور",
   "status": "الحالة",
-  "InvalidISOCode": "كود غير صالح"
+  "InvalidISOCode": "كود غير صالح",
+  "InvalidIdentity": "رقم هوية غيرصالح"
 }

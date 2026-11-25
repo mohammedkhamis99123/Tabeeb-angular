@@ -16,11 +16,14 @@ const routes: Routes = [
 },
 {
   path:"Index",
-  component:ClinicDashboardComponent
+  component:ClinicDashboardComponent,
+  canActivate: [roleGuard],
+    data: { roles: ['Admin'] }
 },
   {
     path:"Doctors",
-    component:ClinicDoctorsComponent
+    component:ClinicDoctorsComponent,
+    
   },
   {
     path:"Offers",

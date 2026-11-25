@@ -124,7 +124,7 @@ this.roles = [
             arName: ['', [Validators.required, Validators.maxLength(150),TextLangValidator(Language.Arabic)]],
             enName: ['', [Validators.required, Validators.maxLength(150),,TextLangValidator(Language.English)]],
             addrees: ['', [Validators.required, Validators.maxLength(250)]],
-            identityNumber: ['', Validators.required],
+            identityNumber: ['', Validators.required,Validators.pattern("^[12]\d{9}$")],
             email: ['', [Validators.required, Validators.email, Validators.maxLength(250)]],
             doctorId: [null],
             role: [null, Validators.required],

@@ -10,7 +10,7 @@ const routes: Routes = [
     path:"Tabeeb",
     component:TabeebProfileComponent
   },
-  {path:'Clinic',
+  {path:'Clinic/:id',
     component:ClinicProfileComponent
   },
   {

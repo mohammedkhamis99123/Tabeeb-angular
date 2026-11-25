@@ -281,6 +281,8 @@
 
                             <div class="text-danger" *ngIf="employeeForm.get('identityNumber')?.touched && employeeForm.get('identityNumber')?.invalid">
                             <span *ngIf="employeeForm.get('identityNumber')?.errors?.['required']">{{'required'|translate}}</span>
+                         <span *ngIf="employeeForm.get('identityNumber')?.errors?.['pattern']">{{'InvalidIdentity'|translate}}</span>
+
                         </div>
                 </div>
 

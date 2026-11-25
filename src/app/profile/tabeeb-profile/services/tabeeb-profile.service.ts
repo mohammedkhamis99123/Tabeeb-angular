@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
-import { TabeebProfileDto } from '../../clinic-profile/models/TabeebProfileDto.model';
 import { IGenericResponse } from 'src/app/common/models/IGenericReponse';
+import { TabeebProfileDto } from '../../clinic-profile/models/TabeebProfileDto.model';
 
 @Injectable({
   providedIn: 'root'
