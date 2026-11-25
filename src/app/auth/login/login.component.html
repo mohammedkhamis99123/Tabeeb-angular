@@ -1,178 +1,334 @@
-<div class="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 sm:p-6 lg:p-8 font-sans" style="    background: rgba(0, 0, 255, 0.1);">
-    
-    <!-- Main Card Container -->
-    <div class="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
-        
-        <!-- Left Side: Brand & Visual Experience (5 Cols) -->
-        <div class="lg:col-span-5 bg-gradient-to-br from-blue-600 via-primary to-blue-800 p-8 sm:p-12 text-white flex flex-col justify-between relative overflow-hidden">
-            <!-- Background Glow Elements -->
-            <div class="absolute -right-16 -top-16 w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-16 -bottom-16 w-56 h-56 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
+<div
+  [attr.dir]="translate.currentLang === 'ae' ? 'rtl' : 'ltr'"
+  class="min-h-screen w-full relative overflow-hidden flex items-center justify-center bg-slate-50 dark:bg-[#070B14] p-4 sm:p-6 lg:p-10 font-sans selection:bg-cyan-500 selection:text-white"
+>
+  <!-- Ambient Background Glows & Grid -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-[15%] -start-[10%] w-[500px] h-[500px] rounded-full bg-cyan-400/20 dark:bg-cyan-500/10 blur-[120px]"></div>
+    <div class="absolute -bottom-[15%] -end-[10%] w-[600px] h-[600px] rounded-full bg-blue-600/20 dark:bg-blue-600/15 blur-[130px]"></div>
+    <div
+      class="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]"
+      style="background-image: linear-gradient(to right, #64748b 1px, transparent 1px), linear-gradient(to bottom, #64748b 1px, transparent 1px); background-size: 40px 40px;"
+    ></div>
+  </div>
 
-            <!-- Top Brand -->
-            <div class="relative z-10 flex items-center gap-3">
-                <div class="w-[80px] h-[70px] rounded-2xl bg-white text-primary flex items-center justify-center font-black text-2xl shadow-lg">
-                    <img class="w-[70px]" src="/assets/images/Logo.jpg"/>
-                </div>
-                <div>
-                    <span class="text-2xl font-black tracking-tight block leading-none">Tabeeb</span>
-                    <span class="text-xs text-blue-200 tracking-widest uppercase font-semibold">Medical Platform</span>
-                </div>
+  <!-- Main Floating Shell -->
+  <div
+    [attr.dir]="translate.currentLang === 'ae' ? 'rtl' : 'ltr'"
+    class="relative z-10 w-full max-w-6xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-[2rem] shadow-[0_32px_80px_-20px_rgba(15,23,42,0.18)] dark:shadow-[0_32px_80px_-20px_rgba(0,0,0,0.75)] border border-white/60 dark:border-slate-800/80 grid grid-cols-1 lg:grid-cols-12 overflow-hidden"
+  >
+    <!-- ================= LOGIN FORM SECTION (7 Cols) ================= -->
+    <div class="lg:col-span-7 p-7 sm:p-12 lg:p-14 flex flex-col justify-between">
+      <!-- Top Bar: Brand Logo & Language Switcher -->
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div
+            class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-0.5 shadow-lg shadow-cyan-500/25"
+          >
+            <div class="w-full h-full bg-white dark:bg-slate-900 rounded-[14px] flex items-center justify-center overflow-hidden p-1">
+              <img src="/assets/images/Logo.jpg" alt="Tabeeb" class="w-full h-full object-contain" />
             </div>
-
-            <!-- Middle Highlights -->
-            <div class="relative z-10 my-10 space-y-4">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-medium text-blue-100 border border-white/10">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    إدارة ذكية للعيادات والمواعيد
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                    رعاية صحية أنظمة أسرع، وأطباء أقرب.
-                </h1>
-                <p class="text-blue-100/80 text-sm leading-relaxed">
-                    منصتك المتكاملة لتنظيم المواعيد الطبية، متابعة ملفات المرضى، وإدارة العيادات باحترافية تامة.
-                </p>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white">Tabeeb</span>
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                Pro
+              </span>
             </div>
-
-            <!-- Bottom Trust Badge -->
-            <div class="relative z-10 pt-6 border-t border-white/15 flex items-center justify-between text-xs text-blue-200">
-                <span>Secure Cloud Platform</span>
-                <span>&copy; 2026 Tabeeb</span>
-            </div>
+            <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500">Smart Healthcare Ecosystem</p>
+          </div>
         </div>
 
-        <!-- Right Side: Login Form (7 Cols) -->
-        <div class="lg:col-span-7 p-8 sm:p-12 lg:p-16 flex flex-col justify-between">
-            
-            <!-- Top Action Bar (Language Switcher if needed) -->
-            <div class="flex items-center justify-between w-full mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">تسجيل الدخول</h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">أهلاً بك مجدداً، يرجى إدخال بيانات حسابك</p>
-                </div>
+        <!-- Language Selector -->
+        <div class="relative">
+          <button
+            type="button"
+            cdkOverlayOrigin
+            #trigger="cdkOverlayOrigin"
+            (click)="isOpen = !isOpen"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-100/70 dark:bg-slate-800/70 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer shadow-sm"
+          >
+            <img
+              [src]="'/assets/images/flags/' + store.locale.toUpperCase() + '.svg'"
+              [alt]="store.locale"
+              class="h-4 w-4 rounded-full object-cover"
+            />
+            <span class="uppercase">{{ store.locale }}</span>
+            <svg
+              class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200"
+              [class.rotate-180]="isOpen"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-                <!-- Language Dropdown Trigger (حافظنا على التوافق مع الكود القديم الخاص بك) -->
-                <div class="relative">
-                    <button
-                        type="button"
-                        cdkOverlayOrigin
-                        #trigger="cdkOverlayOrigin"
-                        (click)="isOpen = !isOpen"
-                        class="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:border-primary transition-all"
-                    >
-                        <img [src]="'/assets/images/flags/'+ store.locale.toUpperCase() + '.svg'" alt="" class="h-4 w-4 rounded-full object-cover" />
-                        <span class="uppercase">{{ store.locale }}</span>
-                    </button>
-
-                    <!-- Overlay Menu -->
-                    <ng-template
-                        cdkConnectedOverlay
-                        [cdkConnectedOverlayOrigin]="trigger"
-                        [cdkConnectedOverlayOpen]="isOpen"
-                        [cdkConnectedOverlayPositions]="[{ originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 6 }]"
-                        (overlayOutsideClick)="isOpen = false"
-                    >
-                        <ul @toggleAnimation class="w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl p-1.5 space-y-1">
-                            <li *ngFor="let item of store.languageList;">
-                                <button
-                                    type="button"
-                                    class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-primary/10 hover:text-primary transition-colors"
-                                    [ngClass]="{ 'bg-primary/10 text-primary font-bold': translate.currentLang === item.code }"
-                                    (click)="changeLanguage(item)"
-                                >
-                                    <img class="h-4 w-4 rounded-full object-cover" [src]="'/assets/images/flags/'+ item.code.toUpperCase() + '.svg'" alt="" />
-                                    <span>{{ item.name }}</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </ng-template>
-                </div>
-            </div>
-
-            <!-- Form Body -->
-            <form class="space-y-5" [formGroup]="LoginForm" (ngSubmit)="onSubmit()">
-                
-                <!-- Email Field -->
-                <div>
-                    <label for="Email" class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
-                        البريد الإلكتروني
-                    </label>
-                    <div class="relative">
-                        <input
-                            id="Email"
-                            type="email5"
-                            placeholder="name@example.com"
-                            formControlName="Email"
-                            class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all ps-11"
-                        />
-                        <span class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400">
-                            <icon-mail [fill]="true" class="w-5 h-5" />
-                        </span>
-                    </div>
-                    
-                    <div *ngIf="LoginForm.get('Email')?.invalid && (LoginForm.get('Email')?.dirty || LoginForm.get('Email')?.touched)" class="text-rose-500 text-xs mt-1.5 font-medium">
-                        <small *ngIf="LoginForm.get('Email')?.errors?.['required']">البريد الإلكتروني مطلوب.</small>
-                        <small *ngIf="LoginForm.get('Email')?.errors?.['email']">البريد الإلكتروني غير صالح.</small>
-                    </div>
-                </div>
-
-                <!-- Password Field -->
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <label for="Password" class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                            كلمة المرور
-                        </label>
-                        <a href="javascript:;" class="text-xs font-semibold text-primary hover:underline">نسيت كلمة المرور؟</a>
-                    </div>
-                    <div class="relative">
-                        <input
-                            id="Password"
-                            type="password"
-                            placeholder="••••••••"
-                            formControlName="Password"
-                            class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all ps-11"
-                        />
-                        <span class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400">
-                            <icon-lock-dots [fill]="true" class="w-5 h-5" />
-                        </span>
-                    </div>
-
-                    <div *ngIf="LoginForm.get('Password')?.invalid && (LoginForm.get('Password')?.dirty || LoginForm.get('Password')?.touched)" class="text-rose-500 text-xs mt-1.5 font-medium">
-                        <small *ngIf="LoginForm.get('Password')?.errors?.['required']">كلمة المرور مطلوبة.</small>
-                    </div>
-                </div>
-
-                <!-- Remember Me -->
-                <div class="flex items-center pt-1">
-                    <label class="flex cursor-pointer items-center gap-3">
-                        <input
-                            type="checkbox"
-                            formControlName="RememberMe"
-                            class="w-4 h-4 rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-700 dark:bg-slate-800"
-                        />
-                        <span class="text-sm font-medium text-slate-600 dark:text-slate-300">تذكرني على هذا الجهاز</span>
-                    </label>
-                </div>
-
-                <!-- Submit Button -->
+          <ng-template
+            cdkConnectedOverlay
+            [cdkConnectedOverlayOrigin]="trigger"
+            [cdkConnectedOverlayOpen]="isOpen"
+            [cdkConnectedOverlayPositions]="[{ originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetY: 8 }]"
+            (overlayOutsideClick)="isOpen = false"
+          >
+            <ul
+              @toggleAnimation
+              class="w-44 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-1.5 space-y-1 z-50"
+            >
+              <li *ngFor="let item of store.languageList">
                 <button
-                    type="submit"
-                    [disabled]="LoginForm.invalid"
-                    class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-primary to-blue-700 hover:from-primary/90 hover:to-blue-800 text-white font-bold tracking-wide shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform active:scale-[0.99]"
+                  type="button"
+                  class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-cyan-500/10 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+                  [ngClass]="{ 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold': translate.currentLang === item.code }"
+                  (click)="changeLanguage(item); isOpen = false"
                 >
-                    تسجيل الدخول
+                  <img
+                    class="h-4 w-4 rounded-full object-cover"
+                    [src]="'/assets/images/flags/' + item.code.toUpperCase() + '.svg'"
+                    [alt]="item.name"
+                  />
+                  <span>{{ item.name }}</span>
                 </button>
-            </form>
+              </li>
+            </ul>
+          </ng-template>
+        </div>
+      </div>
 
-            <!-- Bottom Register Prompt -->
-            <div class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
-                ليس لديك حساب في المنصة؟
-                <a routerLink="/auth/cover-register" class="font-bold text-primary hover:underline ms-1">
-                    إنشاء حساب جديد
-                </a>
-            </div>
-
+      <!-- Main Form Container -->
+      <div class="my-8 max-w-md w-full mx-auto">
+        <!-- Heading -->
+        <div class="mb-7">
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+            مرحباً بعودتك 👋
+          </h1>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1.5">
+            سجّل الدخول للوصول إلى لوحة التحكم الطبية ومتابعة مواعيدك
+          </p>
         </div>
 
+        <!-- Form -->
+        <form class="space-y-4" [formGroup]="LoginForm" (ngSubmit)="onSubmit()">
+          <!-- Email -->
+          <div>
+            <label for="Email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              البريد الإلكتروني
+            </label>
+            <div class="relative group">
+              <input
+                id="Email"
+                type="email"
+                autocomplete="email"
+                placeholder="name@example.com"
+                formControlName="Email"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500/20 focus:border-rose-500':
+                    LoginForm.get('Email')?.invalid && (LoginForm.get('Email')?.dirty || LoginForm.get('Email')?.touched)
+                }"
+                class="w-full px-4 py-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
+              />
+              <span
+                class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-500 transition-colors pointer-events-none"
+              >
+                <icon-mail [fill]="true" class="w-5 h-5" />
+              </span>
+            </div>
+
+            <div
+              *ngIf="LoginForm.get('Email')?.invalid && (LoginForm.get('Email')?.dirty || LoginForm.get('Email')?.touched)"
+              class="text-rose-500 text-xs mt-1.5 font-medium"
+            >
+              <small *ngIf="LoginForm.get('Email')?.errors?.['required']">البريد الإلكتروني مطلوب.</small>
+              <small *ngIf="LoginForm.get('Email')?.errors?.['email']">يرجى إدخال صيغة بريد إلكتروني صحيحة.</small>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="Password" class="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                كلمة المرور
+              </label>
+              <a
+                routerLink="/ForgetPassword"
+                class="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 hover:underline transition-colors"
+              >
+                نسيت كلمة المرور؟
+              </a>
+            </div>
+
+            <div class="relative group">
+              <input
+                id="Password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
+                placeholder="••••••••••••"
+                formControlName="Password"
+                [ngClass]="{
+                  'border-rose-500 focus:ring-rose-500/20 focus:border-rose-500':
+                    LoginForm.get('Password')?.invalid && (LoginForm.get('Password')?.dirty || LoginForm.get('Password')?.touched)
+                }"
+                class="w-full px-4 py-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11 pe-11"
+              />
+              <span
+                class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-500 transition-colors pointer-events-none"
+              >
+                <icon-lock-dots [fill]="true" class="w-5 h-5" />
+              </span>
+
+              <button
+                type="button"
+                (click)="showPassword = !showPassword"
+                class="absolute end-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer"
+              >
+                <svg *ngIf="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+                <svg *ngIf="showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div
+              *ngIf="LoginForm.get('Password')?.invalid && (LoginForm.get('Password')?.dirty || LoginForm.get('Password')?.touched)"
+              class="text-rose-500 text-xs mt-1.5 font-medium"
+            >
+              <small *ngIf="LoginForm.get('Password')?.errors?.['required']">كلمة المرور مطلوبة.</small>
+            </div>
+          </div>
+
+          <!-- Remember Me -->
+          <div class="flex items-center justify-between pt-1">
+            <label class="flex cursor-pointer items-center gap-2.5 select-none">
+              <input
+                type="checkbox"
+                formControlName="RememberMe"
+                class="w-4 h-4 rounded-md text-cyan-600 focus:ring-cyan-500 border-slate-300 dark:border-slate-700 dark:bg-slate-800 cursor-pointer"
+              />
+              <span class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
+                تذكر بيانات دخولي
+              </span>
+            </label>
+          </div>
+
+          <!-- Primary CTA Button -->
+          <button
+            type="submit"
+            [disabled]="LoginForm.invalid || isSubmitting"
+            class="w-full mt-2 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:via-blue-700 hover:to-indigo-700 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span *ngIf="!isSubmitting">تسجيل الدخول إلى المنصة</span>
+            <span *ngIf="isSubmitting">جاري التحقق من البيانات...</span>
+            <svg
+              *ngIf="!isSubmitting"
+              class="w-4 h-4 rtl:rotate-180"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer Register Link -->
+      <div class="text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        جديد في منصة <span class="font-bold text-slate-700 dark:text-slate-200">Tabeeb</span>؟
+        <a
+          routerLink="/SignUp"
+          class="font-bold text-cyan-600 dark:text-cyan-400 hover:underline ms-1"
+        >
+          أنشئ حسابك مجاناً الآن
+        </a>
+      </div>
     </div>
+
+    <!-- ================= INTERACTIVE SHOWCASE (5 Cols) ================= -->
+    <div
+      class="lg:col-span-5 relative bg-gradient-to-br from-slate-900 via-[#0B192C] to-blue-950 p-8 sm:p-10 lg:p-12 text-white flex flex-col justify-between overflow-hidden"
+    >
+      <!-- Glowing Orbs -->
+      <div class="absolute -top-24 -end-24 w-72 h-72 bg-cyan-500/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -start-24 w-72 h-72 bg-indigo-500/30 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Top Live Pill -->
+      <div class="relative z-10 flex items-center justify-between">
+        <span
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-cyan-300"
+        >
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          نظام سحابي متكامل 24/7
+        </span>
+        <span class="text-xs font-mono text-slate-400">HIPAA & GDPR Ready</span>
+      </div>
+
+      <!-- Floating Bento Cards -->
+      <div class="relative z-10 my-10 space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-black leading-snug tracking-tight">
+          مستقبل الرعاية الصحية الذكية في مكان واحد.
+        </h2>
+        <p class="text-slate-300/80 text-xs sm:text-sm leading-relaxed">
+          تجربة رقمية مصممة لربط الأطباء والمرضى بسلاسة تامة، مع تقارير فورية وإدارة ذكية للمواعيد.
+        </p>
+
+        <!-- Mock Live Appointment Card -->
+        <div
+          class="mt-6 p-4 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-2xl space-y-3 transform hover:scale-[1.02] transition-transform duration-300"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center font-black text-slate-950 text-sm">
+                DR
+              </div>
+              <div>
+                <p class="text-xs font-bold text-white">د. أحمد المنصور</p>
+                <p class="text-[11px] text-cyan-300">استشاري أمراض القلب</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-400/20 text-emerald-300 text-[10px] font-bold">
+              موعد مؤكد
+            </span>
+          </div>
+
+          <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300">
+            <span>اليوم • 04:30 مساءً</span>
+            <span class="text-cyan-300 font-semibold">عيادة رقم 4</span>
+          </div>
+        </div>
+
+        <!-- Mini Stats Row -->
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+            <p class="text-xl font-black text-cyan-400">+15K</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">طبيب وعيادة نشطة</p>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+            <p class="text-xl font-black text-emerald-400">99.9%</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">استقرار وأمان البيانات</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Copyright -->
+      <div class="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+        <span>Tabeeb Medical Cloud</span>
+        <span>&copy; 2026 All Rights Reserved</span>
+      </div>
+    </div>
+  </div>
 </div>

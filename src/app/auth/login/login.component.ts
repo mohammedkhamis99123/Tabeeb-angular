@@ -20,6 +20,8 @@ export class LoginComponent {
      store: any;
      isOpen=false;
     currYear: number = new Date().getFullYear();
+    showPassword = false;
+    isSubmitting = false;
     LoginForm!: FormGroup<{ Email: FormControl<string | null>; Password: FormControl<string | null>; RememberMe: FormControl<boolean | null>; }>;
     constructor(
         public translate: TranslateService,
