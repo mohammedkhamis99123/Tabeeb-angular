@@ -7,6 +7,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { RolePermissionsComponent } from './role-permission/role-permission.component';
 import { myClinicComponent } from './my-clinic/my-clinic.component';
 import { ClinicDashboardComponent } from './index/index.component';
+import { authGuard } from '../common/guards/auth.guard';
 
 const routes: Routes = [
 {
@@ -17,33 +18,45 @@ const routes: Routes = [
 {
   path:"Index",
   component:ClinicDashboardComponent,
-  canActivate: [roleGuard],
+  canActivate: [authGuard],
     data: { roles: ['Admin'] }
 },
   {
     path:"Doctors",
     component:ClinicDoctorsComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
     
   },
   {
     path:"Offers",
-    component:OffersComponent
+    component:OffersComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
   },
   {
     path:"Employees",
-    component:EmployeesComponent
+    component:EmployeesComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
   },
   {
     path:"Customers",
-    component:CustomersComponent
+    component:CustomersComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
   },
   {
     path:"Permissions",
-    component:RolePermissionsComponent
+    component:RolePermissionsComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
   },
   {
     path:"MyClinic",
-    component:myClinicComponent
+    component:myClinicComponent,
+      canActivate: [authGuard],
+    data: { roles: ['Admin'] }
   }
 ];
 

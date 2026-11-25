@@ -7,42 +7,58 @@ import { CityComponent } from './city/city.component';
 import { SubscriptionPackageComponent } from './supscription-package/supscription-package.component';
 import { ClinicComponent } from './clinic/clinic.component';
 import { SubscriptionComponent } from './subscriptions/subscriptions.component';
+import { authGuard } from '../common/guards/auth.guard';
 
 const routes: Routes = [
 
   {
     path:'',
     redirectTo:"Index",
-    pathMatch:'full'
+    pathMatch:'full',
+   
   },
   {
   path:'Specialization',
-  component:SpecializationComponent
+  component:SpecializationComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
   {
     path:'Country',
-    component:CountryComponent
+    component:CountryComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
     {
     path:'City',
-    component:CityComponent
+    component:CityComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
   
     {
     path:'Clinic',
-    component:ClinicComponent
+    component:ClinicComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
    {
     path:'SubscriptionPackage',
-    component:SubscriptionPackageComponent
+    component:SubscriptionPackageComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
   {
     path:"Index",
-    component:SuperAdminDashboardComponent
+    component:SuperAdminDashboardComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   },
   {
     path:"Subscription",
-    component:SubscriptionComponent
+    component:SubscriptionComponent,
+      canActivate: [authGuard],
+        data: { roles: ['SuperAdmin'] }
   }
 ];
 
