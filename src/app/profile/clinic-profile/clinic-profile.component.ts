@@ -8,18 +8,13 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { ClinicProfileService } from './services/clinic-profile.service';
+import { ClinicProfileDto, OfferDto } from './models/ClinicProfileDto.model';
+import { ClinicDoctorDto } from './models/ClinicProfileDto.model';
+import { environment } from 'src/environments/environment.prod';
 
-interface Doctor {
-  id: number;
-  name: string;
-  specialty: string;
-  experience: number;
-  rating: number;
-  reviews: number;
-  price: number;
-  image: string;
-  available: boolean;
-}
+
 
 interface GalleryImage {
   url: string;
@@ -35,16 +30,7 @@ interface Review {
   initials: string;
 }
 
-interface Offer {
-  id: number;
-  title: string;
-  description: string;
-  oldPrice: number;
-  newPrice: number;
-  discount: number;
-  icon: string;
-  validity: string;
-}
+
 
 interface BookingDay {
   date: Date;
@@ -60,24 +46,34 @@ interface BookingDay {
   styleUrl: './clinic-profile.component.scss'
 })
 export class ClinicProfileComponent implements OnInit {
+ clinic!:ClinicProfileDto
+ doctors:ClinicDoctorDto[]=[]
+  offers: OfferDto[]=[]
+  constructor(private fb: FormBuilder,
+    private clinicProfile:ClinicProfileService,
+    private actRoute:ActivatedRoute
+  ) {
 
-  constructor(private fb: FormBuilder) {}
+actRoute.paramMap.subscribe((result)=>{
+  this.loadClinic( parseInt(result.get("id")!))
+})
+    
+  }
+  loadClinic(id: number) {
+    this.clinicProfile.getClinicProfile(id).subscribe((result:any)=>{
+      this.clinic=result.data;
+      this.clinic.logoPath=environment.ImageServer+"/"+this.clinic.logoPath
+       this.clinic.bannerPath=environment.ImageServer+"/"+this.clinic.bannerPath
+
+      this.doctors=this.clinic.doctors;
+      this.doctors.map((doc:any)=>{
+       doc.imagePath=environment.ImageServer+"/"+doc.imagePath
+      })
+      this.offers=this.clinic.offers
+    })
+  }
 
   // Clinic Information
-  clinic = {
-    name: 'عيادات النور التخصصية',
-    description:
-      'نقدم لكم رعاية طبية متكاملة بأحدث الأجهزة والتقنيات الطبية، من خلال نخبة من الأطباء المتخصصين.',
-    address: 'شارع الجمهورية، دمنهور، البحيرة',
-    phone: '01012345678',
-    email: 'info@clinic.com',
-    rating: 4.9,
-    reviewsCount: 1250,
-    doctorsCount: 12,
-    patientsCount: 8500,
-    workingHours: 'يومياً من 10 صباحاً حتى 10 مساءً',
-    locationUrl: 'https://maps.google.com/?q=Damanhur,Egypt'
-  };
 
   // Gallery
   galleryImages: GalleryImage[] = [
@@ -104,56 +100,6 @@ export class ClinicProfileComponent implements OnInit {
   ];
 
   selectedGalleryImage: string | null = null;
-
-  // Doctors
-  doctors: Doctor[] = [
-    {
-      id: 1,
-      name: 'د. أحمد محمد',
-      specialty: 'استشاري طب الأطفال',
-      experience: 12,
-      rating: 4.9,
-      reviews: 240,
-      price: 250,
-      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500',
-      available: true
-    },
-    {
-      id: 2,
-      name: 'د. سارة محمود',
-      specialty: 'استشاري أمراض النساء',
-      experience: 9,
-      rating: 4.8,
-      reviews: 185,
-      price: 300,
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500',
-      available: true
-    },
-    {
-      id: 3,
-      name: 'د. محمد علي',
-      specialty: 'أخصائي الباطنة',
-      experience: 8,
-      rating: 4.7,
-      reviews: 160,
-      price: 200,
-      image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=500',
-      available: true
-    },
-    {
-      id: 4,
-      name: 'د. منى إبراهيم',
-      specialty: 'استشاري طب الأسنان',
-      experience: 11,
-      rating: 5.0,
-      reviews: 310,
-      price: 350,
-      image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=500',
-      available: true
-    }
-  ];
-
-  // Reviews
   reviews: Review[] = [
     {
       id: 1,
@@ -181,44 +127,11 @@ export class ClinicProfileComponent implements OnInit {
     }
   ];
 
-  // Offers
-  offers: Offer[] = [
-    {
-      id: 1,
-      title: 'باقة الفحص الشامل',
-      description: 'مجموعة من الفحوصات الأساسية للاطمئنان على صحتك.',
-      oldPrice: 800,
-      newPrice: 550,
-      discount: 31,
-      icon: '🩺',
-      validity: 'لفترة محدودة'
-    },
-    {
-      id: 2,
-      title: 'خصم الكشف الأول',
-      description: 'احصل على خصم خاص عند أول زيارة للعيادة.',
-      oldPrice: 300,
-      newPrice: 200,
-      discount: 33,
-      icon: '💙',
-      validity: 'للمرضى الجدد'
-    },
-    {
-      id: 3,
-      title: 'باقة متابعة الأسرة',
-      description: 'استشارات ومتابعة طبية لجميع أفراد الأسرة.',
-      oldPrice: 1000,
-      newPrice: 750,
-      discount: 25,
-      icon: '👨‍👩‍👧‍👦',
-      validity: 'لفترة محدودة'
-    }
-  ];
 
   // Booking
   currentStep = 1;
 
-  selectedDoctor: Doctor | null = null;
+  selectedDoctor: ClinicDoctorDto | null = null;
   selectedDate: Date | null = null;
   selectedTime: string | null = null;
 
@@ -288,8 +201,8 @@ export class ClinicProfileComponent implements OnInit {
     });
   }
 
-  selectDoctor(doctor: Doctor): void {
-    if (!doctor.available) return;
+  selectDoctor(doctor: ClinicDoctorDto): void {
+
 
     this.selectedDoctor = doctor;
 
@@ -408,4 +321,41 @@ export class ClinicProfileComponent implements OnInit {
   getStars(rating: number): number[] {
     return Array.from({ length: 5 }, (_, i) => i + 1);
   }
+
+  isArabic = true;
+isMobileMenuOpen = false;
+
+toggleLanguage(): void {
+  this.isArabic = !this.isArabic;
+  document.documentElement.dir = this.isArabic ? 'rtl' : 'ltr';
+  document.documentElement.lang = this.isArabic ? 'ar' : 'en';
+}
+
+toggleMobileMenu(): void {
+  this.isMobileMenuOpen = !this.isMobileMenuOpen;
+}
+
+closeMobileMenu(): void {
+  this.isMobileMenuOpen = false;
+}
+
+onLoginClick(): void {
+  // مثال: this.router.navigate(['/auth/login']); أو فتح Login Modal
+  console.log('Navigate to login');
+}
+
+cleanHandle(handle: string | null | undefined): string {
+  return (handle ?? '').trim().replace(/^@+/, '');
+}
+
+cleanWhatsapp(phone: string | null | undefined): string {
+  const digits = (phone ?? '').replace(/\D+/g, '');
+  if (digits.startsWith('00')) {
+    return digits.slice(2);
+  }
+  if (digits.startsWith('05') && digits.length === 10) {
+    return '966' + digits.slice(1);
+  }
+  return digits;
+}
 }

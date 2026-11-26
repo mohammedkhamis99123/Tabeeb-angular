@@ -1,5 +1,5 @@
 export interface ClinicDoctorWorktimeDto {
-  dayOfWeek: number | string;
+  dayOfWeek: number ;
   startAt: string; // e.g. "10:00:00"
   endAt: string;   // e.g. "18:00:00"
 }
@@ -15,6 +15,7 @@ export interface ClinicDoctorDto {
   joinDate?: string | Date;
   sessionDuration: number;
   sessionPrice: number;
+  evaluation:number;
   worktimeDtos: ClinicDoctorWorktimeDto[];
 }
 
@@ -22,8 +23,10 @@ export interface ClinicProfileDto {
   id: number;
   arName: string;
   enName: string;
+  evaluation:number
   arDescription?: string | null;
   enDescription?: string | null;
+  reviewsCount:number;
   profileAr?: string | null;
   profileEn?: string | null;
   bannerPath?: string | null;
@@ -41,4 +44,22 @@ export interface ClinicProfileDto {
   langitude?: number | null;
   latitude?: number | null;
   doctors: ClinicDoctorDto[];
+  offers:OfferDto[],
+ ownerEmail:string,
+ doctorCount:number
+
+ patientsCount:number,
+
+
+  
+}
+
+export interface OfferDto {
+  id: number;
+  doctorArName: string;
+  doctorEnName: string;
+  percentage: number;
+  isActive: boolean;
+  startAt: string;
+  endAt: string;
 }

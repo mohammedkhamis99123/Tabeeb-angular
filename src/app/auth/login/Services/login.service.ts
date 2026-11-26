@@ -4,6 +4,7 @@ import { ILogin } from '../Models/Login.model';
 import { environment } from 'src/environments/environment.prod';
 import { Observable } from 'rxjs';
 import { ILoginResult } from '../Models/LoginResult.model';
+import { SignUp } from '../../sign-up/models/SignUp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +33,12 @@ const refreshToken = sessionStorage.getItem('refreshtokenToken');
     );
   }
 
-
-    Test(): Observable<any> {
-    return this.HttpClient.get<ILoginResult>(
-      `${environment.ServerUrl}/City`,
-  
+ SignUp(SignUp: SignUp): Observable<any> {
+    return this.HttpClient.post<ILoginResult>(
+      `${environment.ServerUrl}/Auth/SignUp`,
+      JSON.stringify(SignUp),
+      { headers: this.headers }
     );
   }
+
 }

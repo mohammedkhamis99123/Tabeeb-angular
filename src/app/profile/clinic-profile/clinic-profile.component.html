@@ -1,25 +1,95 @@
 <!-- ================= NAVBAR ================= -->
-<nav class="clinic-navbar">
+<nav class="clinic-navbar" [attr.dir]="isArabic ? 'rtl' : 'ltr'">
   <div class="container navbar-content">
 
     <a href="#" class="brand">
-      <span class="brand-icon">T</span>
-      <span>Tabeeb</span>
+      <img
+        [src]="clinic.logoPath || 'assets/images/default-logo.png'"
+        [alt]="isArabic ? clinic.arName : clinic.enName"
+        class="brand-logo w-[80px] h-[80px]" style="width: 80px !important; height: 80px !important;"
+      />
     </a>
 
-    <div class="nav-links">
-      <a href="#about">عن العيادة</a>
-      <a href="#gallery">الصور</a>
-      <a href="#doctors">الأطباء</a>
-      <a href="#reviews">التقييمات</a>
-      <a href="#offers">العروض</a>
-      <a href="#contact">التواصل</a>
+    <div class="nav-links" [class.mobile-open]="isMobileMenuOpen">
+      <a href="#about" (click)="closeMobileMenu()">
+        {{ isArabic ? 'عن العيادة' : 'About' }}
+      </a>
+      <a href="#gallery" (click)="closeMobileMenu()">
+        {{ isArabic ? 'الصور' : 'Gallery' }}
+      </a>
+      <a href="#doctors" (click)="closeMobileMenu()">
+        {{ isArabic ? 'الأطباء' : 'Doctors' }}
+      </a>
+      <a href="#reviews" (click)="closeMobileMenu()">
+        {{ isArabic ? 'التقييمات' : 'Reviews' }}
+      </a>
+      <a href="#offers" (click)="closeMobileMenu()">
+        {{ isArabic ? 'العروض' : 'Offers' }}
+      </a>
+      <a href="#contact" (click)="closeMobileMenu()">
+        {{ isArabic ? 'التواصل' : 'Contact' }}
+      </a>
+
+      <div class="mobile-actions">
+        <button
+          type="button"
+          class="btn-outline"
+          (click)="toggleLanguage(); closeMobileMenu()"
+        >
+          {{ isArabic ? 'English' : 'العربية' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-outline"
+          (click)="onLoginClick(); closeMobileMenu()"
+        >
+          {{ isArabic ? 'تسجيل الدخول' : 'Sign In' }}
+        </button>
+      </div>
     </div>
 
-    <button class="btn-primary nav-book-btn" (click)="scrollToBooking()">
-      احجز موعدك
-      <span>←</span>
-    </button>
+    <div class="nav-actions">
+      <button
+        type="button"
+        class="lang-btn"
+        (click)="toggleLanguage()"
+        [attr.aria-label]="isArabic ? 'Switch to English' : 'التبديل إلى العربية'"
+      >
+        <span>🌐</span>
+        <span>{{ isArabic ? 'EN' : 'AR' }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn-outline nav-login-btn"
+        (click)="onLoginClick()"
+      >
+        {{ isArabic ? 'تسجيل الدخول' : 'Sign In' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn-primary nav-book-btn"
+        (click)="scrollToBooking()"
+      >
+        <span>{{ isArabic ? 'احجز موعدك' : 'Book Now' }}</span>
+        <span>{{ isArabic ? '←' : '→' }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="mobile-toggler"
+        [class.open]="isMobileMenuOpen"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Toggle navigation menu"
+        (click)="toggleMobileMenu()"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
 
   </div>
 </nav>
@@ -38,15 +108,15 @@
         عيادة موثقة على طبيب
       </div>
 
-      <h1>{{ clinic.name }}</h1>
+      <h1>{{ clinic.arName }}</h1>
 
       <p class="hero-description">
-        {{ clinic.description }}
+        {{ clinic.arDescription }}
       </p>
 
       <div class="hero-rating">
         <span class="rating-stars">★★★★★</span>
-        <strong>{{ clinic.rating }}</strong>
+        <strong>{{ clinic.evaluation }}</strong>
         <span>({{ clinic.reviewsCount }} تقييم)</span>
       </div>
 
@@ -54,17 +124,13 @@
 
         <div class="hero-detail">
           <span class="detail-icon">📍</span>
-          <span>{{ clinic.address }}</span>
+          <span>{{ clinic.streetArName }}</span>
         </div>
 
-        <div class="hero-detail">
-          <span class="detail-icon">🕒</span>
-          <span>{{ clinic.workingHours }}</span>
-        </div>
 
         <div class="hero-detail">
           <span class="detail-icon">📞</span>
-          <span>{{ clinic.phone }}</span>
+          <span>{{ clinic.whatsappNumber }}</span>
         </div>
 
       </div>
@@ -83,7 +149,7 @@
       <div class="hero-stats">
 
         <div>
-          <strong>{{ clinic.doctorsCount }}+</strong>
+          <strong>{{ clinic.doctorCount }}+</strong>
           <span>طبيب متخصص</span>
         </div>
 
@@ -93,7 +159,7 @@
         </div>
 
         <div>
-          <strong>{{ clinic.rating }}</strong>
+          <strong>{{ clinic.evaluation }}</strong>
           <span>تقييم المرضى</span>
         </div>
 
@@ -105,7 +171,7 @@
 
       <div class="hero-image">
         <img
-          src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1000"
+          [src]="clinic.bannerPath"
           alt="Clinic"
         />
       </div>
@@ -120,7 +186,7 @@
 
       <div class="hero-floating-rating">
         <span>⭐</span>
-        <strong>{{ clinic.rating }}/5</strong>
+        <strong>{{ clinic.evaluation }}/5</strong>
         <small>تقييم المرضى</small>
       </div>
 
@@ -223,64 +289,72 @@
 
     </div>
 
-    <div class="doctors-grid">
+<div class="doctors-grid">
 
-      @for (doctor of doctors; track doctor.id) {
+  @for (doctor of doctors; track doctor.id) {
 
-        <div class="doctor-card">
+    <article class="doctor-card">
 
-          <div class="doctor-image-wrapper">
-            <img [src]="doctor.image" [alt]="doctor.name" />
+      <div class="doctor-image-wrapper">
+        <img
+          [src]="doctor.imagePath || 'assets/images/default-doctor.png'"
+          [alt]="doctor.arName"
+          loading="lazy"
+        />
 
-            @if (doctor.available) {
-              <span class="doctor-available">
-                <span></span>
-                متاح للحجز
-              </span>
-            }
-          </div>
+        @if (doctor.evaluation) {
+          <span class="doctor-rating-badge">
+            <span class="star-icon">★</span>
+            {{ doctor.evaluation }}
+          </span>
+        }
+      </div>
 
-          <div class="doctor-content">
+      <div class="doctor-body">
 
-            <div class="doctor-rating">
-              <span>★</span>
-              {{ doctor.rating }}
-              <small>({{ doctor.reviews }} تقييم)</small>
-            </div>
-
-            <h3>{{ doctor.name }}</h3>
-
-            <p class="doctor-specialty">{{ doctor.specialty }}</p>
-
-            <div class="doctor-experience">
-              <span>✦</span>
-              خبرة {{ doctor.experience }} سنوات
-            </div>
-
-            <div class="doctor-card-footer">
-
-              <div class="doctor-price">
-                <strong>{{ doctor.price }}</strong>
-                <span>جنيه / الكشف</span>
-              </div>
-
-              <button
-                class="btn-primary doctor-book-btn"
-                [disabled]="!doctor.available"
-                (click)="selectDoctor(doctor); scrollToBooking()"
-              >
-                احجز الآن
-              </button>
-
-            </div>
-
-          </div>
-
+        <div class="doctor-header">
+          <span class="doctor-specialty">{{ doctor.specializationArName }}</span>
+          <h3 [title]="doctor.arName">{{ doctor.arName }}</h3>
         </div>
 
-      }
+        <div class="doctor-info-list">
+          <div class="doctor-info-item">
+            <span class="info-label">مدة الجلسة</span>
+            <strong class="info-value">{{ doctor.sessionDuration }} دقيقة</strong>
+          </div>
 
-    </div>
+          <div class="doctor-info-item">
+            <span class="info-label">تاريخ الانضمام</span>
+            <strong class="info-value">{{ doctor.joinDate | date:'dd/MM/yyyy' }}</strong>
+          </div>
+        </div>
+
+        <div class="doctor-footer">
+          <div class="doctor-price">
+            <span class="price-label">سعر الكشف</span>
+            <strong class="price-amount">
+              {{ doctor.sessionPrice | number }}
+              <small>جنيه</small>
+            </strong>
+          </div>
+
+          <button
+            type="button"
+            class="btn-primary doctor-book-btn"
+            (click)="selectDoctor(doctor); scrollToBooking()"
+          >
+            احجز الآن
+            <span>←</span>
+          </button>
+        </div>
+
+      </div>
+
+    </article>
+
+  }
+
+</div>
 
   </div>
 </section>
@@ -379,19 +453,19 @@
                 (click)="selectDoctor(doctor)"
               >
 
-                <img [src]="doctor.image" [alt]="doctor.name" />
+                <img [src]="doctor.imagePath" [alt]="doctor.arName" />
 
                 <div class="booking-doctor-info">
-                  <strong>{{ doctor.name }}</strong>
-                  <span>{{ doctor.specialty }}</span>
+                  <strong>{{ doctor.arName }}</strong>
+                  <span>{{ doctor.specializationArName }}</span>
 
                   <div class="doctor-rating">
                     <span>★</span>
-                    {{ doctor.rating }}
+                    {{ doctor.evaluation }}
                   </div>
 
                   <strong class="booking-doctor-price">
-                    {{ doctor.price }} جنيه
+                    {{ doctor.sessionPrice }} جنيه
                   </strong>
                 </div>
 
@@ -435,15 +509,15 @@
           @if (selectedDoctor) {
             <div class="selected-doctor-summary">
 
-              <img [src]="selectedDoctor.image" [alt]="selectedDoctor.name" />
+              <img [src]="selectedDoctor.imagePath" [alt]="selectedDoctor.arName" />
 
               <div>
-                <strong>{{ selectedDoctor.name }}</strong>
-                <span>{{ selectedDoctor.specialty }}</span>
+                <strong>{{ selectedDoctor.arName }}</strong>
+                <span>{{ selectedDoctor.specializationArName }}</span>
               </div>
 
               <strong class="summary-price">
-                {{ selectedDoctor.price }} جنيه
+                {{ selectedDoctor.sessionPrice }} جنيه
               </strong>
 
             </div>
@@ -540,7 +614,7 @@
 
             <div>
               <span>الطبيب</span>
-              <strong>{{ selectedDoctor?.name }}</strong>
+              <strong>{{ selectedDoctor?.arName }}</strong>
             </div>
 
             <div>
@@ -555,7 +629,7 @@
 
             <div>
               <span>سعر الكشف</span>
-              <strong>{{ selectedDoctor?.price }} جنيه</strong>
+              <strong>{{ selectedDoctor?.sessionPrice }} جنيه</strong>
             </div>
 
           </div>
@@ -688,7 +762,7 @@
 
             <div>
               <span>الطبيب</span>
-              <strong>{{ selectedDoctor?.name }}</strong>
+              <strong>{{ selectedDoctor?.arName }}</strong>
             </div>
 
             <div>
@@ -713,7 +787,7 @@
 
             <div>
               <span>سعر الكشف</span>
-              <strong>{{ selectedDoctor?.price }} جنيه</strong>
+              <strong>{{ selectedDoctor?.sessionPrice }} ريال</strong>
             </div>
 
           </div>
@@ -745,10 +819,9 @@
       </div>
 
       <div class="reviews-overview">
-        <strong>{{ clinic.rating }}</strong>
+        <strong>{{ clinic.evaluation }}</strong>
         <div>
           <div class="rating-stars">★★★★★</div>
-          <span>{{ clinic.reviewsCount }} تقييم</span>
         </div>
       </div>
 
@@ -811,35 +884,52 @@
 
       @for (offer of offers; track offer.id) {
 
-        <div class="offer-card">
+     <div class="offer-card" [class.offer-inactive]="!offer.isActive">
 
-          <div class="offer-top">
-            <div class="offer-icon">{{ offer.icon }}</div>
-            <span class="discount-badge">
-              خصم {{ offer.discount }}%
-            </span>
-          </div>
+  <div class="offer-top">
+    <div class="offer-icon">🩺</div>
 
-          <h3>{{ offer.title }}</h3>
+    <div class="offer-badges">
+      <span class="discount-badge">
+        خصم {{ offer.percentage * 100 }}%
+      </span>
 
-          <p>{{ offer.description }}</p>
+      <span class="offer-status" [class.active]="offer.isActive">
+        {{ offer.isActive ? 'ساري' : 'غير نشط' }}
+      </span>
+    </div>
+  </div>
 
-          <div class="offer-price">
-            <strong>{{ offer.newPrice }} <small>جنيه</small></strong>
-            <del>{{ offer.oldPrice }} جنيه</del>
-          </div>
+  <div class="offer-doctor-box">
+    <span>الطبيب</span>
+    <strong>{{  offer.doctorArName  }}</strong>
+  </div>
 
-          <div class="offer-validity">
-            <span>◷</span>
-            {{ offer.validity }}
-          </div>
+  <div class="offer-dates">
+    <div class="offer-date-item">
+      <span>يبدأ من</span>
+      <strong>{{ offer.startAt | date:'dd/MM/yyyy' }}</strong>
+    </div>
 
-          <button class="btn-primary offer-button" (click)="scrollToBooking()">
-            احجز واستفد من العرض
-            <span>←</span>
-          </button>
+    <div class="offer-date-divider">←</div>
 
-        </div>
+    <div class="offer-date-item">
+      <span>ينتهي في</span>
+      <strong>{{ offer.endAt | date:'dd/MM/yyyy' }}</strong>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="btn-primary offer-button"
+    [disabled]="!offer.isActive"
+    (click)="scrollToBooking()"
+  >
+    احجز واستفد من العرض
+    <span>←</span>
+  </button>
+
+</div>
 
       }
 
@@ -867,7 +957,7 @@
           <div class="contact-icon">📍</div>
           <div>
             <strong>عنوان العيادة</strong>
-            <span>{{ clinic.address }}</span>
+            <span>{{ clinic.streetArName }}</span>
           </div>
         </div>
 
@@ -875,7 +965,7 @@
           <div class="contact-icon">📞</div>
           <div>
             <strong>رقم الهاتف</strong>
-            <a [href]="'tel:' + clinic.phone" dir="ltr">{{ clinic.phone }}</a>
+            <a [href]="'tel:' + clinic.whatsappNumber" dir="ltr">{{ clinic.whatsappNumber }}</a>
           </div>
         </div>
 
@@ -883,20 +973,13 @@
           <div class="contact-icon">✉️</div>
           <div>
             <strong>البريد الإلكتروني</strong>
-            <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
+            <a [href]="'mailto:' + clinic.ownerEmail">{{ clinic.ownerEmail }}</a>
           </div>
         </div>
 
-        <div class="contact-card">
-          <div class="contact-icon">🕒</div>
-          <div>
-            <strong>مواعيد العمل</strong>
-            <span>{{ clinic.workingHours }}</span>
-          </div>
-        </div>
 
         <a
-          [href]="clinic.locationUrl"
+       
           target="_blank"
           rel="noopener"
           class="btn-primary directions-button"
@@ -931,20 +1014,66 @@
       <div class="footer-about">
 
         <a href="#" class="brand footer-brand">
-          <span class="brand-icon">T</span>
-          <span>Tabeeb</span>
+          <img
+        [src]="clinic.logoPath || 'assets/images/default-logo.png'"
+        [alt]="isArabic ? clinic.arName : clinic.enName"
+        class="brand-logo w-[80px] h-[80px]" style="width: 80px !important; height: 80px !important;"
+      />
         </a>
 
         <p>
-          {{ clinic.name }}، نسعى لتقديم أفضل خدمات الرعاية الطبية
+          {{ clinic.arName }}، نسعى لتقديم أفضل خدمات الرعاية الطبية
           من خلال فريق متخصص وتجهيزات طبية حديثة.
         </p>
 
-        <div class="social-links">
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">◎</a>
-          <a href="#" aria-label="WhatsApp">◉</a>
-        </div>
+      <div class="social-links">
+
+  @if (clinic.instgramUser) {
+    <a
+      [href]="'https://instagram.com/' + cleanHandle(clinic.instgramUser)"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram"
+      title="Instagram"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+  }
+
+  @if (clinic.snapshatUser) {
+    <a
+      [href]="'https://www.snapchat.com/add/' + cleanHandle(clinic.snapshatUser)"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Snapchat"
+      title="Snapchat"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+        <path d="M12.17 2.5c-2.63 0-4.46 1.76-4.78 4.42-.14 1.15-.02 2.24.06 2.79-.26.14-.61.2-.97.12-.44-.1-.84-.34-1.15-.34-.47 0-.89.31-.98.76-.08.41.15.83.62 1.13.45.28.98.48 1.14.77.15.28-.04.76-.59 1.62-.67 1.05-1.82 1.88-3.28 2.18-.42.09-.68.44-.63.84.05.41.43.69.92.75.95.12 1.75.43 2.24.89.32.3.5.69.74 1.03.32.45.84.66 1.56.66.52 0 1.11-.11 1.75-.11.68 0 1.24.21 1.81.43.66.25 1.35.51 2.25.51.9 0 1.59-.26 2.25-.51.57-.22 1.13-.43 1.81-.43.64 0 1.23.11 1.75.11.72 0 1.24-.21 1.56-.66.24-.34.42-.73.74-1.03.49-.46 1.29-.77 2.24-.89.49-.06.87-.34.92-.75.05-.4-.21-.75-.63-.84-1.46-.3-2.61-1.13-3.28-2.18-.55-.86-.74-1.34-.59-1.62.16-.29.69-.49 1.14-.77.47-.3.7-.72.62-1.13-.09-.45-.51-.76-.98-.76-.31 0-.71.24-1.15.34-.36.08-.71.02-.97-.12.08-.55.2-1.64.06-2.79C16.63 4.26 14.8 2.5 12.17 2.5z"/>
+      </svg>
+    </a>
+  }
+
+  @if (clinic.whatsappNumber) {
+    <a
+      [href]="'https://wa.me/' + cleanWhatsapp(clinic.whatsappNumber)"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="WhatsApp"
+      title="WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        <path d="M9.5 9.5c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.3l.7 1.7c.1.2.1.4 0 .6l-.4.5c-.1.1-.1.3 0 .5.3.5.8 1.1 1.4 1.5.6.4 1.1.6 1.5.7.2 0 .4 0 .5-.1l.4-.5c.1-.1.3-.2.5-.1l1.6.7c.2.1.3.3.3.5v.5c0 .3 0 .6-.5.8-.5.2-1.2.2-2.2-.2-1-.4-2.1-1.2-3-2.1-.9-.9-1.7-2-2.1-3-.4-1-.4-1.7-.2-2.2z"></path>
+      </svg>
+    </a>
+  }
+
+</div>
 
       </div>
 
@@ -965,9 +1094,9 @@
 
       <div class="footer-column">
         <h4>معلومات التواصل</h4>
-        <span>{{ clinic.address }}</span>
-        <a [href]="'tel:' + clinic.phone" dir="ltr">{{ clinic.phone }}</a>
-        <a [href]="'mailto:' + clinic.email">{{ clinic.email }}</a>
+        <span>{{ clinic.streetArName }}</span>
+        <a [href]="'tel:' + clinic.whatsappNumber" >{{ clinic.whatsappNumber }}</a>
+        <a [href]="'mailto:' + clinic.ownerEmail">{{ clinic.ownerEmail }}</a>
       </div>
 
     </div>

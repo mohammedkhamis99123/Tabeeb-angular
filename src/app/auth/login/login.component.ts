@@ -75,6 +75,7 @@ export class LoginComponent {
                     sessionStorage.setItem("Permissions",result.data.permissions.toString())
                     sessionStorage.setItem("Roles",result.data.roles.toString())
                     sessionStorage.setItem("Clinics",JSON.stringify(result.data.clinics))
+                    sessionStorage.setItem("SelectedClinic",result.data.clinicID!)
 
                    if(result.data.redirectToChooseClinic){
                        this.router.navigateByUrl("/SelectClinic");

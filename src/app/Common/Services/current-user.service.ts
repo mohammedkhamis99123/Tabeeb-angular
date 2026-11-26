@@ -9,6 +9,11 @@ export class CurrentUserService {
   constructor() { }
 
   hasAnyPermissionOf(permissions: Permission[]): boolean {
+
+      if (sessionStorage.getItem("Roles")=="SuperAdmin")
+            return true;
+
+      
     const permissionStr = sessionStorage.getItem("Permissions");
     if (!permissionStr) return false;
     
