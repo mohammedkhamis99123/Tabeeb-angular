@@ -23,17 +23,17 @@
         <div class="flex items-center gap-3.5">
           <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-0.5 shadow-lg shadow-cyan-500/25">
             <div class="w-full h-full bg-white dark:bg-slate-900 rounded-[14px] flex items-center justify-center overflow-hidden p-1">
-              <img src="/assets/images/Logo.jpg" alt="Tabeeb" class="w-full h-full object-contain" />
+              <img src="/assets/images/Logo.jpg" [alt]="'AUTH.SIGNUP.BRAND_NAME' | translate" class="w-full h-full object-contain" />
             </div>
           </div>
           <div>
             <div class="flex items-center gap-1.5">
-              <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white">Tabeeb</span>
+              <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white">{{ 'AUTH.SIGNUP.BRAND_NAME' | translate }}</span>
               <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
-                Pro
+                {{ 'AUTH.SIGNUP.BADGE_PRO' | translate }}
               </span>
             </div>
-            <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500">Create Your Account</p>
+            <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500">{{ 'AUTH.SIGNUP.TOP_SUBTITLE' | translate }}</p>
           </div>
         </div>
 
@@ -98,10 +98,10 @@
       <div class="my-6 max-w-xl w-full mx-auto">
         <div class="mb-5">
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-            إنشاء حساب جديد
+            {{ 'AUTH.SIGNUP.TITLE' | translate }}
           </h1>
           <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            ابدأ رحلتك على منصة Tabeeb لإدارة العيادات والمواعيد بسهولة
+            {{ 'AUTH.SIGNUP.SUBTITLE' | translate }}
           </p>
         </div>
 
@@ -111,20 +111,22 @@
           </div>
         }
 
-        <form class="space-y-3.5" [formGroup]="RegisterForm" (ngSubmit)="onSubmit()" novalidate>
+        <form class="space-y-3.5" [formGroup]="RegisterForm" (ngSubmit)="onSubmit()" 
+        [attr.dir]="translate.currentLang === 'ae' ? 'rtl' : 'ltr'"
+        novalidate>
 
           <!-- ArName & EnName -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <!-- ArName -->
             <div>
               <label for="ArName" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                الاسم بالعربية
+                {{ 'AUTH.SIGNUP.AR_NAME_LABEL' | translate }}
               </label>
               <div class="relative group">
                 <input
                   id="ArName"
                   type="text"
-                  placeholder="مثال: محمد أحمد"
+                  [placeholder]="'AUTH.SIGNUP.AR_NAME_PLACEHOLDER' | translate"
                   formControlName="ArName"
                   class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
                 />
@@ -134,11 +136,11 @@
               </div>
               @if (isInvalid('ArName')) {
                 @if (f['ArName'].hasError('required')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">الاسم بالعربية مطلوب.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.AR_NAME_REQUIRED' | translate }}</p>
                 } @else if (f['ArName'].hasError('minlength')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">يجب أن يكون 3 أحرف على الأقل.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.AR_NAME_MIN' | translate }}</p>
                 } @else if (f['ArName'].hasError('pattern')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">حروف عربية ومسافات فقط.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.AR_NAME_PATTERN' | translate }}</p>
                 }
               }
             </div>
@@ -146,14 +148,13 @@
             <!-- EnName -->
             <div>
               <label for="EnName" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                الاسم بالإنجليزية
+                {{ 'AUTH.SIGNUP.EN_NAME_LABEL' | translate }}
               </label>
               <div class="relative group">
                 <input
                   id="EnName"
                   type="text"
-                  dir="ltr"
-                  placeholder="e.g. Mohamed Ahmed"
+                  [placeholder]="'AUTH.SIGNUP.EN_NAME_PLACEHOLDER' | translate"
                   formControlName="EnName"
                   class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
                 />
@@ -163,11 +164,11 @@
               </div>
               @if (isInvalid('EnName')) {
                 @if (f['EnName'].hasError('required')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">الاسم بالإنجليزية مطلوب.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.EN_NAME_REQUIRED' | translate }}</p>
                 } @else if (f['EnName'].hasError('minlength')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">يجب أن يكون 3 أحرف على الأقل.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.EN_NAME_MIN' | translate }}</p>
                 } @else if (f['EnName'].hasError('pattern')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">حروف إنجليزية ومسافات فقط.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.EN_NAME_PATTERN' | translate }}</p>
                 }
               }
             </div>
@@ -178,15 +179,15 @@
             <!-- UserName -->
             <div>
               <label for="UserName" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                اسم المستخدم
+                {{ 'AUTH.SIGNUP.USERNAME_LABEL' | translate }}
               </label>
               <div class="relative group">
                 <input
                   id="UserName"
                   type="text"
-                  dir="ltr"
+                  
                   autocomplete="username"
-                  placeholder="mohamed.atef"
+                  [placeholder]="'AUTH.SIGNUP.USERNAME_PLACEHOLDER' | translate"
                   formControlName="UserName"
                   class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
                 />
@@ -196,11 +197,11 @@
               </div>
               @if (isInvalid('UserName')) {
                 @if (f['UserName'].hasError('required')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">اسم المستخدم مطلوب.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.USERNAME_REQUIRED' | translate }}</p>
                 } @else if (f['UserName'].hasError('minlength')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">3 أحرف على الأقل.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.USERNAME_MIN' | translate }}</p>
                 } @else if (f['UserName'].hasError('pattern')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">أحرف وأرقام و (- . _ +) فقط بدون مسافات.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.USERNAME_PATTERN' | translate }}</p>
                 }
               }
             </div>
@@ -208,15 +209,15 @@
             <!-- PhoneNumber -->
             <div>
               <label for="PhoneNumber" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                رقم الجوال السعودي
+                {{ 'AUTH.SIGNUP.PHONE_LABEL' | translate }}
               </label>
               <div class="relative group">
                 <input
                   id="PhoneNumber"
                   type="tel"
-                  dir="ltr"
+                  
                   autocomplete="tel"
-                  placeholder="05xxxxxxxx"
+                  [placeholder]="'AUTH.SIGNUP.PHONE_PLACEHOLDER' | translate"
                   formControlName="PhoneNumber"
                   class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
                 />
@@ -226,9 +227,9 @@
               </div>
               @if (isInvalid('PhoneNumber')) {
                 @if (f['PhoneNumber'].hasError('required')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">رقم الجوال مطلوب.</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.PHONE_REQUIRED' | translate }}</p>
                 } @else if (f['PhoneNumber'].hasError('pattern')) {
-                  <p class="mt-1 text-[11px] font-medium text-red-500">أدخل رقم جوال سعودي صحيح (05xxxxxxxx).</p>
+                  <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.PHONE_PATTERN' | translate }}</p>
                 }
               }
             </div>
@@ -237,15 +238,15 @@
           <!-- Email -->
           <div>
             <label for="Email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-              البريد الإلكتروني
+              {{ 'AUTH.SIGNUP.EMAIL_LABEL' | translate }}
             </label>
             <div class="relative group">
               <input
                 id="Email"
                 type="email"
-                dir="ltr"
+                
                 autocomplete="email"
-                placeholder="name@example.com"
+                [placeholder]="'AUTH.SIGNUP.EMAIL_PLACEHOLDER' | translate"
                 formControlName="Email"
                 class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11"
               />
@@ -255,9 +256,9 @@
             </div>
             @if (isInvalid('Email')) {
               @if (f['Email'].hasError('required')) {
-                <p class="mt-1 text-[11px] font-medium text-red-500">البريد الإلكتروني مطلوب.</p>
+                <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.EMAIL_REQUIRED' | translate }}</p>
               } @else if (f['Email'].hasError('email')) {
-                <p class="mt-1 text-[11px] font-medium text-red-500">صيغة البريد الإلكتروني غير صحيحة.</p>
+                <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.EMAIL_INVALID' | translate }}</p>
               }
             }
           </div>
@@ -265,17 +266,17 @@
           <!-- Password -->
           <div>
             <label for="Password" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-              كلمة المرور
+              {{ 'AUTH.SIGNUP.PASSWORD_LABEL' | translate }}
             </label>
             <div class="relative group">
               <input
                 id="Password"
                 [type]="showPassword ? 'text' : 'password'"
-                dir="ltr"
+                
                 autocomplete="new-password"
-                placeholder="••••••••••••"
+                [placeholder]="'AUTH.SIGNUP.PASSWORD_PLACEHOLDER' | translate"
                 formControlName="Password"
-                class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11 pe-11"
+                class="w-full px-4 py-3 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-cyan-500/15 focus:border-cyan-500 transition-all ps-11 pe-20"
               />
               <span class="absolute start-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-500 transition-colors pointer-events-none">
                 <icon-lock-dots [fill]="true" class="w-5 h-5" />
@@ -283,18 +284,19 @@
               <button
                 type="button"
                 (click)="showPassword = !showPassword"
-                class="absolute end-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer"
+                class="absolute end-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 px-1.5 py-1 rounded-lg text-[11px] font-bold transition-colors cursor-pointer flex items-center gap-1.5"
               >
-                <i class="fa-solid text-sm" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                <i class="fa-solid text-xs" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                <span>{{ (showPassword ? 'AUTH.SIGNUP.HIDE_PASSWORD' : 'AUTH.SIGNUP.SHOW_PASSWORD') | translate }}</span>
               </button>
             </div>
             @if (isInvalid('Password')) {
               @if (f['Password'].hasError('required')) {
-                <p class="mt-1 text-[11px] font-medium text-red-500">كلمة المرور مطلوبة.</p>
+                <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.PASSWORD_REQUIRED' | translate }}</p>
               } @else if (f['Password'].hasError('minlength')) {
-                <p class="mt-1 text-[11px] font-medium text-red-500">يجب أن تكون 8 أحرف على الأقل.</p>
+                <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.PASSWORD_MIN' | translate }}</p>
               } @else if (f['Password'].hasError('pattern')) {
-                <p class="mt-1 text-[11px] font-medium text-red-500">يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص.</p>
+                <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.PASSWORD_PATTERN' | translate }}</p>
               }
             }
           </div>
@@ -308,11 +310,13 @@
                 class="w-4 h-4 rounded-md text-cyan-600 focus:ring-cyan-500 border-slate-300 dark:border-slate-700 dark:bg-slate-800 cursor-pointer"
               />
               <span class="text-xs text-slate-600 dark:text-slate-300">
-                أوافق على <a href="javascript:;" class="font-bold text-cyan-600 dark:text-cyan-400 hover:underline">الشروط والأحكام</a> وسياسة الخصوصية
+                {{ 'AUTH.SIGNUP.TERMS_PREFIX' | translate }}
+                <a href="javascript:;" class="font-bold text-cyan-600 dark:text-cyan-400 hover:underline">{{ 'AUTH.SIGNUP.TERMS_LINK' | translate }}</a>
+                {{ 'AUTH.SIGNUP.TERMS_SUFFIX' | translate }}
               </span>
             </label>
             @if (isInvalid('AcceptTerms')) {
-              <p class="mt-1 text-[11px] font-medium text-red-500">يجب الموافقة على الشروط والأحكام للمتابعة.</p>
+              <p class="mt-1 text-[11px] font-medium text-red-500">{{ 'AUTH.SIGNUP.ERRORS.TERMS_REQUIRED' | translate }}</p>
             }
           </div>
 
@@ -321,16 +325,16 @@
             [disabled]="RegisterForm.invalid || isSubmitting"
             class="w-full mt-2 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-600 hover:via-blue-700 hover:to-indigo-700 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>{{ isSubmitting ? 'جاري إنشاء الحساب...' : 'إنشاء الحساب' }}</span>
+            <span>{{ (isSubmitting ? 'AUTH.SIGNUP.SUBMITTING' : 'AUTH.SIGNUP.SUBMIT') | translate }}</span>
           </button>
         </form>
       </div>
 
       <!-- Footer Login Link -->
       <div class="text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-        لديك حساب بالفعل؟
+        {{ 'AUTH.SIGNUP.HAVE_ACCOUNT' | translate }}
         <a routerLink="/auth/login" class="font-bold text-cyan-600 dark:text-cyan-400 hover:underline ms-1">
-          تسجيل الدخول
+          {{ 'AUTH.SIGNUP.LOGIN_LINK' | translate }}
         </a>
       </div>
     </div>
@@ -343,33 +347,33 @@
       <div class="relative z-10 flex items-center justify-between">
         <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-semibold text-cyan-300">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          انضم إلى منصة Tabeeb
+          {{ 'AUTH.SIGNUP.SHOWCASE_TAG' | translate }}
         </span>
       </div>
 
       <div class="relative z-10 my-10 space-y-4">
         <h2 class="text-2xl sm:text-3xl font-black leading-snug tracking-tight">
-          كل ما تحتاجه لإدارة عيادتك ومواعيدك في مكان واحد.
+          {{ 'AUTH.SIGNUP.SHOWCASE_TITLE' | translate }}
         </h2>
         <p class="text-slate-300/80 text-xs sm:text-sm leading-relaxed">
-          واجهة سريعة، تنبيهات فورية، وسجلات طبية منظمة تمنحك تجربة عمل احترافية منذ اليوم الأول.
+          {{ 'AUTH.SIGNUP.SHOWCASE_DESC' | translate }}
         </p>
 
         <div class="grid grid-cols-2 gap-3 pt-2">
           <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-            <p class="text-xl font-black text-cyan-400">24/7</p>
-            <p class="text-[11px] text-slate-300 mt-0.5">وصول سحابي مستمر</p>
+            <p class="text-xl font-black text-cyan-400">{{ 'AUTH.SIGNUP.STAT_UPTIME_VALUE' | translate }}</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">{{ 'AUTH.SIGNUP.STAT_UPTIME_LABEL' | translate }}</p>
           </div>
           <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-            <p class="text-xl font-black text-emerald-400">100%</p>
-            <p class="text-[11px] text-slate-300 mt-0.5">تشفير وحماية للبيانات</p>
+            <p class="text-xl font-black text-emerald-400">{{ 'AUTH.SIGNUP.STAT_SECURITY_VALUE' | translate }}</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">{{ 'AUTH.SIGNUP.STAT_SECURITY_LABEL' | translate }}</p>
           </div>
         </div>
       </div>
 
       <div class="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
-        <span>Tabeeb Medical Cloud</span>
-        <span>&copy; 2026 All Rights Reserved</span>
+        <span>{{ 'AUTH.SIGNUP.FOOTER_BRAND' | translate }}</span>
+        <span>{{ 'AUTH.SIGNUP.FOOTER_RIGHTS' | translate }}</span>
       </div>
     </div>
   </div>

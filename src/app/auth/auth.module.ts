@@ -11,6 +11,7 @@ import { UnAuthorizedComponent } from './un-authorized/un-authorized.component';
 import { ForgotPasswordComponent } from './forget-password/forget-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SignupComponent } from './sign-up/sign-up.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SignupComponent } from './sign-up/sign-up.component';
     IconModule,
     OverlayModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ]
 })
 export class AuthModule { }

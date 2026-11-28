@@ -9,7 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { AppService } from 'src/app/app.service';
 
 export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('Password')?.value;
@@ -29,8 +31,17 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
 export class ResetPasswordComponent implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   public translate = inject(TranslateService);
+
+store:any
+  constructor(public storedata: Store<any>,
+      public router: Router,
+      private appSetting: AppService) {
+   this.initStore()
+
+  }
+
+  
 
   ResetForm: FormGroup = this.fb.group(
     {
@@ -47,7 +58,26 @@ export class ResetPasswordComponent implements OnInit {
   isSubmitting = false;
   errorMessage = '';
   successMessage = '';
+ async initStore() {
+    this.storedata
+      .select((d) => d.index)
+      .subscribe((d) => {
+        this.store = d;
+      });
 
+    console.log(this.store?.languageList);
+  }
+
+  changeLanguage(item: any) {
+    this.translate.use(item);
+    this.appSetting.toggleLanguage(item);
+    if (this.store?.locale?.toLowerCase() === 'ae') {
+      this.storedata.dispatch({ type: 'toggleRTL', payload: 'rtl' });
+    } else {
+      this.storedata.dispatch({ type: 'toggleRTL', payload: 'ltr' });
+    }
+    window.location.reload();
+  }
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
     this.email = this.route.snapshot.queryParamMap.get('email');

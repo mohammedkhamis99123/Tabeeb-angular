@@ -40,5 +40,11 @@ const refreshToken = sessionStorage.getItem('refreshtokenToken');
       { headers: this.headers }
     );
   }
-
+ ForgetPassword(email: string): Observable<any> {
+    return this.HttpClient.post<ILoginResult>(
+      `${environment.ServerUrl}/Auth/ForgetPassword`,
+      JSON.stringify({email:email}),
+      { headers: this.headers }
+    );
+  }
 }
