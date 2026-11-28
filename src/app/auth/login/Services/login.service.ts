@@ -47,4 +47,12 @@ const refreshToken = sessionStorage.getItem('refreshtokenToken');
       { headers: this.headers }
     );
   }
+
+  ResetPassword(payload:any){
+        return this.HttpClient.post(
+      `${environment.ServerUrl}/Auth/ResetPassword`,
+      JSON.stringify(payload),
+      { headers: this.headers }
+    );
+  }
 }

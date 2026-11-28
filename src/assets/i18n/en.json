@@ -367,5 +367,6 @@
       }
     }
   },
-  "sendLink": "Send Recovery Link"
+  "sendLink": "Send Recovery Link",
+  "UpdatePassword": "Update Password"
 }

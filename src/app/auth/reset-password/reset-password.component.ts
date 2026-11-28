@@ -12,11 +12,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { AppService } from 'src/app/app.service';
+import { LoginService } from '../login/Services/login.service';
 
 export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('Password')?.value;
   const confirmPassword = control.get('ConfirmPassword')?.value;
-
+  
   if (!password || !confirmPassword) {
     return null;
   }
@@ -32,7 +33,9 @@ export class ResetPasswordComponent implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   public translate = inject(TranslateService);
-
+  private Auth=inject(LoginService)
+  private readonly strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/;
 store:any
   constructor(public storedata: Store<any>,
       public router: Router,
@@ -45,7 +48,9 @@ store:any
 
   ResetForm: FormGroup = this.fb.group(
     {
-      Password: ['', [Validators.required, Validators.minLength(8)]],
+      Password: ['', [Validators.required, Validators.minLength(8),
+        Validators.maxLength(100),
+        Validators.pattern(this.strongPasswordRegex),]],
       ConfirmPassword: ['', [Validators.required]],
     },
     { validators: passwordMatchValidator }
@@ -96,19 +101,23 @@ store:any
     const payload = {
       email: this.email,
       token: this.token,
-      password: this.ResetForm.value.Password,
+      newPassword: this.ResetForm.value.Password,
       confirmPassword: this.ResetForm.value.ConfirmPassword,
     };
+    
+    this.Auth.ResetPassword(payload).subscribe((result:any)=>{
+      if(result.isSuccess){
+        this.router.navigateByUrl("/Login")
+      }
+    })
+    
+  }
+    get f() {
+    return this.ResetForm.controls;
+  }
 
-    // محاكاة مؤقتة لحين ربط الـ API
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.successMessage = 'تم تحديث كلمة المرور بنجاح. جاري تحويلك لتسجيل الدخول...';
-      console.log('Reset password payload:', payload);
-
-      setTimeout(() => {
-        this.router.navigate(['/auth/login']);
-      }, 1500);
-    }, 1000);
+  isInvalid(controlName: string): boolean {
+    const control = this.ResetForm.get(controlName);
+    return !!(control && control.invalid && (control.touched || control.dirty));
   }
 }
