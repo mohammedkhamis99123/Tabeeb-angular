@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Permission } from '../enums/Permission.enum';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { Permission } from '../enums/Permission.enum';
 export class CurrentUserService {
 
   constructor() { }
+      isLoggedIn=new BehaviorSubject<boolean>(false);
 
   hasAnyPermissionOf(permissions: Permission[]): boolean {
 

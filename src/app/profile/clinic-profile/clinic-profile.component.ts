@@ -1,18 +1,20 @@
 
 
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClinicProfileService } from './services/clinic-profile.service';
 import { ClinicProfileDto, OfferDto } from './models/ClinicProfileDto.model';
 import { ClinicDoctorDto } from './models/ClinicProfileDto.model';
 import { environment } from 'src/environments/environment.prod';
+import { LoginService } from 'src/app/auth/login/Services/login.service';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
 
 
 
@@ -49,9 +51,20 @@ export class ClinicProfileComponent implements OnInit {
  clinic!:ClinicProfileDto
  doctors:ClinicDoctorDto[]=[]
   offers: OfferDto[]=[]
+  @Input() isArabic = true;
+
+  isMobileMenuOpen = false;
+  isUserMenuOpen = false;
+
+
+
   constructor(private fb: FormBuilder,
     private clinicProfile:ClinicProfileService,
-    private actRoute:ActivatedRoute
+    private actRoute:ActivatedRoute,
+    private router: Router,
+    private authService: LoginService,
+    private currentUser:CurrentUserService,
+    private eRef: ElementRef
   ) {
 
 actRoute.paramMap.subscribe((result)=>{
@@ -59,6 +72,8 @@ actRoute.paramMap.subscribe((result)=>{
 })
     
   }
+
+    currentUser$ = this.currentUser.isLoggedIn;
   loadClinic(id: number) {
     this.clinicProfile.getClinicProfile(id).subscribe((result:any)=>{
       this.clinic=result.data;
@@ -304,12 +319,7 @@ actRoute.paramMap.subscribe((result)=>{
     this.selectedGalleryImage = null;
   }
 
-  scrollToBooking(): void {
-    document.getElementById('booking')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  }
+
 
   scrollToDoctors(): void {
     document.getElementById('doctors')?.scrollIntoView({
@@ -322,27 +332,10 @@ actRoute.paramMap.subscribe((result)=>{
     return Array.from({ length: 5 }, (_, i) => i + 1);
   }
 
-  isArabic = true;
-isMobileMenuOpen = false;
 
-toggleLanguage(): void {
-  this.isArabic = !this.isArabic;
-  document.documentElement.dir = this.isArabic ? 'rtl' : 'ltr';
-  document.documentElement.lang = this.isArabic ? 'ar' : 'en';
-}
 
-toggleMobileMenu(): void {
-  this.isMobileMenuOpen = !this.isMobileMenuOpen;
-}
 
-closeMobileMenu(): void {
-  this.isMobileMenuOpen = false;
-}
 
-onLoginClick(): void {
-  // مثال: this.router.navigate(['/auth/login']); أو فتح Login Modal
-  console.log('Navigate to login');
-}
 
 cleanHandle(handle: string | null | undefined): string {
   return (handle ?? '').trim().replace(/^@+/, '');
@@ -358,4 +351,52 @@ cleanWhatsapp(phone: string | null | undefined): string {
   }
   return digits;
 }
+
+onLoginClick() {
+    this.router.navigate(['/Login'], {
+      queryParams: { returnUrl: this.router.url }
+    });
+  }
+
+  onProfileClick() {
+    this.isUserMenuOpen = false;
+    this.closeMobileMenu();
+    // لو عندك مسار بروفايل خاص بالعيادة أو بروفايل عام عدّله هنا
+    this.router.navigate(['/profile']);
+  }
+
+  onLogoutClick() {
+    this.isUserMenuOpen = false;
+    this.closeMobileMenu();
+    this.authService.Logout();
+  }
+
+  toggleUserMenu(event: Event) {
+    event.stopPropagation();
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  toggleLanguage() {
+    this.isArabic = !this.isArabic;
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
+  }
+
+  scrollToBooking() {
+    const el = document.getElementById('booking');
+    el?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isUserMenuOpen = false;
+    }
+  }
 }

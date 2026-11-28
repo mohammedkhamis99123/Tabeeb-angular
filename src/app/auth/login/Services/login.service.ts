@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ILogin } from '../Models/Login.model';
 import { environment } from 'src/environments/environment.prod';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ILoginResult } from '../Models/LoginResult.model';
 import { SignUp } from '../../sign-up/models/SignUp.model';
 
@@ -15,6 +15,7 @@ export class LoginService {
   });
 
   constructor(private HttpClient: HttpClient) {}
+ 
 
   Login(login: ILogin): Observable<ILoginResult> {
     return this.HttpClient.post<ILoginResult>(
@@ -54,5 +55,10 @@ const refreshToken = sessionStorage.getItem('refreshtokenToken');
       JSON.stringify(payload),
       { headers: this.headers }
     );
+  }
+
+  Logout(){
+    sessionStorage.clear();
+    
   }
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TabeebProfileService } from './services/tabeeb-profile.service';
 import {
   ClinicDoctorDto,
@@ -11,6 +11,8 @@ import {
 } from '../clinic-profile/models/TabeebProfileDto.model';
 import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { LoginService } from 'src/app/auth/login/Services/login.service';
 
 export interface ScreenshotItem {
   id: number;
@@ -27,8 +29,13 @@ export interface ScreenshotItem {
   styleUrl: './tabeeb-profile.component.css'
 })
 export class TabeebProfileComponent implements OnInit {
+
   private profileService = inject(TabeebProfileService);
   protected TranslateServ=inject(TranslateService)
+  private route=inject(Router)
+  private currentUser=inject(CurrentUserService)
+  private loginServ=inject(LoginService)
+  private eRef=inject(ElementRef)
   profile: TabeebProfileDto | null = null;
   mobileMenuOpen = false;
   isLoading = true;
@@ -181,6 +188,10 @@ export class TabeebProfileComponent implements OnInit {
   selectDoctorClinicFilter(clinicName: string): void {
     this.selectedDoctorClinicFilter = clinicName;
     this.doctorSlideIndex = 0;
+  }
+  gotoclinic(id:number){
+
+    this.route.navigateByUrl(`/Profile/Clinic/${id}`)
   }
 
   goToDoctorSlide(index: number): void {
@@ -365,5 +376,36 @@ export class TabeebProfileComponent implements OnInit {
         clinicEn.includes(q)
       );
     });
+  }
+
+  goToLogin() {
+  const currentUrl = this.route.url; // مثال: '/clinic/profile' أو '/site/profile'
+  this.route.navigate(['/Login'], {
+    queryParams: { returnUrl: currentUrl }
+  });
+}
+
+  userMenuOpen = false;
+
+  // بنربطها مباشرة بالـ Observable من السيرفس
+  currentUser$ = this.currentUser.isLoggedIn;
+
+ 
+  goToProfile() {
+    this.userMenuOpen = false;
+    this.route.navigate(['/profile']); // عدّل المسار لصفحة الملف الشخصي عندك
+  }
+
+  logout() {
+    this.userMenuOpen = false;
+    this.loginServ.Logout();
+  }
+
+  // قفل الدروب داون لو المستخدم ضغط في أي مكان بره الهيدر
+  @HostListener('document:click', ['$event'])
+  clickout(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.userMenuOpen = false;
+    }
   }
 }
