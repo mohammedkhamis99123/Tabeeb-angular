@@ -1,5 +1,8 @@
+<div [attr.dir]="translate.currentLang=='ae'? 'rtl' : 'ltr'">
+
+
 <!-- ================= NAVBAR ================= -->
-<nav class="clinic-navbar" [attr.dir]="isArabic ? 'rtl' : 'ltr'">
+<nav class="clinic-navbar">
   <div class="container navbar-content">
 
     <a href="#" class="brand">
@@ -12,22 +15,22 @@
 
     <div class="nav-links" [class.mobile-open]="isMobileMenuOpen">
       <a href="#about" (click)="closeMobileMenu()">
-        {{ isArabic ? 'عن العيادة' : 'About' }}
+        {{ 'CLINIC_PROFILE.NAV.ABOUT' | translate }}
       </a>
       <a href="#gallery" (click)="closeMobileMenu()">
-        {{ isArabic ? 'الصور' : 'Gallery' }}
+        {{ 'CLINIC_PROFILE.NAV.GALLERY' | translate }}
       </a>
       <a href="#doctors" (click)="closeMobileMenu()">
-        {{ isArabic ? 'الأطباء' : 'Doctors' }}
+        {{ 'CLINIC_PROFILE.NAV.DOCTORS' | translate }}
       </a>
       <a href="#reviews" (click)="closeMobileMenu()">
-        {{ isArabic ? 'التقييمات' : 'Reviews' }}
+        {{ 'CLINIC_PROFILE.NAV.REVIEWS' | translate }}
       </a>
       <a href="#offers" (click)="closeMobileMenu()">
-        {{ isArabic ? 'العروض' : 'Offers' }}
+        {{ 'CLINIC_PROFILE.NAV.OFFERS' | translate }}
       </a>
       <a href="#contact" (click)="closeMobileMenu()">
-        {{ isArabic ? 'التواصل' : 'Contact' }}
+        {{ 'CLINIC_PROFILE.NAV.CONTACT' | translate }}
       </a>
 
       <!-- أزرار الموبايل داخل القائمة المنسدلة للموبايل -->
@@ -37,7 +40,7 @@
           class="btn-outline"
           (click)="toggleLanguage(); closeMobileMenu()"
         >
-          {{ isArabic ? 'English' : 'العربية' }}
+          {{ (isArabic ? 'CLINIC_PROFILE.NAV.LANG_TO_EN' : 'CLINIC_PROFILE.NAV.LANG_TO_AR') | translate }}
         </button>
 
         <ng-container *ngIf="!(currentUser$ | async); else mobileLoggedIn">
@@ -46,7 +49,7 @@
             class="btn-outline"
             (click)="onLoginClick(); closeMobileMenu()"
           >
-            {{ isArabic ? 'تسجيل الدخول' : 'Sign In' }}
+            {{ 'CLINIC_PROFILE.NAV.LOGIN' | translate }}
           </button>
         </ng-container>
 
@@ -56,14 +59,14 @@
             class="btn-outline"
             (click)="onProfileClick()"
           >
-            {{ isArabic ? 'الملف الشخصي' : 'Profile' }}
+            {{ 'CLINIC_PROFILE.NAV.PROFILE' | translate }}
           </button>
           <button
             type="button"
             class="btn-outline text-rose-600 border-rose-200"
             (click)="onLogoutClick()"
           >
-            {{ isArabic ? 'تسجيل الخروج' : 'Sign Out' }}
+            {{ 'CLINIC_PROFILE.NAV.LOGOUT' | translate }}
           </button>
         </ng-template>
       </div>
@@ -87,7 +90,7 @@
           class="btn-outline nav-login-btn"
           (click)="onLoginClick()"
         >
-          {{ isArabic ? 'تسجيل الدخول' : 'Sign In' }}
+          {{ 'CLINIC_PROFILE.NAV.LOGIN' | translate }}
         </button>
       </ng-container>
 
@@ -99,11 +102,12 @@
             (click)="toggleUserMenu($event)"
             class="btn-outline nav-login-btn inline-flex items-center gap-2"
           >
-  <span class="w-7 h-7 rounded-lg bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-        </span>            <svg
+            <span class="w-7 h-7 rounded-lg bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </span>
+            <svg
               class="w-4 h-4 transition-transform duration-200"
               [class.rotate-180]="isUserMenuOpen"
               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
@@ -125,7 +129,7 @@
               [class.text-left]="!isArabic"
               class="w-full px-4 py-2.5 hover:bg-slate-50 transition block"
             >
-              {{ isArabic ? 'الملف الشخصي' : 'Profile' }}
+              {{ 'CLINIC_PROFILE.NAV.PROFILE' | translate }}
             </button>
 
             <div class="my-1 border-t border-slate-100"></div>
@@ -137,7 +141,7 @@
               [class.text-left]="!isArabic"
               class="w-full px-4 py-2.5 text-rose-600 hover:bg-rose-50 transition block"
             >
-              {{ isArabic ? 'تسجيل الخروج' : 'Sign Out' }}
+              {{ 'CLINIC_PROFILE.NAV.LOGOUT' | translate }}
             </button>
           </div>
         </div>
@@ -148,7 +152,7 @@
         class="btn-primary nav-book-btn"
         (click)="scrollToBooking()"
       >
-        <span>{{ isArabic ? 'احجز موعدك' : 'Book Now' }}</span>
+        <span>{{ 'CLINIC_PROFILE.NAV.BOOK_NOW' | translate }}</span>
         <span>{{ isArabic ? '←' : '→' }}</span>
       </button>
 
@@ -157,7 +161,7 @@
         class="mobile-toggler"
         [class.open]="isMobileMenuOpen"
         [attr.aria-expanded]="isMobileMenuOpen"
-        aria-label="Toggle navigation menu"
+        [attr.aria-label]="'CLINIC_PROFILE.NAV.TOGGLE_MENU' | translate"
         (click)="toggleMobileMenu()"
       >
         <span></span>
@@ -180,28 +184,27 @@
 
       <div class="verified-badge">
         <span>✓</span>
-        عيادة موثقة على طبيب
+        {{ 'CLINIC_PROFILE.HERO.VERIFIED_BADGE' | translate }}
       </div>
 
-      <h1>{{ clinic.arName }}</h1>
+      <h1>{{ isArabic ? clinic.arName : (clinic.enName || clinic.arName) }}</h1>
 
       <p class="hero-description">
-        {{ clinic.arDescription }}
+        {{ isArabic ? clinic.arDescription : (clinic.enDescription || clinic.arDescription) }}
       </p>
 
       <div class="hero-rating">
         <span class="rating-stars">★★★★★</span>
         <strong>{{ clinic.evaluation }}</strong>
-        <span>({{ clinic.reviewsCount }} تقييم)</span>
+        <span>({{ clinic.reviewsCount }} {{ 'CLINIC_PROFILE.HERO.REVIEWS_COUNT' | translate }})</span>
       </div>
 
       <div class="hero-details">
 
         <div class="hero-detail">
           <span class="detail-icon">📍</span>
-          <span>{{ clinic.streetArName }}</span>
+          <span>{{ isArabic ? clinic.streetArName : (clinic.streetEnName || clinic.streetArName) }}</span>
         </div>
-
 
         <div class="hero-detail">
           <span class="detail-icon">📞</span>
@@ -212,12 +215,12 @@
 
       <div class="hero-actions">
         <button class="btn-primary" (click)="scrollToBooking()">
-          احجز موعد الآن
-          <span>←</span>
+          {{ 'CLINIC_PROFILE.HERO.BOOK_NOW' | translate }}
+          <span>{{ isArabic ? '←' : '→' }}</span>
         </button>
 
         <button class="btn-outline" (click)="scrollToDoctors()">
-          تعرف على الأطباء
+          {{ 'CLINIC_PROFILE.HERO.MEET_DOCTORS' | translate }}
         </button>
       </div>
 
@@ -225,17 +228,17 @@
 
         <div>
           <strong>{{ clinic.doctorCount }}+</strong>
-          <span>طبيب متخصص</span>
+          <span>{{ 'CLINIC_PROFILE.HERO.SPECIALIST_DOCTORS' | translate }}</span>
         </div>
 
         <div>
           <strong>{{ clinic.patientsCount | number }}</strong>
-          <span>مريض</span>
+          <span>{{ 'CLINIC_PROFILE.HERO.PATIENTS_LABEL' | translate }}</span>
         </div>
 
         <div>
           <strong>{{ clinic.evaluation }}</strong>
-          <span>تقييم المرضى</span>
+          <span>{{ 'CLINIC_PROFILE.HERO.PATIENTS_RATING' | translate }}</span>
         </div>
 
       </div>
@@ -247,22 +250,22 @@
       <div class="hero-image">
         <img
           [src]="clinic.bannerPath"
-          alt="Clinic"
+          [alt]="'CLINIC_PROFILE.HERO.IMAGE_ALT' | translate"
         />
       </div>
 
       <div class="hero-floating-card">
         <div class="floating-icon">✓</div>
         <div>
-          <strong>رعاية طبية موثوقة</strong>
-          <span>نضع صحتك أولويتنا</span>
+          <strong>{{ 'CLINIC_PROFILE.HERO.TRUSTED_CARE' | translate }}</strong>
+          <span>{{ 'CLINIC_PROFILE.HERO.HEALTH_PRIORITY' | translate }}</span>
         </div>
       </div>
 
       <div class="hero-floating-rating">
         <span>⭐</span>
-        <strong>{{ clinic.evaluation }}/5</strong>
-        <small>تقييم المرضى</small>
+        <strong>{{ clinic.evaluation }}{{ 'CLINIC_PROFILE.HERO.RATING_OUT_OF' | translate }}</strong>
+        <small>{{ 'CLINIC_PROFILE.HERO.PATIENTS_RATING' | translate }}</small>
       </div>
 
     </div>
@@ -278,32 +281,32 @@
     <div class="quick-feature">
       <div class="quick-icon">👨‍⚕️</div>
       <div>
-        <strong>نخبة من الأطباء</strong>
-        <span>خبرات طبية متميزة</span>
+        <strong>{{ 'CLINIC_PROFILE.QUICK_FEATURES.ELITE_DOCTORS_TITLE' | translate }}</strong>
+        <span>{{ 'CLINIC_PROFILE.QUICK_FEATURES.ELITE_DOCTORS_DESC' | translate }}</span>
       </div>
     </div>
 
     <div class="quick-feature">
       <div class="quick-icon">📅</div>
       <div>
-        <strong>حجز إلكتروني</strong>
-        <span>احجز في أي وقت</span>
+        <strong>{{ 'CLINIC_PROFILE.QUICK_FEATURES.ONLINE_BOOKING_TITLE' | translate }}</strong>
+        <span>{{ 'CLINIC_PROFILE.QUICK_FEATURES.ONLINE_BOOKING_DESC' | translate }}</span>
       </div>
     </div>
 
     <div class="quick-feature">
       <div class="quick-icon">🏥</div>
       <div>
-        <strong>تجهيزات حديثة</strong>
-        <span>أحدث الأجهزة الطبية</span>
+        <strong>{{ 'CLINIC_PROFILE.QUICK_FEATURES.MODERN_EQUIPMENT_TITLE' | translate }}</strong>
+        <span>{{ 'CLINIC_PROFILE.QUICK_FEATURES.MODERN_EQUIPMENT_DESC' | translate }}</span>
       </div>
     </div>
 
     <div class="quick-feature">
       <div class="quick-icon">💙</div>
       <div>
-        <strong>رعاية متكاملة</strong>
-        <span>اهتمام بكل التفاصيل</span>
+        <strong>{{ 'CLINIC_PROFILE.QUICK_FEATURES.COMPLETE_CARE_TITLE' | translate }}</strong>
+        <span>{{ 'CLINIC_PROFILE.QUICK_FEATURES.COMPLETE_CARE_DESC' | translate }}</span>
       </div>
     </div>
 
@@ -317,9 +320,9 @@
 
     <div class="section-heading">
       <div>
-        <span class="section-kicker">معرض الصور</span>
-        <h2>اكتشف عيادتنا</h2>
-        <p>تعرف على المكان والتجهيزات الطبية قبل زيارتك.</p>
+        <span class="section-kicker">{{ 'CLINIC_PROFILE.GALLERY.KICKER' | translate }}</span>
+        <h2>{{ 'CLINIC_PROFILE.GALLERY.TITLE' | translate }}</h2>
+        <p>{{ 'CLINIC_PROFILE.GALLERY.SUBTITLE' | translate }}</p>
       </div>
     </div>
 
@@ -347,79 +350,137 @@
 
 
 <!-- ================= DOCTORS ================= -->
+<!-- ================= DOCTORS SLIDER ================= -->
 <section class="section doctors-section" id="doctors">
   <div class="container">
 
     <div class="section-heading heading-between">
 
       <div>
-        <span class="section-kicker">فريقنا الطبي</span>
-        <h2>تعرف على أطبائنا</h2>
-        <p>نخبة من الأطباء المتخصصين لتقديم أفضل رعاية طبية.</p>
+        <span class="section-kicker">{{ 'CLINIC_PROFILE.DOCTORS.KICKER' | translate }}</span>
+        <h2>{{ 'CLINIC_PROFILE.DOCTORS.TITLE' | translate }}</h2>
+        <p>{{ 'CLINIC_PROFILE.DOCTORS.SUBTITLE' | translate }}</p>
       </div>
 
-      <button class="btn-outline" (click)="scrollToBooking()">
-        احجز مع طبيب
-      </button>
+      <div class="flex items-center gap-2.5 flex-wrap">
+        @if (doctors.length > doctorsPerPage) {
+          <div class="flex items-center gap-2" dir="ltr">
+            <button
+              type="button"
+              (click)="prevDoctorSlide()"
+              aria-label="Previous doctors"
+              class="w-10 h-10 rounded-xl border border-slate-200 bg-white hover:border-[#0284C7] hover:text-[#0284C7] text-slate-700 font-black flex items-center justify-center transition cursor-pointer shadow-2xs"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              (click)="nextDoctorSlide()"
+              aria-label="Next doctors"
+              class="w-10 h-10 rounded-xl border border-slate-200 bg-white hover:border-[#0284C7] hover:text-[#0284C7] text-slate-700 font-black flex items-center justify-center transition cursor-pointer shadow-2xs"
+            >
+              ›
+            </button>
+          </div>
+        }
+
+        <button class="btn-outline" (click)="scrollToBooking()">
+          {{ 'CLINIC_PROFILE.DOCTORS.BOOK_WITH_DOCTOR' | translate }}
+        </button>
+      </div>
 
     </div>
 
-<div class="doctors-grid">
+    <div class="doctors-grid">
 
-  @for (doctor of doctors; track doctor.id) {
+  @for (doctor of visibleDoctors; track doctor.id) {
 
-    <article class="doctor-card">
+    <article class="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#0284C7]/35 hover:-translate-y-1 transition-all duration-300 flex flex-col">
 
-      <div class="doctor-image-wrapper">
+      <!-- صورة الطبيب وشارة التقييم -->
+      <div class="relative h-60 w-full overflow-hidden bg-gradient-to-b from-sky-50/80 to-slate-100">
         <img
           [src]="doctor.imagePath || 'assets/images/default-doctor.png'"
-          [alt]="doctor.arName"
+          [alt]="isArabic ? doctor.arName : (doctor.enName || doctor.arName)"
           loading="lazy"
+          class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
         />
 
+        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/35 to-transparent pointer-events-none"></div>
+
         @if (doctor.evaluation) {
-          <span class="doctor-rating-badge">
-            <span class="star-icon">★</span>
-            {{ doctor.evaluation }}
+          <span
+            dir="ltr"
+            class="absolute top-3.5 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-xs text-slate-800 text-xs font-extrabold shadow-sm border border-amber-200/70"
+            [class.right-3.5]="isArabic"
+            [class.left-3.5]="!isArabic"
+          >
+            <span class="text-amber-400 text-sm leading-none">★</span>
+            <span>{{ doctor.evaluation }}</span>
           </span>
         }
       </div>
 
-      <div class="doctor-body">
+      <!-- محتوى الكارت -->
+      <div class="p-5 flex-1 flex flex-col justify-between gap-4">
 
-        <div class="doctor-header">
-          <span class="doctor-specialty">{{ doctor.specializationArName }}</span>
-          <h3 [title]="doctor.arName">{{ doctor.arName }}</h3>
+        <div>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#0284C7]/10 text-[#0284C7] mb-2.5">
+            {{ isArabic ? doctor.specializationArName : (doctor.specializationEnName || doctor.specializationArName) }}
+          </span>
+
+          <h3
+            [title]="isArabic ? doctor.arName : (doctor.enName || doctor.arName)"
+            class="text-lg font-extrabold text-slate-900 truncate group-hover:text-[#0284C7] transition-colors"
+          >
+            {{ isArabic ? doctor.arName : (doctor.enName || doctor.arName) }}
+          </h3>
         </div>
 
-        <div class="doctor-info-list">
-          <div class="doctor-info-item">
-            <span class="info-label">مدة الجلسة</span>
-            <strong class="info-value">{{ doctor.sessionDuration }} دقيقة</strong>
-          </div>
-
-          <div class="doctor-info-item">
-            <span class="info-label">تاريخ الانضمام</span>
-            <strong class="info-value">{{ doctor.joinDate | date:'dd/MM/yyyy' }}</strong>
-          </div>
-        </div>
-
-        <div class="doctor-footer">
-          <div class="doctor-price">
-            <span class="price-label">سعر الكشف</span>
-            <strong class="price-amount">
-              {{ doctor.sessionPrice | number }}
-              <small>جنيه</small>
+        <!-- بيانات الجلسة وتاريخ الانضمام -->
+        <div class="grid grid-cols-2 gap-2.5 p-3 rounded-xl bg-slate-50/90 border border-slate-100 text-xs">
+          <div class="flex flex-col gap-0.5">
+            <span class="text-slate-400 font-semibold">
+              {{ 'CLINIC_PROFILE.DOCTORS.SESSION_DURATION_LABEL' | translate }}
+            </span>
+            <strong class="text-slate-700 font-extrabold">
+              {{ doctor.sessionDuration }} {{ 'CLINIC_PROFILE.DOCTORS.MINUTES' | translate }}
             </strong>
+          </div>
+
+          <div class="flex flex-col gap-0.5 border-s border-slate-200/80 ps-2.5">
+            <span class="text-slate-400 font-semibold">
+              {{ 'CLINIC_PROFILE.DOCTORS.JOIN_DATE_LABEL' | translate }}
+            </span>
+            <strong class="text-slate-700 font-extrabold">
+              {{ doctor.joinDate | date:'dd/MM/yyyy' }}
+            </strong>
+          </div>
+        </div>
+
+        <!-- السعر وزر الحجز -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+          <div class="flex flex-col">
+            <span class="text-[11px] font-semibold text-slate-400">
+              {{ 'CLINIC_PROFILE.DOCTORS.CONSULTATION_FEE_LABEL' | translate }}
+            </span>
+            <div class="text-base font-black text-slate-900 leading-tight">
+              {{ doctor.sessionPrice | number }}
+              <small class="text-xs font-bold text-[#0284C7] ms-0.5">
+                {{ 'CLINIC_PROFILE.DOCTORS.CURRENCY' | translate }}
+              </small>
+            </div>
           </div>
 
           <button
             type="button"
-            class="btn-primary doctor-book-btn"
             (click)="selectDoctor(doctor); scrollToBooking()"
+            class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#0284C7] hover:bg-[#0369A1] active:scale-[0.98] text-white text-xs sm:text-sm font-bold shadow-sm shadow-[#0284C7]/25 transition-all cursor-pointer shrink-0"
           >
-            احجز الآن
-            <span>←</span>
+            <span>{{ 'CLINIC_PROFILE.DOCTORS.BOOK_NOW' | translate }}</span>
+            <span class="transition-transform duration-200 group-hover:translate-x-0.5">
+              {{ isArabic ? '←' : '→' }}
+            </span>
           </button>
         </div>
 
@@ -429,10 +490,28 @@
 
   }
 
-</div>
+
+
+    </div>
+
+    @if (doctorSlideDots.length > 0) {
+      <div class="flex items-center justify-center gap-2 mt-8" dir="ltr">
+        @for (dotIdx of doctorSlideDots; track dotIdx) {
+          <button
+            type="button"
+            (click)="goToDoctorSlide(dotIdx)"
+            class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
+            [ngClass]="doctorSlideIndex === dotIdx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+            [attr.aria-label]="'Doctor slide ' + (dotIdx + 1)"
+          ></button>
+        }
+      </div>
+    }
 
   </div>
 </section>
+
+
 
 
 <!-- ================= BOOKING STEPPER ================= -->
@@ -440,9 +519,9 @@
   <div class="container">
 
     <div class="booking-header">
-      <span class="section-kicker">حجز موعد</span>
-      <h2>احجز زيارتك بسهولة</h2>
-      <p>اتبع الخطوات التالية لتأكيد موعدك في العيادة.</p>
+      <span class="section-kicker">{{ 'CLINIC_PROFILE.BOOKING.KICKER' | translate }}</span>
+      <h2>{{ 'CLINIC_PROFILE.BOOKING.TITLE' | translate }}</h2>
+      <p>{{ 'CLINIC_PROFILE.BOOKING.SUBTITLE' | translate }}</p>
     </div>
 
     <div class="booking-card">
@@ -461,7 +540,7 @@
             }
           </div>
 
-          <span>اختيار الطبيب</span>
+          <span>{{ 'CLINIC_PROFILE.BOOKING.STEP_1' | translate }}</span>
         </div>
 
         <div class="stepper-line" [class.completed]="currentStep > 1"></div>
@@ -477,7 +556,7 @@
             }
           </div>
 
-          <span>اختيار الموعد</span>
+          <span>{{ 'CLINIC_PROFILE.BOOKING.STEP_2' | translate }}</span>
         </div>
 
         <div class="stepper-line" [class.completed]="currentStep > 2"></div>
@@ -493,7 +572,7 @@
             }
           </div>
 
-          <span>بيانات المريض</span>
+          <span>{{ 'CLINIC_PROFILE.BOOKING.STEP_3' | translate }}</span>
         </div>
 
         <div class="stepper-line" [class.completed]="currentStep >= 4"></div>
@@ -501,7 +580,7 @@
         <div class="stepper-item" [class.active]="currentStep === 4">
 
           <div class="step-circle">4</div>
-          <span>تأكيد الحجز</span>
+          <span>{{ 'CLINIC_PROFILE.BOOKING.STEP_4' | translate }}</span>
 
         </div>
 
@@ -514,8 +593,8 @@
         <div class="booking-step">
 
           <div class="step-title">
-            <h3>اختر الطبيب المناسب لك</h3>
-            <p>حدد الطبيب الذي ترغب في حجز موعد معه.</p>
+            <h3>{{ 'CLINIC_PROFILE.BOOKING.STEP1_TITLE' | translate }}</h3>
+            <p>{{ 'CLINIC_PROFILE.BOOKING.STEP1_SUBTITLE' | translate }}</p>
           </div>
 
           <div class="booking-doctors-grid">
@@ -528,11 +607,11 @@
                 (click)="selectDoctor(doctor)"
               >
 
-                <img [src]="doctor.imagePath" [alt]="doctor.arName" />
+                <img [src]="doctor.imagePath" [alt]="isArabic ? doctor.arName : (doctor.enName || doctor.arName)" />
 
                 <div class="booking-doctor-info">
-                  <strong>{{ doctor.arName }}</strong>
-                  <span>{{ doctor.specializationArName }}</span>
+                  <strong>{{ isArabic ? doctor.arName : (doctor.enName || doctor.arName) }}</strong>
+                  <span>{{ isArabic ? doctor.specializationArName : (doctor.specializationEnName || doctor.specializationArName) }}</span>
 
                   <div class="doctor-rating">
                     <span>★</span>
@@ -540,7 +619,7 @@
                   </div>
 
                   <strong class="booking-doctor-price">
-                    {{ doctor.sessionPrice }} جنيه
+                    {{ doctor.sessionPrice }} {{ 'CLINIC_PROFILE.BOOKING.CURRENCY_SHORT' | translate }}
                   </strong>
                 </div>
 
@@ -562,7 +641,7 @@
               [disabled]="!selectedDoctor"
               (click)="nextStep()"
             >
-              التالي: اختيار الموعد ←
+              {{ 'CLINIC_PROFILE.BOOKING.NEXT_TO_TIME' | translate }} {{ isArabic ? '←' : '→' }}
             </button>
           </div>
 
@@ -577,22 +656,22 @@
         <div class="booking-step">
 
           <div class="step-title">
-            <h3>اختر اليوم والوقت المناسب</h3>
-            <p>حدد موعد زيارتك من المواعيد المتاحة.</p>
+            <h3>{{ 'CLINIC_PROFILE.BOOKING.STEP2_TITLE' | translate }}</h3>
+            <p>{{ 'CLINIC_PROFILE.BOOKING.STEP2_SUBTITLE' | translate }}</p>
           </div>
 
           @if (selectedDoctor) {
             <div class="selected-doctor-summary">
 
-              <img [src]="selectedDoctor.imagePath" [alt]="selectedDoctor.arName" />
+              <img [src]="selectedDoctor.imagePath" [alt]="isArabic ? selectedDoctor.arName : (selectedDoctor.enName || selectedDoctor.arName)" />
 
               <div>
-                <strong>{{ selectedDoctor.arName }}</strong>
-                <span>{{ selectedDoctor.specializationArName }}</span>
+                <strong>{{ isArabic ? selectedDoctor.arName : (selectedDoctor.enName || selectedDoctor.arName) }}</strong>
+                <span>{{ isArabic ? selectedDoctor.specializationArName : (selectedDoctor.specializationEnName || selectedDoctor.specializationArName) }}</span>
               </div>
 
               <strong class="summary-price">
-                {{ selectedDoctor.sessionPrice }} جنيه
+                {{ selectedDoctor.sessionPrice }} {{ 'CLINIC_PROFILE.BOOKING.CURRENCY_SHORT' | translate }}
               </strong>
 
             </div>
@@ -600,7 +679,7 @@
 
           <div class="booking-subtitle">
             <span>📅</span>
-            اختر يوم الزيارة
+            {{ 'CLINIC_PROFILE.BOOKING.CHOOSE_DAY' | translate }}
           </div>
 
           <div class="days-grid">
@@ -625,13 +704,13 @@
 
           <div class="booking-subtitle">
             <span>🕒</span>
-            اختر الوقت المناسب
+            {{ 'CLINIC_PROFILE.BOOKING.CHOOSE_TIME' | translate }}
           </div>
 
           @if (!selectedDate) {
 
             <div class="empty-selection">
-              من فضلك اختر اليوم أولاً لعرض المواعيد.
+              {{ 'CLINIC_PROFILE.BOOKING.SELECT_DAY_FIRST' | translate }}
             </div>
 
           } @else {
@@ -657,7 +736,7 @@
           <div class="step-actions between">
 
             <button class="btn-outline" (click)="previousStep()">
-              → السابق
+              {{ isArabic ? '→' : '←' }} {{ 'CLINIC_PROFILE.BOOKING.PREVIOUS' | translate }}
             </button>
 
             <button
@@ -665,7 +744,7 @@
               [disabled]="!selectedDate || !selectedTime"
               (click)="nextStep()"
             >
-              التالي: بيانات المريض ←
+              {{ 'CLINIC_PROFILE.BOOKING.NEXT_TO_PATIENT' | translate }} {{ isArabic ? '←' : '→' }}
             </button>
 
           </div>
@@ -681,30 +760,30 @@
         <div class="booking-step">
 
           <div class="step-title">
-            <h3>أدخل بياناتك الشخصية</h3>
-            <p>يرجى إدخال البيانات التالية لاستكمال الحجز.</p>
+            <h3>{{ 'CLINIC_PROFILE.BOOKING.STEP3_TITLE' | translate }}</h3>
+            <p>{{ 'CLINIC_PROFILE.BOOKING.STEP3_SUBTITLE' | translate }}</p>
           </div>
 
           <div class="booking-summary">
 
             <div>
-              <span>الطبيب</span>
-              <strong>{{ selectedDoctor?.arName }}</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_DOCTOR' | translate }}</span>
+              <strong>{{ isArabic ? selectedDoctor?.arName : (selectedDoctor?.enName || selectedDoctor?.arName) }}</strong>
             </div>
 
             <div>
-              <span>تاريخ الزيارة</span>
-              <strong>{{ selectedDate | date:'fullDate':'':'ar-EG' }}</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_DATE' | translate }}</span>
+              <strong>{{ selectedDate | date:'fullDate':'':(isArabic ? 'ar-EG' : 'en-US') }}</strong>
             </div>
 
             <div>
-              <span>الوقت</span>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_TIME' | translate }}</span>
               <strong>{{ selectedTime }}</strong>
             </div>
 
             <div>
-              <span>سعر الكشف</span>
-              <strong>{{ selectedDoctor?.sessionPrice }} جنيه</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_FEE' | translate }}</span>
+              <strong>{{ selectedDoctor?.sessionPrice }} {{ 'CLINIC_PROFILE.BOOKING.CURRENCY_SHORT' | translate }}</strong>
             </div>
 
           </div>
@@ -714,83 +793,83 @@
             <div class="form-grid">
 
               <div class="form-group full-width">
-                <label>الاسم بالكامل <span>*</span></label>
+                <label>{{ 'CLINIC_PROFILE.BOOKING.FULL_NAME_LABEL' | translate }} <span>*</span></label>
 
                 <input
                   type="text"
                   formControlName="fullName"
-                  placeholder="اكتب اسمك بالكامل"
+                  [placeholder]="'CLINIC_PROFILE.BOOKING.FULL_NAME_PLACEHOLDER' | translate"
                   [class.invalid]="fullNameControl?.touched && fullNameControl?.invalid"
                 />
 
                 @if (fullNameControl?.touched && fullNameControl?.hasError('required')) {
-                  <small class="error-message">الاسم مطلوب.</small>
+                  <small class="error-message">{{ 'CLINIC_PROFILE.BOOKING.FULL_NAME_REQUIRED' | translate }}</small>
                 }
 
                 @if (fullNameControl?.touched && fullNameControl?.hasError('minlength')) {
-                  <small class="error-message">يجب أن يكون الاسم 3 أحرف على الأقل.</small>
+                  <small class="error-message">{{ 'CLINIC_PROFILE.BOOKING.FULL_NAME_MIN' | translate }}</small>
                 }
               </div>
 
 
               <div class="form-group">
-                <label>رقم الهاتف <span>*</span></label>
+                <label>{{ 'CLINIC_PROFILE.BOOKING.PHONE_LABEL' | translate }} <span>*</span></label>
 
                 <input
                   type="tel"
                   formControlName="phone"
-                  placeholder="01xxxxxxxxx"
+                  [placeholder]="'CLINIC_PROFILE.BOOKING.PHONE_PLACEHOLDER' | translate"
                   dir="ltr"
                   [class.invalid]="phoneControl?.touched && phoneControl?.invalid"
                 />
 
                 @if (phoneControl?.touched && phoneControl?.invalid) {
-                  <small class="error-message">أدخل رقم هاتف مصري صحيح.</small>
+                  <small class="error-message">{{ 'CLINIC_PROFILE.BOOKING.PHONE_INVALID' | translate }}</small>
                 }
               </div>
 
 
               <div class="form-group">
-                <label>العمر <span>*</span></label>
+                <label>{{ 'CLINIC_PROFILE.BOOKING.AGE_LABEL' | translate }} <span>*</span></label>
 
                 <input
                   type="number"
                   formControlName="age"
-                  placeholder="العمر"
+                  [placeholder]="'CLINIC_PROFILE.BOOKING.AGE_PLACEHOLDER' | translate"
                   [class.invalid]="ageControl?.touched && ageControl?.invalid"
                 />
 
                 @if (ageControl?.touched && ageControl?.invalid) {
-                  <small class="error-message">أدخل عمراً صحيحاً.</small>
+                  <small class="error-message">{{ 'CLINIC_PROFILE.BOOKING.AGE_INVALID' | translate }}</small>
                 }
               </div>
 
 
               <div class="form-group full-width">
-                <label>النوع <span>*</span></label>
+                <label>{{ 'CLINIC_PROFILE.BOOKING.GENDER_LABEL' | translate }} <span>*</span></label>
 
                 <select
                   formControlName="gender"
                   [class.invalid]="genderControl?.touched && genderControl?.invalid"
                 >
-                  <option value="">اختر النوع</option>
-                  <option value="male">ذكر</option>
-                  <option value="female">أنثى</option>
+                  <option value="">{{ 'CLINIC_PROFILE.BOOKING.GENDER_SELECT' | translate }}</option>
+                  <option value="male">{{ 'CLINIC_PROFILE.BOOKING.GENDER_MALE' | translate }}</option>
+                  <option value="female">{{ 'CLINIC_PROFILE.BOOKING.GENDER_FEMALE' | translate }}</option>
                 </select>
 
                 @if (genderControl?.touched && genderControl?.invalid) {
-                  <small class="error-message">من فضلك اختر النوع.</small>
+                  <small class="error-message">{{ 'CLINIC_PROFILE.BOOKING.GENDER_REQUIRED' | translate }}</small>
                 }
               </div>
 
 
               <div class="form-group full-width">
-                <label>ملاحظات إضافية</label>
+                <label>{{ 'CLINIC_PROFILE.BOOKING.NOTES_LABEL' | translate }}</label>
 
                 <textarea
                   formControlName="notes"
                   rows="4"
-                  placeholder="هل لديك أي معلومات أو ملاحظات ترغب في إضافتها؟"
+                  [placeholder]="'CLINIC_PROFILE.BOOKING.NOTES_PLACEHOLDER' | translate"
                 ></textarea>
               </div>
 
@@ -799,11 +878,11 @@
             <div class="step-actions between">
 
               <button type="button" class="btn-outline" (click)="previousStep()">
-                → السابق
+                {{ isArabic ? '→' : '←' }} {{ 'CLINIC_PROFILE.BOOKING.PREVIOUS' | translate }}
               </button>
 
               <button type="submit" class="btn-primary">
-                تأكيد بيانات الحجز ←
+                {{ 'CLINIC_PROFILE.BOOKING.CONFIRM_BOOKING' | translate }} {{ isArabic ? '←' : '→' }}
               </button>
 
             </div>
@@ -822,53 +901,53 @@
 
           <div class="success-icon">✓</div>
 
-          <h3>تم تجهيز طلب الحجز بنجاح!</h3>
+          <h3>{{ 'CLINIC_PROFILE.BOOKING.SUCCESS_TITLE' | translate }}</h3>
 
           <p>
-            تم إنشاء ملخص الحجز التجريبي. سيتم تأكيد الموعد بعد ربط النظام بخدمة الحجز.
+            {{ 'CLINIC_PROFILE.BOOKING.SUCCESS_SUBTITLE' | translate }}
           </p>
 
           <div class="booking-number">
-            <span>رقم الطلب</span>
+            <span>{{ 'CLINIC_PROFILE.BOOKING.ORDER_NUMBER' | translate }}</span>
             <strong>{{ bookingNumber }}</strong>
           </div>
 
           <div class="success-details">
 
             <div>
-              <span>الطبيب</span>
-              <strong>{{ selectedDoctor?.arName }}</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_DOCTOR' | translate }}</span>
+              <strong>{{ isArabic ? selectedDoctor?.arName : (selectedDoctor?.enName || selectedDoctor?.arName) }}</strong>
             </div>
 
             <div>
-              <span>التاريخ</span>
-              <strong>{{ selectedDate | date:'fullDate':'':'ar-EG' }}</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUCCESS_DATE' | translate }}</span>
+              <strong>{{ selectedDate | date:'fullDate':'':(isArabic ? 'ar-EG' : 'en-US') }}</strong>
             </div>
 
             <div>
-              <span>الوقت</span>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUMMARY_TIME' | translate }}</span>
               <strong>{{ selectedTime }}</strong>
             </div>
 
             <div>
-              <span>اسم المريض</span>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.PATIENT_NAME' | translate }}</span>
               <strong>{{ patientForm.value.fullName }}</strong>
             </div>
 
             <div>
-              <span>رقم الهاتف</span>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.PATIENT_PHONE' | translate }}</span>
               <strong>{{ patientForm.value.phone }}</strong>
             </div>
 
             <div>
-              <span>سعر الكشف</span>
-              <strong>{{ selectedDoctor?.sessionPrice }} ريال</strong>
+              <span>{{ 'CLINIC_PROFILE.BOOKING.SUCCESS_FEE' | translate }}</span>
+              <strong>{{ selectedDoctor?.sessionPrice }} {{ 'CLINIC_PROFILE.BOOKING.SUCCESS_CURRENCY' | translate }}</strong>
             </div>
 
           </div>
 
           <button class="btn-primary" (click)="resetBooking()">
-            حجز موعد جديد
+            {{ 'CLINIC_PROFILE.BOOKING.BOOK_NEW' | translate }}
           </button>
 
         </div>
@@ -888,9 +967,9 @@
     <div class="section-heading heading-between">
 
       <div>
-        <span class="section-kicker">آراء المرضى</span>
-        <h2>ماذا يقول عملاؤنا؟</h2>
-        <p>تجارب وآراء بعض المرضى حول خدمات العيادة.</p>
+        <span class="section-kicker">{{ 'CLINIC_PROFILE.REVIEWS.KICKER' | translate }}</span>
+        <h2>{{ 'CLINIC_PROFILE.REVIEWS.TITLE' | translate }}</h2>
+        <p>{{ 'CLINIC_PROFILE.REVIEWS.SUBTITLE' | translate }}</p>
       </div>
 
       <div class="reviews-overview">
@@ -932,7 +1011,7 @@
           <p>{{ review.comment }}</p>
 
           <div class="review-footer">
-            <span>✓ تجربة مريض</span>
+            <span>✓ {{ 'CLINIC_PROFILE.REVIEWS.PATIENT_EXPERIENCE' | translate }}</span>
           </div>
 
         </div>
@@ -950,61 +1029,61 @@
   <div class="container">
 
     <div class="section-heading">
-      <span class="section-kicker">عروضنا المميزة</span>
-      <h2>اهتم بصحتك ووفر أكثر</h2>
-      <p>اكتشف العروض والباقات المتاحة داخل العيادة.</p>
+      <span class="section-kicker">{{ 'CLINIC_PROFILE.OFFERS.KICKER' | translate }}</span>
+      <h2>{{ 'CLINIC_PROFILE.OFFERS.TITLE' | translate }}</h2>
+      <p>{{ 'CLINIC_PROFILE.OFFERS.SUBTITLE' | translate }}</p>
     </div>
 
     <div class="offers-grid">
 
       @for (offer of offers; track offer.id) {
 
-     <div class="offer-card" [class.offer-inactive]="!offer.isActive">
+        <div class="offer-card" [class.offer-inactive]="!offer.isActive">
 
-  <div class="offer-top">
-    <div class="offer-icon">🩺</div>
+          <div class="offer-top">
+            <div class="offer-icon">🩺</div>
 
-    <div class="offer-badges">
-      <span class="discount-badge">
-        خصم {{ offer.percentage * 100 }}%
-      </span>
+            <div class="offer-badges">
+              <span class="discount-badge">
+                {{ 'CLINIC_PROFILE.OFFERS.DISCOUNT_PREFIX' | translate }} {{ offer.percentage * 100 }}%
+              </span>
 
-      <span class="offer-status" [class.active]="offer.isActive">
-        {{ offer.isActive ? 'ساري' : 'غير نشط' }}
-      </span>
-    </div>
-  </div>
+              <span class="offer-status" [class.active]="offer.isActive">
+                {{ (offer.isActive ? 'CLINIC_PROFILE.OFFERS.ACTIVE' : 'CLINIC_PROFILE.OFFERS.INACTIVE') | translate }}
+              </span>
+            </div>
+          </div>
 
-  <div class="offer-doctor-box">
-    <span>الطبيب</span>
-    <strong>{{  offer.doctorArName  }}</strong>
-  </div>
+          <div class="offer-doctor-box">
+            <span>{{ 'CLINIC_PROFILE.OFFERS.DOCTOR_LABEL' | translate }}</span>
+            <strong>{{ isArabic ? offer.doctorArName : (offer.doctorEnName || offer.doctorArName) }}</strong>
+          </div>
 
-  <div class="offer-dates">
-    <div class="offer-date-item">
-      <span>يبدأ من</span>
-      <strong>{{ offer.startAt | date:'dd/MM/yyyy' }}</strong>
-    </div>
+          <div class="offer-dates">
+            <div class="offer-date-item">
+              <span>{{ 'CLINIC_PROFILE.OFFERS.STARTS_AT' | translate }}</span>
+              <strong>{{ offer.startAt | date:'dd/MM/yyyy' }}</strong>
+            </div>
 
-    <div class="offer-date-divider">←</div>
+            <div class="offer-date-divider">{{ isArabic ? '←' : '→' }}</div>
 
-    <div class="offer-date-item">
-      <span>ينتهي في</span>
-      <strong>{{ offer.endAt | date:'dd/MM/yyyy' }}</strong>
-    </div>
-  </div>
+            <div class="offer-date-item">
+              <span>{{ 'CLINIC_PROFILE.OFFERS.ENDS_AT' | translate }}</span>
+              <strong>{{ offer.endAt | date:'dd/MM/yyyy' }}</strong>
+            </div>
+          </div>
 
-  <button
-    type="button"
-    class="btn-primary offer-button"
-    [disabled]="!offer.isActive"
-    (click)="scrollToBooking()"
-  >
-    احجز واستفد من العرض
-    <span>←</span>
-  </button>
+          <button
+            type="button"
+            class="btn-primary offer-button"
+            [disabled]="!offer.isActive"
+            (click)="scrollToBooking()"
+          >
+            {{ 'CLINIC_PROFILE.OFFERS.BOOK_OFFER' | translate }}
+            <span>{{ isArabic ? '←' : '→' }}</span>
+          </button>
 
-</div>
+        </div>
 
       }
 
@@ -1019,9 +1098,9 @@
   <div class="container">
 
     <div class="section-heading">
-      <span class="section-kicker">تواصل معنا</span>
-      <h2>نحن هنا لمساعدتك</h2>
-      <p>يسعدنا استقبال استفساراتك ومساعدتك في الوصول إلينا.</p>
+      <span class="section-kicker">{{ 'CLINIC_PROFILE.CONTACT.KICKER' | translate }}</span>
+      <h2>{{ 'CLINIC_PROFILE.CONTACT.TITLE' | translate }}</h2>
+      <p>{{ 'CLINIC_PROFILE.CONTACT.SUBTITLE' | translate }}</p>
     </div>
 
     <div class="contact-grid">
@@ -1031,15 +1110,15 @@
         <div class="contact-card">
           <div class="contact-icon">📍</div>
           <div>
-            <strong>عنوان العيادة</strong>
-            <span>{{ clinic.streetArName }}</span>
+            <strong>{{ 'CLINIC_PROFILE.CONTACT.ADDRESS_LABEL' | translate }}</strong>
+            <span>{{ isArabic ? clinic.streetArName : (clinic.streetEnName || clinic.streetArName) }}</span>
           </div>
         </div>
 
         <div class="contact-card">
           <div class="contact-icon">📞</div>
           <div>
-            <strong>رقم الهاتف</strong>
+            <strong>{{ 'CLINIC_PROFILE.CONTACT.PHONE_LABEL' | translate }}</strong>
             <a [href]="'tel:' + clinic.whatsappNumber" dir="ltr">{{ clinic.whatsappNumber }}</a>
           </div>
         </div>
@@ -1047,19 +1126,17 @@
         <div class="contact-card">
           <div class="contact-icon">✉️</div>
           <div>
-            <strong>البريد الإلكتروني</strong>
+            <strong>{{ 'CLINIC_PROFILE.CONTACT.EMAIL_LABEL' | translate }}</strong>
             <a [href]="'mailto:' + clinic.ownerEmail">{{ clinic.ownerEmail }}</a>
           </div>
         </div>
 
-
         <a
-       
           target="_blank"
           rel="noopener"
           class="btn-primary directions-button"
         >
-          احصل على الاتجاهات ←
+          {{ 'CLINIC_PROFILE.CONTACT.GET_DIRECTIONS' | translate }} {{ isArabic ? '←' : '→' }}
         </a>
 
       </div>
@@ -1069,7 +1146,7 @@
           src="https://maps.google.com/maps?q=Damanhur,Egypt&t=&z=13&ie=UTF8&iwloc=&output=embed"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="موقع العيادة على الخريطة"
+          [title]="'CLINIC_PROFILE.CONTACT.MAP_TITLE' | translate"
         ></iframe>
       </div>
 
@@ -1090,95 +1167,94 @@
 
         <a href="#" class="brand footer-brand">
           <img
-        [src]="clinic.logoPath || 'assets/images/default-logo.png'"
-        [alt]="isArabic ? clinic.arName : clinic.enName"
-        class="brand-logo w-[80px] h-[80px]" style="width: 80px !important; height: 80px !important;"
-      />
+            [src]="clinic.logoPath || 'assets/images/default-logo.png'"
+            [alt]="isArabic ? clinic.arName : clinic.enName"
+            class="brand-logo w-[80px] h-[80px]" style="width: 80px !important; height: 80px !important;"
+          />
         </a>
 
         <p>
-          {{ clinic.arName }}، نسعى لتقديم أفضل خدمات الرعاية الطبية
-          من خلال فريق متخصص وتجهيزات طبية حديثة.
+          {{ isArabic ? clinic.arName : (clinic.enName || clinic.arName) }}{{ 'CLINIC_PROFILE.FOOTER.ABOUT_SUFFIX' | translate }}
         </p>
 
-      <div class="social-links">
+        <div class="social-links">
 
-  @if (clinic.instgramUser) {
-    <a
-      [href]="'https://instagram.com/' + cleanHandle(clinic.instgramUser)"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Instagram"
-      title="Instagram"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-      </svg>
-    </a>
-  }
+          @if (clinic.instgramUser) {
+            <a
+              [href]="'https://instagram.com/' + cleanHandle(clinic.instgramUser)"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              title="Instagram"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          }
 
-  @if (clinic.snapshatUser) {
-    <a
-      [href]="'https://www.snapchat.com/add/' + cleanHandle(clinic.snapshatUser)"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Snapchat"
-      title="Snapchat"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-        <path d="M12.17 2.5c-2.63 0-4.46 1.76-4.78 4.42-.14 1.15-.02 2.24.06 2.79-.26.14-.61.2-.97.12-.44-.1-.84-.34-1.15-.34-.47 0-.89.31-.98.76-.08.41.15.83.62 1.13.45.28.98.48 1.14.77.15.28-.04.76-.59 1.62-.67 1.05-1.82 1.88-3.28 2.18-.42.09-.68.44-.63.84.05.41.43.69.92.75.95.12 1.75.43 2.24.89.32.3.5.69.74 1.03.32.45.84.66 1.56.66.52 0 1.11-.11 1.75-.11.68 0 1.24.21 1.81.43.66.25 1.35.51 2.25.51.9 0 1.59-.26 2.25-.51.57-.22 1.13-.43 1.81-.43.64 0 1.23.11 1.75.11.72 0 1.24-.21 1.56-.66.24-.34.42-.73.74-1.03.49-.46 1.29-.77 2.24-.89.49-.06.87-.34.92-.75.05-.4-.21-.75-.63-.84-1.46-.3-2.61-1.13-3.28-2.18-.55-.86-.74-1.34-.59-1.62.16-.29.69-.49 1.14-.77.47-.3.7-.72.62-1.13-.09-.45-.51-.76-.98-.76-.31 0-.71.24-1.15.34-.36.08-.71.02-.97-.12.08-.55.2-1.64.06-2.79C16.63 4.26 14.8 2.5 12.17 2.5z"/>
-      </svg>
-    </a>
-  }
+          @if (clinic.snapshatUser) {
+            <a
+              [href]="'https://www.snapchat.com/add/' + cleanHandle(clinic.snapshatUser)"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Snapchat"
+              title="Snapchat"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M12.17 2.5c-2.63 0-4.46 1.76-4.78 4.42-.14 1.15-.02 2.24.06 2.79-.26.14-.61.2-.97.12-.44-.1-.84-.34-1.15-.34-.47 0-.89.31-.98.76-.08.41.15.83.62 1.13.45.28.98.48 1.14.77.15.28-.04.76-.59 1.62-.67 1.05-1.82 1.88-3.28 2.18-.42.09-.68.44-.63.84.05.41.43.69.92.75.95.12 1.75.43 2.24.89.32.3.5.69.74 1.03.32.45.84.66 1.56.66.52 0 1.11-.11 1.75-.11.68 0 1.24.21 1.81.43.66.25 1.35.51 2.25.51.9 0 1.59-.26 2.25-.51.57-.22 1.13-.43 1.81-.43.64 0 1.23.11 1.75.11.72 0 1.24-.21 1.56-.66.24-.34.42-.73.74-1.03.49-.46 1.29-.77 2.24-.89.49-.06.87-.34.92-.75.05-.4-.21-.75-.63-.84-1.46-.3-2.61-1.13-3.28-2.18-.55-.86-.74-1.34-.59-1.62.16-.29.69-.49 1.14-.77.47-.3.7-.72.62-1.13-.09-.45-.51-.76-.98-.76-.31 0-.71.24-1.15.34-.36.08-.71.02-.97-.12.08-.55.2-1.64.06-2.79C16.63 4.26 14.8 2.5 12.17 2.5z"/>
+              </svg>
+            </a>
+          }
 
-  @if (clinic.whatsappNumber) {
-    <a
-      [href]="'https://wa.me/' + cleanWhatsapp(clinic.whatsappNumber)"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="WhatsApp"
-      title="WhatsApp"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        <path d="M9.5 9.5c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.3l.7 1.7c.1.2.1.4 0 .6l-.4.5c-.1.1-.1.3 0 .5.3.5.8 1.1 1.4 1.5.6.4 1.1.6 1.5.7.2 0 .4 0 .5-.1l.4-.5c.1-.1.3-.2.5-.1l1.6.7c.2.1.3.3.3.5v.5c0 .3 0 .6-.5.8-.5.2-1.2.2-2.2-.2-1-.4-2.1-1.2-3-2.1-.9-.9-1.7-2-2.1-3-.4-1-.4-1.7-.2-2.2z"></path>
-      </svg>
-    </a>
-  }
+          @if (clinic.whatsappNumber) {
+            <a
+              [href]="'https://wa.me/' + cleanWhatsapp(clinic.whatsappNumber)"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              title="WhatsApp"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                <path d="M9.5 9.5c.2-.5.5-.5.8-.5h.5c.2 0 .4.1.5.3l.7 1.7c.1.2.1.4 0 .6l-.4.5c-.1.1-.1.3 0 .5.3.5.8 1.1 1.4 1.5.6.4 1.1.6 1.5.7.2 0 .4 0 .5-.1l.4-.5c.1-.1.3-.2.5-.1l1.6.7c.2.1.3.3.3.5v.5c0 .3 0 .6-.5.8-.5.2-1.2.2-2.2-.2-1-.4-2.1-1.2-3-2.1-.9-.9-1.7-2-2.1-3-.4-1-.4-1.7-.2-2.2z"></path>
+              </svg>
+            </a>
+          }
 
-</div>
+        </div>
 
       </div>
 
       <div class="footer-column">
-        <h4>روابط سريعة</h4>
-        <a href="#about">عن العيادة</a>
-        <a href="#gallery">معرض الصور</a>
-        <a href="#doctors">الأطباء</a>
-        <a href="#reviews">آراء المرضى</a>
+        <h4>{{ 'CLINIC_PROFILE.FOOTER.QUICK_LINKS' | translate }}</h4>
+        <a href="#about">{{ 'CLINIC_PROFILE.NAV.ABOUT' | translate }}</a>
+        <a href="#gallery">{{ 'CLINIC_PROFILE.NAV.GALLERY' | translate }}</a>
+        <a href="#doctors">{{ 'CLINIC_PROFILE.NAV.DOCTORS' | translate }}</a>
+        <a href="#reviews">{{ 'CLINIC_PROFILE.NAV.REVIEWS' | translate }}</a>
       </div>
 
       <div class="footer-column">
-        <h4>خدماتنا</h4>
-        <a href="#booking">حجز موعد</a>
-        <a href="#offers">العروض والباقات</a>
-        <a href="#contact">تواصل معنا</a>
+        <h4>{{ 'CLINIC_PROFILE.FOOTER.OUR_SERVICES' | translate }}</h4>
+        <a href="#booking">{{ 'CLINIC_PROFILE.FOOTER.BOOKING_LINK' | translate }}</a>
+        <a href="#offers">{{ 'CLINIC_PROFILE.FOOTER.OFFERS_LINK' | translate }}</a>
+        <a href="#contact">{{ 'CLINIC_PROFILE.FOOTER.CONTACT_LINK' | translate }}</a>
       </div>
 
       <div class="footer-column">
-        <h4>معلومات التواصل</h4>
-        <span>{{ clinic.streetArName }}</span>
-        <a [href]="'tel:' + clinic.whatsappNumber" >{{ clinic.whatsappNumber }}</a>
+        <h4>{{ 'CLINIC_PROFILE.FOOTER.CONTACT_INFO' | translate }}</h4>
+        <span>{{ isArabic ? clinic.streetArName : (clinic.streetEnName || clinic.streetArName) }}</span>
+        <a [href]="'tel:' + clinic.whatsappNumber">{{ clinic.whatsappNumber }}</a>
         <a [href]="'mailto:' + clinic.ownerEmail">{{ clinic.ownerEmail }}</a>
       </div>
 
     </div>
 
     <div class="footer-bottom">
-      <span>© {{ 2026 }} Tabeeb. جميع الحقوق محفوظة.</span>
-      <span>صحتك أولويتنا 💙</span>
+      <span>{{ 'CLINIC_PROFILE.FOOTER.COPYRIGHT_PREFIX' | translate }} {{ 'CLINIC_PROFILE.FOOTER.COPYRIGHT_SUFFIX' | translate }}</span>
+      <span>{{ 'CLINIC_PROFILE.FOOTER.TAGLINE' | translate }}</span>
     </div>
 
   </div>
@@ -1194,7 +1270,7 @@
     <button
       class="lightbox-close"
       type="button"
-      aria-label="إغلاق"
+      [attr.aria-label]="'CLINIC_PROFILE.LIGHTBOX.CLOSE_ARIA' | translate"
       (click)="closeGallery()"
     >
       ×
@@ -1202,7 +1278,7 @@
 
     <img
       [src]="selectedGalleryImage"
-      alt="صورة العيادة"
+      [alt]="'CLINIC_PROFILE.LIGHTBOX.IMAGE_ALT' | translate"
       (click)="$event.stopPropagation()"
     />
 
@@ -1218,5 +1294,6 @@
   (click)="scrollToBooking()"
 >
   <span>📅</span>
-  احجز موعدك
+  {{ 'CLINIC_PROFILE.FLOATING_BOOK' | translate }}
 </button>
+</div>

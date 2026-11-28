@@ -1,5 +1,5 @@
 <div
-  dir="rtl"
+  [attr.dir]="TranslateServ.currentLang === 'ae' ? 'rtl' : 'ltr'"
   class="min-h-screen bg-[#F7FAFF] text-[#0F294A] font-sans overflow-x-hidden selection:bg-[#0284C7] selection:text-white">
 
   <!-- 1. Navbar -->
@@ -8,125 +8,130 @@
 
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 shrink-0">
-        <div class="  flex items-center justify-center overflow-hidden p-1">
+        <div class="flex items-center justify-center overflow-hidden p-1">
           <img
             src="../../../assets/images/Logo.jpg"
-            alt="Tabeeb Logo"
+            [alt]="'LANDING.LOGO_ALT' | translate"
             class="w-[95px]">
         </div>
-     
       </a>
 
       <!-- Nav Links -->
       <nav class="hidden lg:flex items-center gap-7 text-sm font-bold text-slate-600">
-        <a href="#hero" class="text-[#0284C7] hover:text-[#0369A1] transition">الرئيسية</a>
-        <a href="#features" class="hover:text-[#0284C7] transition">المميزات</a>
-        <a href="#screenshots" class="hover:text-[#0284C7] transition">النظام</a>
-        <a href="#clinics" class="hover:text-[#0284C7] transition">العيادات</a>
-        <a href="#doctors" class="hover:text-[#0284C7] transition">الأطباء</a>
-        <a href="#pricing" class="hover:text-[#0284C7] transition">الباقات</a>
-        <a href="#contact" class="hover:text-[#0284C7] transition">تواصل معنا</a>
+        <a href="#hero" class="text-[#0284C7] hover:text-[#0369A1] transition">{{ 'LANDING.NAV.HOME' | translate }}</a>
+        <a href="#features" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+        <a href="#screenshots" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.SYSTEM' | translate }}</a>
+        <a href="#clinics" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.CLINICS' | translate }}</a>
+        <a href="#doctors" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.DOCTORS' | translate }}</a>
+        <a href="#pricing" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+        <a href="#contact" class="hover:text-[#0284C7] transition">{{ 'LANDING.NAV.CONTACT' | translate }}</a>
+              <button
+        type="button"
+        class="lang-btn"
+        (click)="toggleLanguage(TranslateServ.currentLang)"
+        
+      >
+        <span>🌐</span>
+        <span>{{ TranslateServ.currentLang=="en"? 'AR' : 'EN' }}</span>
+      </button>
       </nav>
 
       <!-- Header Actions -->
-    <!-- Header Actions -->
-<div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2.5">
 
-  <!-- حالة: المستخدم غير مسجل دخول -->
-  <ng-container *ngIf="!(currentUser$ | async) as user; else loggedInMenu">
-    <a
-      (click)="goToLogin()"
-      class="cursor-pointer hidden sm:inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-[#0284C7] border border-[#0284C7]/40 px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition">
-      <span>تسجيل الدخول</span>
-    </a>
+        <!-- حالة: المستخدم غير مسجل دخول -->
+        <ng-container *ngIf="!(currentUser$ | async) as user; else loggedInMenu">
+          <a
+            (click)="goToLogin()"
+            class="cursor-pointer hidden sm:inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-[#0284C7] border border-[#0284C7]/40 px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition">
+            <span>{{ 'LANDING.AUTH.LOGIN' | translate }}</span>
+          </a>
 
-    <a
-      href="#pricing"
-      class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-sm transition">
-      <span>ابدأ الآن</span>
-      <span aria-hidden="true">←</span>
-    </a>
-  </ng-container>
+          <a
+            href="#pricing"
+            class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold shadow-sm transition">
+            <span>{{ 'LANDING.AUTH.START_NOW' | translate }}</span>
+            <span aria-hidden="true" class="ltr:rotate-180">←</span>
+          </a>
+        </ng-container>
 
-  <!-- حالة: المستخدم مسجل دخول (Dropdown) -->
-  <ng-template #loggedInMenu>
-    <div class="relative" *ngIf="(currentUser$ | async) as currentUser">
-      <button
-        type="button"
-        (click)="userMenuOpen = !userMenuOpen"
-        class="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/90 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition">
-        
-        <!-- أيقونة المستخدم -->
-        <span class="w-7 h-7 rounded-lg bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
-        </span>
+        <!-- حالة: المستخدم مسجل دخول (Dropdown) -->
+        <ng-template #loggedInMenu>
+          <div class="relative" *ngIf="(currentUser$ | async) as currentUser">
+            <button
+              type="button"
+              (click)="userMenuOpen = !userMenuOpen"
+              class="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/90 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold transition">
 
-       
+              <!-- أيقونة المستخدم -->
+              <span class="w-7 h-7 rounded-lg bg-[#0284C7]/10 text-[#0284C7] flex items-center justify-center">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              </span>
 
-        <!-- سهم الدروب داون -->
-        <svg
-          class="w-4 h-4 text-slate-400 transition-transform duration-200"
-          [class.rotate-180]="userMenuOpen"
-          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-        </svg>
-      </button>
+              <!-- سهم الدروب داون -->
+              <svg
+                class="w-4 h-4 text-slate-400 transition-transform duration-200"
+                [class.rotate-180]="userMenuOpen"
+                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
 
-      <!-- قائمة Dropdown -->
-      <div
-        *ngIf="userMenuOpen"
-        class="absolute left-0 mt-2 w-48 bg-white rounded-2xl shadow-lg border border-slate-100 py-1.5 z-50 text-sm font-bold text-slate-700">
-        
+            <!-- قائمة Dropdown -->
+            <div
+              *ngIf="userMenuOpen"
+              class="absolute start-0 mt-2 w-48 bg-white rounded-2xl shadow-lg border border-slate-100 py-1.5 z-50 text-sm font-bold text-slate-700">
+
+              <button
+                type="button"
+                (click)="goToProfile()"
+                class="w-full flex items-center gap-2.5 px-4 py-2.5 text-start hover:bg-slate-50 hover:text-[#0284C7] transition">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <span>{{ 'LANDING.AUTH.PROFILE' | translate }}</span>
+              </button>
+
+              <div class="my-1 border-t border-slate-100"></div>
+
+              <button
+                type="button"
+                (click)="logout()"
+                class="w-full flex items-center gap-2.5 px-4 py-2.5 text-start text-rose-600 hover:bg-rose-50 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                <span>{{ 'LANDING.AUTH.LOGOUT' | translate }}</span>
+              </button>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- زرار الموبايل منيو -->
         <button
           type="button"
-          (click)="goToProfile()"
-          class="w-full flex items-center gap-2.5 px-4 py-2.5 text-right hover:bg-slate-50 hover:text-[#0284C7] transition">
-          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+          (click)="mobileMenuOpen = !mobileMenuOpen"
+          class="lg:hidden w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-700"
+          [attr.aria-label]="'LANDING.NAV.OPEN_MENU' | translate">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
-          <span>الملف الشخصي</span>
-        </button>
-
-        <div class="my-1 border-t border-slate-100"></div>
-
-        <button
-          type="button"
-          (click)="logout()"
-          class="w-full flex items-center gap-2.5 px-4 py-2.5 text-right text-rose-600 hover:bg-rose-50 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-          </svg>
-          <span>تسجيل الخروج</span>
         </button>
       </div>
-    </div>
-  </ng-template>
-
-  <!-- زرار الموبايل منيو زي ما هو -->
-  <button
-    type="button"
-    (click)="mobileMenuOpen = !mobileMenuOpen"
-    class="lg:hidden w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-700"
-    aria-label="القائمة">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-    </svg>
-  </button>
-</div>
 
     </div>
 
     <!-- Mobile Menu -->
     <div *ngIf="mobileMenuOpen" class="lg:hidden bg-white border-t border-slate-100 px-5 py-4 space-y-2.5 text-sm font-bold text-slate-700">
-      <a (click)="mobileMenuOpen = false" href="#hero" class="block py-1.5 hover:text-[#0284C7]">الرئيسية</a>
-      <a (click)="mobileMenuOpen = false" href="#features" class="block py-1.5 hover:text-[#0284C7]">المميزات</a>
-      <a (click)="mobileMenuOpen = false" href="#screenshots" class="block py-1.5 hover:text-[#0284C7]">النظام</a>
-      <a (click)="mobileMenuOpen = false" href="#clinics" class="block py-1.5 hover:text-[#0284C7]">العيادات</a>
-      <a (click)="mobileMenuOpen = false" href="#doctors" class="block py-1.5 hover:text-[#0284C7]">الأطباء</a>
-      <a (click)="mobileMenuOpen = false" href="#pricing" class="block py-1.5 hover:text-[#0284C7]">الباقات</a>
-      <a (click)="mobileMenuOpen = false" href="#contact" class="block py-1.5 hover:text-[#0284C7]">تواصل معنا</a>
+      <a (click)="mobileMenuOpen = false" href="#hero" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.HOME' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#features" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.FEATURES' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#screenshots" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.SYSTEM' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#clinics" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.CLINICS' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#doctors" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.DOCTORS' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#pricing" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.PRICING' | translate }}</a>
+      <a (click)="mobileMenuOpen = false" href="#contact" class="block py-1.5 hover:text-[#0284C7]">{{ 'LANDING.NAV.CONTACT' | translate }}</a>
     </div>
   </header>
 
@@ -150,7 +155,7 @@
           type="button"
           (click)="loadProfile()"
           class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-xl text-xs font-extrabold cursor-pointer">
-          إعادة المحاولة
+          {{ 'LANDING.RETRY' | translate }}
         </button>
       </div>
     </div>
@@ -160,52 +165,52 @@
   <section id="hero" class="relative pt-10 pb-14 lg:py-16 px-4 sm:px-6 bg-gradient-to-b from-[#EAF4FF] via-[#F4F9FF] to-[#F7FAFF]">
     <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
 
-      <!-- Right Column: Headline & CTAs -->
-      <div class="lg:col-span-5 text-center lg:text-right order-1">
+      <!-- Headline & CTAs -->
+      <div class="lg:col-span-5 text-center lg:text-start order-1">
         <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-5">
           <span>♡</span>
-          <span>مستقبل الإدارة الطبية يبدأ من هنا</span>
+          <span>{{ 'LANDING.HERO.BADGE' | translate }}</span>
         </div>
 
         <h1 class="text-4xl sm:text-5xl font-black leading-[1.2] tracking-tight text-[#0F294A]">
-          إدارة عيادتك...
-          <span class="block text-[#0284C7] mt-1">بذكاء واحترافية</span>
+          {{ 'LANDING.HERO.TITLE_LINE_1' | translate }}
+          <span class="block text-[#0284C7] mt-1">{{ 'LANDING.HERO.TITLE_LINE_2' | translate }}</span>
         </h1>
 
         <p class="text-slate-600 text-sm sm:text-base leading-8 mt-5 max-w-md mx-auto lg:mx-0">
-          منصة طبيب هي الحل الذكي لإدارة العيادات والمجمعات الطبية. تحكم في الحجوزات والمرضى والأطباء والفواتير من مكان واحد.
+          {{ 'LANDING.HERO.DESC' | translate }}
         </p>
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-3 mt-7">
           <a
             href="#pricing"
             class="inline-flex items-center gap-2 bg-[#0284C7] hover:bg-[#0369A1] text-white px-6 py-3.5 rounded-xl text-sm font-extrabold shadow-md shadow-sky-600/20 transition">
-            <span>ابدأ رحلتك الآن</span>
-            <span aria-hidden="true">←</span>
+            <span>{{ 'LANDING.HERO.CTA_START' | translate }}</span>
+            <span aria-hidden="true" class="ltr:rotate-180">←</span>
           </a>
 
           <a
             href="#doctors"
             class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-[#0F294A] border border-slate-200 px-6 py-3.5 rounded-xl text-sm font-extrabold transition">
             <span class="w-5 h-5 rounded-full bg-sky-100 text-[#0284C7] inline-flex items-center justify-center text-[10px]">🩺</span>
-            <span>تصفح الأطباء</span>
+            <span>{{ 'LANDING.HERO.CTA_DOCTORS' | translate }}</span>
           </a>
         </div>
 
         <div class="flex flex-wrap justify-center lg:justify-start gap-x-5 gap-y-2 mt-7 text-xs font-bold text-slate-600">
           <span class="inline-flex items-center gap-1.5">
-            <span class="text-emerald-600 font-black">✓</span> إدارة متكاملة
+            <span class="text-emerald-600 font-black">✓</span> {{ 'LANDING.HERO.POINT_1' | translate }}
           </span>
           <span class="inline-flex items-center gap-1.5">
-            <span class="text-emerald-600 font-black">✓</span> بيانات آمنة
+            <span class="text-emerald-600 font-black">✓</span> {{ 'LANDING.HERO.POINT_2' | translate }}
           </span>
           <span class="inline-flex items-center gap-1.5">
-            <span class="text-emerald-600 font-black">✓</span> سهولة الاستخدام
+            <span class="text-emerald-600 font-black">✓</span> {{ 'LANDING.HERO.POINT_3' | translate }}
           </span>
         </div>
       </div>
 
-      <!-- Left Column: Visual Showcase Frame (تغيير الـ div الذي يعمل كصورة في الهيرو) -->
+      <!-- Visual Showcase Frame -->
       <div class="lg:col-span-7 order-2">
         <div class="relative bg-white rounded-3xl border border-slate-200/90 shadow-2xl shadow-sky-900/10 p-4 sm:p-5 overflow-hidden">
 
@@ -215,12 +220,12 @@
               <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-              <span class="text-xs font-extrabold text-slate-500 mr-2">Tabeeb Medical Platform</span>
+              <span class="text-xs font-extrabold text-slate-500 ms-2">{{ 'LANDING.HERO.FRAME_TITLE' | translate }}</span>
             </div>
 
             <span class="inline-flex items-center gap-1.5 bg-sky-50 text-[#0284C7] border border-sky-200/70 px-3 py-1 rounded-full text-[11px] font-extrabold">
               <span class="w-1.5 h-1.5 rounded-full bg-[#0284C7]"></span>
-              <span>إدارة سحابية متكاملة</span>
+              <span>{{ 'LANDING.HERO.FRAME_BADGE' | translate }}</span>
             </span>
           </div>
 
@@ -228,17 +233,17 @@
           <div class="relative mt-4 h-64 sm:h-76 rounded-2xl overflow-hidden bg-[#0F294A]">
             <img
               src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1100&auto=format&fit=crop&q=85"
-              alt="منصة طبيب لإدارة العيادات والمجمعات الطبية"
+              [alt]="'LANDING.HERO.IMAGE_ALT' | translate"
               class="w-full h-full object-cover opacity-90">
 
             <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A] via-[#0F294A]/40 to-transparent"></div>
 
-            <!-- Floating Card Top Right -->
-            <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-xs text-[#0F294A] px-3.5 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+            <!-- Floating Card -->
+            <div class="absolute top-4 end-4 bg-white/95 backdrop-blur-xs text-[#0F294A] px-3.5 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
               <span class="w-10 h-10 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center text-lg font-black">🏥</span>
-              <div class="text-right">
-                <div class="text-xs font-black text-[#0F294A]">شبكة عيادات وأطباء معتمدة</div>
-                <div class="text-[11px] font-bold text-slate-500">تنظيم المواعيد والملفات الطبية بسهولة</div>
+              <div class="text-start">
+                <div class="text-xs font-black text-[#0F294A]">{{ 'LANDING.HERO.FLOATING_TITLE' | translate }}</div>
+                <div class="text-[11px] font-bold text-slate-500">{{ 'LANDING.HERO.FLOATING_SUBTITLE' | translate }}</div>
               </div>
             </div>
 
@@ -246,18 +251,18 @@
             <div class="absolute inset-x-0 bottom-0 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
               <div>
                 <span class="inline-block bg-[#0284C7] text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-lg mb-1.5">
-                  تجربة طبية متكاملة
+                  {{ 'LANDING.HERO.OVERLAY_TAG' | translate }}
                 </span>
                 <h2 class="text-lg sm:text-xl font-black leading-snug">
-                  ربط ذكي بين العيادة والطبيب والمريض في مكان واحد
+                  {{ 'LANDING.HERO.OVERLAY_HEADING' | translate }}
                 </h2>
               </div>
 
               <a
                 href="#clinics"
                 class="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-sky-50 text-[#0F294A] px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition shrink-0">
-                <span>استعرض العيادات</span>
-                <span aria-hidden="true">←</span>
+                <span>{{ 'LANDING.HERO.OVERLAY_CTA' | translate }}</span>
+                <span aria-hidden="true" class="ltr:rotate-180">←</span>
               </a>
             </div>
           </div>
@@ -266,19 +271,19 @@
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 text-center">
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
               <div class="text-lg font-black text-[#0F294A]">{{ profile?.clinicsCount ?? 0 }}</div>
-              <div class="text-[11px] font-bold text-slate-500 mt-0.5">عيادة</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">{{ 'LANDING.HERO.STAT_CLINICS' | translate }}</div>
             </div>
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
               <div class="text-lg font-black text-[#0F294A]">{{ profile?.doctorsCount ?? 0 }}</div>
-              <div class="text-[11px] font-bold text-slate-500 mt-0.5">طبيب</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">{{ 'LANDING.HERO.STAT_DOCTORS' | translate }}</div>
             </div>
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
               <div class="text-lg font-black text-[#0F294A]">{{ profile?.customersCount ?? 0 }}</div>
-              <div class="text-[11px] font-bold text-slate-500 mt-0.5">مريض</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">{{ 'LANDING.HERO.STAT_PATIENTS' | translate }}</div>
             </div>
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3">
               <div class="text-lg font-black text-[#0284C7]">{{ profile?.reservationsCount ?? 0 }}</div>
-              <div class="text-[11px] font-bold text-slate-500 mt-0.5">حجز</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5">{{ 'LANDING.HERO.STAT_BOOKINGS' | translate }}</div>
             </div>
           </div>
 
@@ -294,19 +299,19 @@
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y lg:divide-y-0 lg:divide-x lg:divide-x-reverse divide-slate-100 text-center">
         <div class="pt-2 lg:pt-0">
           <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.customersCount ?? 0 }}</div>
-          <div class="text-xs font-bold text-slate-600 mt-1">مريض يدبرون مواعيدهم</div>
+          <div class="text-xs font-bold text-slate-600 mt-1">{{ 'LANDING.STATS.PATIENTS' | translate }}</div>
         </div>
-        <div class="pt-4 lg:pt-0 lg:pr-6">
+        <div class="pt-4 lg:pt-0 lg:ps-6">
           <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.clinicsCount ?? 0 }}</div>
-          <div class="text-xs font-bold text-slate-600 mt-1">عيادة تستخدم النظام</div>
+          <div class="text-xs font-bold text-slate-600 mt-1">{{ 'LANDING.STATS.CLINICS' | translate }}</div>
         </div>
-        <div class="pt-4 lg:pt-0 lg:pr-6">
+        <div class="pt-4 lg:pt-0 lg:ps-6">
           <div class="text-2xl sm:text-3xl font-black text-[#0F294A]">{{ profile?.doctorsCount ?? 0 }}</div>
-          <div class="text-xs font-bold text-slate-500 mt-1">طبيب متخصص على المنصة</div>
+          <div class="text-xs font-bold text-slate-500 mt-1">{{ 'LANDING.STATS.DOCTORS' | translate }}</div>
         </div>
-        <div class="pt-4 lg:pt-0 lg:pr-6">
+        <div class="pt-4 lg:pt-0 lg:ps-6">
           <div class="text-2xl sm:text-3xl font-black text-[#0284C7]">{{ profile?.reservationsCount ?? 0 }}</div>
-          <div class="text-xs font-bold text-slate-500 mt-1">إجمالي الحجوزات والمواعيد</div>
+          <div class="text-xs font-bold text-slate-500 mt-1">{{ 'LANDING.STATS.BOOKINGS' | translate }}</div>
         </div>
       </div>
     </div>
@@ -318,77 +323,77 @@
       <div class="text-center mb-10">
         <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
           <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-          <span>إمكانيات متكاملة</span>
+          <span>{{ 'LANDING.FEATURES.BADGE' | translate }}</span>
         </div>
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">مميزات منصة طبيب</h2>
+        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">{{ 'LANDING.FEATURES.TITLE' | translate }}</h2>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center shrink-0 font-black text-lg">📅</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">إدارة المواعيد</h3>
-            <p class="text-xs text-slate-500 mt-1">جدولة وحجز المواعيد بسهولة</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.APPOINTMENTS_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.APPOINTMENTS_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 font-black text-lg">👥</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">إدارة المرضى</h3>
-            <p class="text-xs text-slate-500 mt-1">متابعة شاملة لسجلات المرضى</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.PATIENTS_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.PATIENTS_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center shrink-0 font-black text-lg">📊</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">التقارير والإحصائيات</h3>
-            <p class="text-xs text-slate-500 mt-1">تقارير دقيقة لاتخاذ قرارات أفضل</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.REPORTS_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.REPORTS_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-sky-50 text-[#0284C7] flex items-center justify-center shrink-0 font-black text-lg">🧾</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">الفواتير والمدفوعات</h3>
-            <p class="text-xs text-slate-500 mt-1">إدارة الفواتير والمدفوعات بمرونة</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.BILLING_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.BILLING_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center shrink-0 font-black text-lg">🏥</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">إدارة عيادات متعددة</h3>
-            <p class="text-xs text-slate-500 mt-1">إدارة عدة عيادات من مكان واحد</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.MULTI_CLINIC_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.MULTI_CLINIC_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-5 flex items-center gap-4 hover:border-sky-300 hover:shadow-md transition">
           <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 font-black text-lg">🛡️</div>
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">أمان عالي للبيانات</h3>
-            <p class="text-xs text-slate-500 mt-1">حماية بياناتك وخصوصيتك</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.FEATURES.SECURITY_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.FEATURES.SECURITY_DESC' | translate }}</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 5. Screenshots Slider Section (Dots فقط) -->
+  <!-- 5. Screenshots Slider Section -->
   <section id="screenshots" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-y border-slate-200/70">
     <div class="max-w-7xl mx-auto">
 
       <div class="mb-10">
         <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
           <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-          <span>جولة داخل المنصة</span>
+          <span>{{ 'LANDING.SCREENSHOTS.BADGE' | translate }}</span>
         </div>
         <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-          لقطات من <span class="text-[#0284C7]">النظام</span>
+          {{ 'LANDING.SCREENSHOTS.TITLE_PREFIX' | translate }} <span class="text-[#0284C7]">{{ 'LANDING.SCREENSHOTS.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
         <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-          واجهات عصرية ومبسطة مصممة لسرعة إنجاز العمل اليومي داخل العيادة أو المجمع الطبي.
+          {{ 'LANDING.SCREENSHOTS.DESC' | translate }}
         </p>
       </div>
 
@@ -404,7 +409,7 @@
 
               <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/55 via-transparent to-transparent"></div>
 
-              <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
+              <span class="absolute top-3 end-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
                 {{ shot.tag }}
               </span>
             </div>
@@ -429,7 +434,7 @@
               (click)="goToScreenshotSlide(idx)"
               class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
               [ngClass]="screenshotSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-              [attr.aria-label]="'الانتقال إلى اللقطة ' + (idx + 1)">
+              [attr.aria-label]="('LANDING.SCREENSHOTS.DOT_ARIA' | translate) + ' ' + (idx + 1)">
             </button>
           }
         </div>
@@ -442,50 +447,50 @@
   <section class="py-16 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
-        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">مناسب لجميع أنواع العيادات</h2>
+        <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">{{ 'LANDING.CLINIC_TYPES.TITLE' | translate }}</h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-5">
         <div class="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md transition">
           <img
             src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&auto=format&fit=crop&q=80"
-            alt="العيادات الطبية"
+            [alt]="'LANDING.CLINIC_TYPES.MEDICAL_TITLE' | translate"
             loading="lazy"
             class="w-24 h-20 rounded-xl object-cover shrink-0">
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">العيادات الطبية</h3>
-            <p class="text-xs text-slate-500 mt-1">عيادات عامة ومتخصصة</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.CLINIC_TYPES.MEDICAL_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.CLINIC_TYPES.MEDICAL_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md transition">
           <img
             src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&auto=format&fit=crop&q=80"
-            alt="المجمعات الطبية"
+            [alt]="'LANDING.CLINIC_TYPES.COMPLEX_TITLE' | translate"
             loading="lazy"
             class="w-24 h-20 rounded-xl object-cover shrink-0">
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">المجمعات الطبية</h3>
-            <p class="text-xs text-slate-500 mt-1">إدارة متكاملة لمجمعك الطبي</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.CLINIC_TYPES.COMPLEX_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.CLINIC_TYPES.COMPLEX_DESC' | translate }}</p>
           </div>
         </div>
 
         <div class="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center gap-4 hover:shadow-md transition">
           <img
             src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&auto=format&fit=crop&q=80"
-            alt="العيادات الخاصة"
+            [alt]="'LANDING.CLINIC_TYPES.PRIVATE_TITLE' | translate"
             loading="lazy"
             class="w-24 h-20 rounded-xl object-cover shrink-0">
           <div>
-            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">العيادات الخاصة</h3>
-            <p class="text-xs text-slate-500 mt-1">حل مثالي للعيادات الخاصة</p>
+            <h3 class="font-black text-sm sm:text-base text-[#0F294A]">{{ 'LANDING.CLINIC_TYPES.PRIVATE_TITLE' | translate }}</h3>
+            <p class="text-xs text-slate-500 mt-1">{{ 'LANDING.CLINIC_TYPES.PRIVATE_DESC' | translate }}</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-<!-- 7. Clinics Slider Section (Dots فقط + Search) -->
+  <!-- 7. Clinics Slider Section -->
   <section id="clinics" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-y border-slate-200/70">
     <div class="max-w-7xl mx-auto">
 
@@ -493,32 +498,32 @@
         <div>
           <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
             <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-            <span>شبكة العيادات المعتمدة</span>
+            <span>{{ 'LANDING.CLINICS.BADGE' | translate }}</span>
           </div>
           <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-            عيادات ومجمعات تثق في <span class="text-[#0284C7]">طبيب</span>
+            {{ 'LANDING.CLINICS.TITLE_PREFIX' | translate }} <span class="text-[#0284C7]">{{ 'LANDING.CLINICS.TITLE_HIGHLIGHT' | translate }}</span>
           </h2>
           <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-            استعرض نخبة من العيادات والمجمعات الطبية المشتركة على المنصة، وابحث بالاسم أو المدينة.
+            {{ 'LANDING.CLINICS.DESC' | translate }}
           </p>
         </div>
 
         <!-- حقل بحث العيادات -->
         <div class="w-full lg:w-88">
           <div class="relative flex items-center">
-            <span class="absolute right-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
+            <span class="absolute start-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
             <input
               type="text"
               [value]="clinicSearchQuery"
               (input)="onClinicSearchChange($any($event.target).value)"
-              placeholder="ابحث باسم العيادة أو المدينة..."
-              class="w-full bg-white border border-slate-200/90 focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl pr-10 pl-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
+              [placeholder]="'LANDING.CLINICS.SEARCH_PLACEHOLDER' | translate"
+              class="w-full bg-white border border-slate-200/90 focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl ps-10 pe-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
             @if (clinicSearchQuery) {
               <button
                 type="button"
                 (click)="clearClinicFilters()"
-                class="absolute left-2.5 w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
-                aria-label="مسح البحث">
+                class="absolute end-2.5 w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
+                [attr.aria-label]="'LANDING.CLINICS.CLEAR_SEARCH' | translate">
                 ✕
               </button>
             }
@@ -541,93 +546,92 @@
 
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0F294A]/60 via-transparent to-transparent"></div>
 
-                <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
-                  📍 {{ clinic.cityArName || clinic.cityEnName || 'مدينة' }}
+                <span class="absolute top-3 end-3 bg-white/95 backdrop-blur-xs text-[#0F294A] border border-slate-200/70 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-2xs">
+                  📍 {{ TranslateServ.currentLang=="ae"? clinic.cityArName : clinic.cityEnName || ('LANDING.CLINICS.DEFAULT_CITY' | translate) }}
                   @if (clinic.countryArName || clinic.countryEnName) {
-                    <span> - {{ clinic.countryArName || clinic.countryEnName }}</span>
+                    <span> - {{ TranslateServ.currentLang=="ae" ?clinic.countryArName :clinic.countryEnName }}</span>
                   }
                 </span>
 
-                <span class="absolute top-3 left-3 bg-[#0F294A]/90 backdrop-blur-xs text-amber-400 text-xs font-black px-3 py-1.5 rounded-xl shadow-2xs">
+                <span class="absolute top-3 start-3 bg-[#0F294A]/90 backdrop-blur-xs text-amber-400 text-xs font-black px-3 py-1.5 rounded-xl shadow-2xs">
                   ★ {{ getClinicRating(clinic) }}
                 </span>
 
-                <span class="absolute bottom-3 right-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
-                  {{ clinic.enName || 'Clinic' }}
+                <span class="absolute bottom-3 end-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
+                  {{TranslateServ.currentLang=="ae" ?clinic.arName :clinic.enName || ('LANDING.CLINICS.DEFAULT_EN_NAME' | translate) }}
                 </span>
               </div>
 
               <!-- Card Body -->
               <div class="p-4 pb-2 flex-1 flex flex-col">
                 <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
-                  {{ clinic.arName || clinic.enName }}
+                  {{ TranslateServ.currentLang=="ae" ?clinic.arName :clinic.enName }}
                 </h3>
 
                 <p class="text-xs text-slate-500 leading-6 mt-1.5 line-clamp-2">
-                  {{clinic.arDescription}}
+                  {{TranslateServ.currentLang=="ae" ? clinic.arDescription :clinic.enDesription }}
                 </p>
 
                 <!-- Social & Status Row -->
-          <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-100">
-  <div class="flex items-center gap-2">
-    @if (clinic.whatsappNumber) {
-      <a
-        [href]="'https://wa.me/' + clinic.whatsappNumber"
-        target="_blank"
-        rel="noopener"
-        [attr.title]="'واتساب: ' + clinic.whatsappNumber"
-        aria-label="واتساب"
-        class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-200/70 flex items-center justify-center transition">
-        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.76 14.08c-.24.68-1.4 1.3-1.92 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.18-4.94-4.37-.15-.19-1.18-1.57-1.18-3s.76-2.13 1.03-2.42c.27-.29.59-.36.79-.36.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.03.9 2.18.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.12.63-.07.17-.2.73-.85.92-1.14.2-.29.39-.24.66-.15.27.1 1.71.81 2 .95.29.15.49.22.56.34.07.12.07.7-.17 1.38z"/>
-        </svg>
-      </a>
-    }
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-100">
+                  <div class="flex items-center gap-2">
+                    @if (clinic.whatsappNumber) {
+                      <a
+                        [href]="'https://wa.me/' + clinic.whatsappNumber"
+                        target="_blank"
+                        rel="noopener"
+                        [attr.title]="('LANDING.CLINICS.WHATSAPP_TITLE' | translate) + ': ' + clinic.whatsappNumber"
+                        [attr.aria-label]="'LANDING.CLINICS.WHATSAPP_ARIA' | translate"
+                        class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white border border-emerald-200/70 flex items-center justify-center transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.76 14.08c-.24.68-1.4 1.3-1.92 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.18-4.94-4.37-.15-.19-1.18-1.57-1.18-3s.76-2.13 1.03-2.42c.27-.29.59-.36.79-.36.2 0 .4 0 .57.01.18.01.43-.07.67.51.24.59.83 2.03.9 2.18.07.15.12.32.02.52-.1.2-.15.32-.29.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.12.63-.07.17-.2.73-.85.92-1.14.2-.29.39-.24.66-.15.27.1 1.71.81 2 .95.29.15.49.22.56.34.07.12.07.7-.17 1.38z"/>
+                        </svg>
+                      </a>
+                    }
 
-    @if (clinic.instgramUser) {
-      <a
-        [href]="'https://instagram.com/' + clinic.instgramUser"
-        target="_blank"
-        rel="noopener"
-        [attr.title]="'إنستجرام: @' + clinic.instgramUser"
-        aria-label="إنستجرام"
-        class="w-8 h-8 rounded-xl bg-sky-50 text-[#0284C7] hover:bg-[#0284C7] hover:text-white border border-sky-200/70 flex items-center justify-center transition">
-        <svg class="w-4 h-4 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.5" cy="6.5" r="1" class="fill-current stroke-none"/>
-        </svg>
-      </a>
-    }
+                    @if (clinic.instgramUser) {
+                      <a
+                        [href]="'https://instagram.com/' + clinic.instgramUser"
+                        target="_blank"
+                        rel="noopener"
+                        [attr.title]="('LANDING.CLINICS.INSTAGRAM_TITLE' | translate) + ': @' + clinic.instgramUser"
+                        [attr.aria-label]="'LANDING.CLINICS.INSTAGRAM_ARIA' | translate"
+                        class="w-8 h-8 rounded-xl bg-sky-50 text-[#0284C7] hover:bg-[#0284C7] hover:text-white border border-sky-200/70 flex items-center justify-center transition">
+                        <svg class="w-4 h-4 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                          <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+                          <circle cx="12" cy="12" r="4"/>
+                          <circle cx="17.5" cy="6.5" r="1" class="fill-current stroke-none"/>
+                        </svg>
+                      </a>
+                    }
 
-    @if (clinic.snapshatUser) {
-      <a
-        [href]="'https://www.snapchat.com/add/' + clinic.snapshatUser"
-        target="_blank"
-        rel="noopener"
-        [attr.title]="'سناب شات: ' + clinic.snapshatUser"
-        aria-label="سناب شات"
-        class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-400 hover:text-[#0F294A] border border-amber-200/80 flex items-center justify-center transition">
-        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2.5c-3.1 0-5.1 2.1-5.1 5 0 .9.2 1.8.4 2.4-.3.1-.7.2-1.1.2-.5 0-.9-.2-1.1-.4-.2-.2-.5-.3-.8-.2-.4.1-.7.5-.6 1 .1.7.8 1.3 1.8 1.6.2.1.3.2.2.4-.5 1.3-1.6 2.5-3.3 3.1-.4.1-.6.5-.5.9.1.4.5.6.9.6.8 0 1.6-.2 2.3-.5.2.6.6 1.1 1.2 1.4.7.4 1.6.4 2.5.4.8 0 1.6 0 2.5.4.9.4 1.7.4 2.5.4.9 0 1.8 0 2.5-.4.6-.3 1-.8 1.2-1.4.7.3 1.5.5 2.3.5.4 0 .8-.2.9-.6.1-.4-.1-.8-.5-.9-1.7-.6-2.8-1.8-3.3-3.1-.1-.2 0-.3.2-.4 1-.3 1.7-.9 1.8-1.6.1-.5-.2-.9-.6-1-.3-.1-.6 0-.8.2-.2.2-.6.4-1.1.4-.4 0-.8-.1-1.1-.2.2-.6.4-1.5.4-2.4 0-2.9-2-5-5.1-5z"/>
-        </svg>
-      </a>
-    }
-  </div>
+                    @if (clinic.snapshatUser) {
+                      <a
+                        [href]="'https://www.snapchat.com/add/' + clinic.snapshatUser"
+                        target="_blank"
+                        rel="noopener"
+                        [attr.title]="('LANDING.CLINICS.SNAPCHAT_TITLE' | translate) + ': ' + clinic.snapshatUser"
+                        [attr.aria-label]="'LANDING.CLINICS.SNAPCHAT_ARIA' | translate"
+                        class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-400 hover:text-[#0F294A] border border-amber-200/80 flex items-center justify-center transition">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 2.5c-3.1 0-5.1 2.1-5.1 5 0 .9.2 1.8.4 2.4-.3.1-.7.2-1.1.2-.5 0-.9-.2-1.1-.4-.2-.2-.5-.3-.8-.2-.4.1-.7.5-.6 1 .1.7.8 1.3 1.8 1.6.2.1.3.2.2.4-.5 1.3-1.6 2.5-3.3 3.1-.4.1-.6.5-.5.9.1.4.5.6.9.6.8 0 1.6-.2 2.3-.5.2.6.6 1.1 1.2 1.4.7.4 1.6.4 2.5.4.8 0 1.6 0 2.5.4.9.4 1.7.4 2.5.4.9 0 1.8 0 2.5-.4.6-.3 1-.8 1.2-1.4.7.3 1.5.5 2.3.5.4 0 .8-.2.9-.6.1-.4-.1-.8-.5-.9-1.7-.6-2.8-1.8-3.3-3.1-.1-.2 0-.3.2-.4 1-.3 1.7-.9 1.8-1.6.1-.5-.2-.9-.6-1-.3-.1-.6 0-.8.2-.2.2-.6.4-1.1.4-.4 0-.8-.1-1.1-.2.2-.6.4-1.5.4-2.4 0-2.9-2-5-5.1-5z"/>
+                        </svg>
+                      </a>
+                    }
+                  </div>
 
-  <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md shrink-0">
-    <span>●</span>
-    <span>متاح</span>
-  </span>
-</div>
+                  <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md shrink-0">
+                    <span>●</span>
+                    <span>{{ 'LANDING.CLINICS.AVAILABLE' | translate }}</span>
+                  </span>
+                </div>
 
                 <!-- Action Button: الانتقال إلى أطباء العيادة -->
                 <a
-                  
                   (click)="gotoclinic(clinic.id!)"
                   class="mt-4 w-full bg-[#0F294A] hover:bg-[#0284C7] text-white py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
-                  <span>🩺 أطباء العيادة ومواعيدهم</span>
-                  <span aria-hidden="true">←</span>
+                  <span>🩺 {{ 'LANDING.CLINICS.VIEW_DOCTORS' | translate }}</span>
+                  <span aria-hidden="true" class="ltr:rotate-180">←</span>
                 </a>
               </div>
 
@@ -638,9 +642,9 @@
         <div class="bg-white border border-slate-200/80 rounded-3xl p-10 text-center space-y-3">
           <div class="text-sm font-bold text-slate-500">
             @if (clinicSearchQuery) {
-              <span>لا توجد نتائج مطابقة لبحثك عن "{{ clinicSearchQuery }}".</span>
+              <span>{{ 'LANDING.CLINICS.NO_SEARCH_RESULTS_PREFIX' | translate }} "{{ clinicSearchQuery }}".</span>
             } @else {
-              <span>لا توجد عيادات متاحة للعرض حالياً.</span>
+              <span>{{ 'LANDING.CLINICS.NO_CLINICS' | translate }}</span>
             }
           </div>
           @if (clinicSearchQuery) {
@@ -648,7 +652,7 @@
               type="button"
               (click)="clearClinicFilters()"
               class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer transition">
-              <span>إظهار جميع العيادات</span>
+              <span>{{ 'LANDING.CLINICS.SHOW_ALL' | translate }}</span>
             </button>
           }
         </div>
@@ -662,7 +666,7 @@
               (click)="goToClinicSlide(idx)"
               class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
               [ngClass]="clinicSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-              [attr.aria-label]="'الانتقال إلى العيادة ' + (idx + 1)">
+              [attr.aria-label]="('LANDING.CLINICS.DOT_ARIA' | translate) + ' ' + (idx + 1)">
             </button>
           }
         </div>
@@ -671,7 +675,7 @@
     </div>
   </section>
 
-<!-- 8. Doctors Slider Section (من profile.doctors + Search + فلتر العيادة + Dots فقط) -->
+  <!-- 8. Doctors Slider Section -->
   <section id="doctors" class="py-16 lg:py-20 px-4 sm:px-6 bg-white border-b border-slate-200/70">
     <div class="max-w-7xl mx-auto">
 
@@ -681,32 +685,32 @@
           <div>
             <div class="inline-flex items-center gap-2 bg-[#F4F9FF] border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
               <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-              <span>فريق الأطباء المتخصصين</span>
+              <span>{{ 'LANDING.DOCTORS.BADGE' | translate }}</span>
             </div>
             <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-              نخبة من <span class="text-[#0284C7]">الأطباء</span> في خدمتك
+              {{ 'LANDING.DOCTORS.TITLE_PREFIX' | translate }} <span class="text-[#0284C7]">{{ 'LANDING.DOCTORS.TITLE_HIGHLIGHT' | translate }}</span> {{ 'LANDING.DOCTORS.TITLE_SUFFIX' | translate }}
             </h2>
             <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-              ابحث باسم الطبيب أو التخصص أو العيادة واطلع على مواعيد عمله مباشرة.
+              {{ 'LANDING.DOCTORS.DESC' | translate }}
             </p>
           </div>
 
           <!-- حقل بحث الأطباء -->
           <div class="w-full lg:w-88">
             <div class="relative flex items-center">
-              <span class="absolute right-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
+              <span class="absolute start-3.5 text-slate-400 text-sm pointer-events-none">🔍</span>
               <input
                 type="text"
                 [value]="doctorSearchQuery"
                 (input)="onDoctorSearchChange($any($event.target).value)"
-                placeholder="ابحث باسم الطبيب، التخصص، أو العيادة..."
-                class="w-full bg-[#F8FBFF] border border-slate-200/90 focus:bg-white focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl pr-10 pl-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
+                [placeholder]="'LANDING.DOCTORS.SEARCH_PLACEHOLDER' | translate"
+                class="w-full bg-[#F8FBFF] border border-slate-200/90 focus:bg-white focus:border-[#0284C7] focus:ring-3 focus:ring-sky-500/15 rounded-2xl ps-10 pe-9 py-2.5 text-xs sm:text-sm font-bold text-[#0F294A] placeholder:text-slate-400 outline-none transition shadow-2xs">
               @if (doctorSearchQuery) {
                 <button
                   type="button"
                   (click)="onDoctorSearchChange('')"
-                  class="absolute left-2.5 w-6 h-6 rounded-lg bg-slate-200/70 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
-                  aria-label="مسح البحث">
+                  class="absolute end-2.5 w-6 h-6 rounded-lg bg-slate-200/70 hover:bg-slate-200 text-slate-600 text-xs font-black flex items-center justify-center cursor-pointer transition"
+                  [attr.aria-label]="'LANDING.DOCTORS.CLEAR_SEARCH' | translate">
                   ✕
                 </button>
               }
@@ -724,7 +728,7 @@
               [ngClass]="selectedDoctorClinicFilter === 'ALL'
                 ? 'bg-[#0284C7] text-white border-[#0284C7] shadow-2xs'
                 : 'bg-[#F8FBFF] text-[#0F294A] border-slate-200 hover:border-sky-300'">
-              الكل ({{ doctorsList.length }})
+              {{ 'LANDING.DOCTORS.FILTER_ALL' | translate }} ({{ doctorsList.length }})
             </button>
 
             @for (clinicName of clinicFilterOptions; track clinicName) {
@@ -765,24 +769,25 @@
                     </div>
                   }
 
-                  <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-xs text-[#0284C7] border border-slate-200/70 text-xs font-extrabold px-3 py-1 rounded-xl shadow-2xs">
-                    🩺 {{ doctor.specializationArName || doctor.specializationEnName || 'طبيب متخصص' }}
+                  <span class="absolute top-3 end-3 bg-white/95 backdrop-blur-xs text-[#0284C7] border border-slate-200/70 text-xs font-extrabold px-3 py-1 rounded-xl shadow-2xs">
+                    🩺 {{TranslateServ.currentLang=="ae" ?  doctor.specializationArName : doctor.specializationEnName || ('LANDING.DOCTORS.DEFAULT_SPECIALTY' | translate) }}
                   </span>
 
                   @if (doctor.sessionPrice) {
-                    <span class="absolute top-3 left-3 bg-[#0F294A]/90 backdrop-blur-xs text-white text-xs font-black px-3 py-1 rounded-xl shadow-2xs">
-                      {{ doctor.sessionPrice }} ر.س
+                    <span class="absolute top-3 start-3 bg-[#0F294A]/90 backdrop-blur-xs text-white text-xs font-black px-3 py-1 rounded-xl shadow-2xs">
+                      {{ doctor.sessionPrice }} {{ 'LANDING.DOCTORS.CURRENCY' | translate }}
                     </span>
                   }
 
-                  <span class="absolute bottom-3 right-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
-                    🏥 {{ doctor.clinicArName || doctor.clinicEnName }}
+                  <span class="absolute bottom-3 end-3 bg-[#0284C7] text-white text-[11px] font-extrabold px-3 py-1 rounded-lg">
+                    🏥 {{ TranslateServ.currentLang=="ae" ? doctor.clinicArName :doctor.clinicEnName }}
                   </span>
                 </div>
 
                 <div class="p-3 pb-1">
                   <h3 class="text-lg font-black text-[#0F294A] group-hover:text-[#0284C7] transition-colors">
-                    د. {{ doctor.arName || doctor.enName }}
+                    {{ 'LANDING.DOCTORS.DR_PREFIX' | translate }} {{ TranslateServ.currentLang=="ae" ? doctor.arName 
+                    :doctor.enName }}
                   </h3>
                   @if (doctor.enName && doctor.arName) {
                     <div class="text-xs font-bold text-slate-400 mt-0.5">{{ doctor.enName }}</div>
@@ -791,12 +796,12 @@
                   <div class="flex items-center justify-between text-[11px] font-bold text-slate-500 mt-4 pt-3.5 border-t border-slate-200/70">
                     <span class="inline-flex items-center gap-1">
                       <span>⏱️</span>
-                      <span>مدة الكشف: {{ doctor.sessionDuration || 30 }} دقيقة</span>
+                      <span>{{ 'LANDING.DOCTORS.DURATION_PREFIX' | translate }} {{ doctor.sessionDuration || 30 }} {{ 'LANDING.DOCTORS.DURATION_UNIT' | translate }}</span>
                     </span>
 
                     <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
                       <span>●</span>
-                      <span>{{ getDoctorWorktimes(doctor).length }} أيام عمل</span>
+                      <span>{{ getDoctorWorktimes(doctor).length }} {{ 'LANDING.DOCTORS.WORKDAYS_SUFFIX' | translate }}</span>
                     </span>
                   </div>
                 </div>
@@ -806,8 +811,8 @@
                 type="button"
                 (click)="openWorktimes(doctor)"
                 class="mt-4 w-full bg-[#0F294A] hover:bg-[#0284C7] text-white py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer">
-                <span>🕒 مواعيد الدكتور</span>
-                <span aria-hidden="true">←</span>
+                <span>🕒 {{ 'LANDING.DOCTORS.VIEW_WORKTIMES' | translate }}</span>
+                <span aria-hidden="true" class="ltr:rotate-180">←</span>
               </button>
 
             </article>
@@ -817,9 +822,9 @@
         <div class="bg-[#F8FBFF] border border-slate-200/80 rounded-3xl p-10 text-center space-y-3">
           <div class="text-sm font-bold text-slate-500">
             @if (doctorSearchQuery || selectedDoctorClinicFilter !== 'ALL') {
-              <span>لا توجد نتائج مطابقة للبحث أو العيادة المحددة.</span>
+              <span>{{ 'LANDING.DOCTORS.NO_FILTER_RESULTS' | translate }}</span>
             } @else {
-              <span>لا يوجد أطباء متاحون للعرض حالياً.</span>
+              <span>{{ 'LANDING.DOCTORS.NO_DOCTORS' | translate }}</span>
             }
           </div>
           @if (doctorSearchQuery || selectedDoctorClinicFilter !== 'ALL') {
@@ -827,7 +832,7 @@
               type="button"
               (click)="clearDoctorFilters()"
               class="inline-flex items-center gap-1.5 bg-[#0284C7] hover:bg-[#0369A1] text-white px-4 py-2 rounded-xl text-xs font-extrabold cursor-pointer transition">
-              <span>إعادة ضبط الفلاتر</span>
+              <span>{{ 'LANDING.DOCTORS.RESET_FILTERS' | translate }}</span>
             </button>
           }
         </div>
@@ -841,7 +846,7 @@
               (click)="goToDoctorSlide(idx)"
               class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
               [ngClass]="doctorSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-              [attr.aria-label]="'الانتقال إلى الطبيب ' + (idx + 1)">
+              [attr.aria-label]="('LANDING.DOCTORS.DOT_ARIA' | translate) + ' ' + (idx + 1)">
             </button>
           }
         </div>
@@ -850,20 +855,20 @@
     </div>
   </section>
 
-  <!-- 9. Pricing Plans Slider (Dots فقط) -->
+  <!-- 9. Pricing Plans Slider -->
   <section id="pricing" class="py-16 lg:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#F7FAFF] to-[#EEF5FF]/60 border-b border-slate-200/70">
     <div class="max-w-7xl mx-auto">
 
       <div class="mb-10">
         <div class="inline-flex items-center gap-2 bg-white border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
           <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-          <span>باقات الاشتراك</span>
+          <span>{{ 'LANDING.PRICING.BADGE' | translate }}</span>
         </div>
         <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-          خطط وأسعار <span class="text-[#0284C7]">مرنة</span>
+          {{ 'LANDING.PRICING.TITLE_PREFIX' | translate }} <span class="text-[#0284C7]">{{ 'LANDING.PRICING.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
         <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-          اختر الباقة المناسبة لحجم عيادتك أو مجمعك الطبي مع إمكانية الترقية في أي وقت.
+          {{ 'LANDING.PRICING.DESC' | translate }}
         </p>
       </div>
 
@@ -879,33 +884,33 @@
               <div>
                 <div class="flex items-center justify-between gap-2 mb-4">
                   <span class="bg-sky-50 text-[#0284C7] border border-sky-200/70 text-xs font-extrabold px-3 py-1 rounded-xl">
-                    {{ pkg.durationInDays }} يوم
+                    {{ pkg.durationInDays }} {{ 'LANDING.PRICING.DAYS_UNIT' | translate }}
                   </span>
 
                   @if (isPopularPackage(idx)) {
                     <span class="bg-[#0284C7] text-white text-xs font-black px-3 py-1 rounded-xl">
-                      الأكثر طلباً
+                      {{ 'LANDING.PRICING.MOST_POPULAR' | translate }}
                     </span>
                   }
                 </div>
 
                 <h3 class="text-xl font-black text-[#0F294A]">
-                  {{ pkg.arName || pkg.enName }}
+                  {{  TranslateServ.currentLang=="ae" ?pkg.arName :pkg.enName }}
                 </h3>
                 @if (pkg.enName && pkg.arName) {
-                  <div class="text-xs font-bold text-slate-400 mt-0.5">{{ pkg.enName }}</div>
+                  <div class="text-xs font-bold text-slate-400 mt-0.5">{{ TranslateServ.currentLang=="ae" ?pkg.arName :pkg.enName }}</div>
                 }
 
                 <p class="text-xs sm:text-sm text-slate-600 leading-6 mt-3">
-                  {{ pkg.arDescription || pkg.enDescription || 'باقة متكاملة لإدارة العيادة والمواعيد والمرضى بكفاءة عالية.' }}
+                  {{ TranslateServ.currentLang=="ae" ? pkg.arDescription :pkg.enDescription || ('LANDING.PRICING.DEFAULT_DESC' | translate) }}
                 </p>
 
                 <div class="my-6 py-4 px-4 rounded-2xl bg-[#F8FBFF] border border-sky-100 flex items-baseline justify-between">
                   <div>
                     <span class="text-3xl font-black text-[#0F294A]">{{ pkg.price }}</span>
-                    <span class="text-xs font-extrabold text-[#0284C7] mr-1.5">ر.س</span>
+                    <span class="text-xs font-extrabold text-[#0284C7] ms-1.5">{{ 'LANDING.PRICING.CURRENCY' | translate }}</span>
                   </div>
-                  <span class="text-xs font-bold text-slate-500">لمدة {{ pkg.durationInDays }} يوم</span>
+                  <span class="text-xs font-bold text-slate-500">{{ 'LANDING.PRICING.DURATION_LABEL' | translate }} {{ pkg.durationInDays }} {{ 'LANDING.PRICING.DAYS_UNIT' | translate }}</span>
                 </div>
               </div>
 
@@ -916,15 +921,15 @@
                 [ngClass]="isPopularPackage(idx)
                   ? 'bg-[#0284C7] hover:bg-[#0369A1] text-white shadow-sm'
                   : 'bg-[#0F294A] hover:bg-[#0284C7] text-white'">
-                <span>اشترك في {{ pkg.arName || pkg.enName }}</span>
-                <span aria-hidden="true">←</span>
+                <span>{{ 'LANDING.PRICING.SUBSCRIBE_PREFIX' | translate }} {{ TranslateServ.currentLang=="ae" ? pkg.arName :pkg.enName }}</span>
+                <span aria-hidden="true" class="ltr:rotate-180">←</span>
               </button>
             </article>
           }
         </div>
       } @else if (!isLoading) {
         <div class="bg-white border border-slate-200/80 rounded-3xl p-10 text-center text-sm font-bold text-slate-500">
-          لا توجد باقات اشتراك متاحة حالياً.
+          {{ 'LANDING.PRICING.NO_PACKAGES' | translate }}
         </div>
       }
 
@@ -936,7 +941,7 @@
               (click)="goToPackageSlide(idx)"
               class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
               [ngClass]="packageSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-              [attr.aria-label]="'الانتقال إلى الباقة ' + (idx + 1)">
+              [attr.aria-label]="('LANDING.PRICING.DOT_ARIA' | translate) + ' ' + (idx + 1)">
             </button>
           }
         </div>
@@ -945,20 +950,20 @@
     </div>
   </section>
 
-  <!-- 10. Testimonials Slider (Dots فقط) -->
+  <!-- 10. Testimonials Slider -->
   <section id="testimonials" class="py-16 lg:py-20 px-4 sm:px-6 bg-white">
     <div class="max-w-7xl mx-auto">
 
       <div class="mb-10">
         <div class="inline-flex items-center gap-2 bg-[#F4F9FF] border border-sky-200/80 text-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-2xs mb-3">
           <span class="w-2 h-2 rounded-full bg-[#0284C7]"></span>
-          <span>شركاء النجاح</span>
+          <span>{{ 'LANDING.TESTIMONIALS.BADGE' | translate }}</span>
         </div>
         <h2 class="text-2xl sm:text-4xl font-black text-[#0F294A]">
-          آراء <span class="text-[#0284C7]">عملائنا</span>
+          {{ 'LANDING.TESTIMONIALS.TITLE_PREFIX' | translate }} <span class="text-[#0284C7]">{{ 'LANDING.TESTIMONIALS.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
         <p class="text-slate-600 text-xs sm:text-sm leading-7 mt-2 max-w-xl">
-          تجارب حقيقية لأطباء ومديري عيادات ومجمعات طبية يعتمدون على منصة طبيب يومياً.
+          {{ 'LANDING.TESTIMONIALS.DESC' | translate }}
         </p>
       </div>
 
@@ -968,7 +973,7 @@
             <div>
               <div class="flex items-center justify-between mb-4">
                 <div class="text-amber-400 text-sm tracking-wider">★★★★★</div>
-                <span class="text-xs font-extrabold text-[#0284C7] bg-sky-50 px-2.5 py-1 rounded-lg">موثق</span>
+                <span class="text-xs font-extrabold text-[#0284C7] bg-sky-50 px-2.5 py-1 rounded-lg">{{ 'LANDING.TESTIMONIALS.VERIFIED' | translate }}</span>
               </div>
               <p class="text-xs sm:text-sm text-slate-600 leading-7">
                 “{{ item.comment }}”
@@ -998,7 +1003,7 @@
               (click)="goToTestimonialSlide(idx)"
               class="h-2.5 rounded-full transition-all duration-300 cursor-pointer"
               [ngClass]="testimonialSlideIndex === idx ? 'w-8 bg-[#0284C7]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-              [attr.aria-label]="'الانتقال إلى الرأي ' + (idx + 1)">
+              [attr.aria-label]="('LANDING.TESTIMONIALS.DOT_ARIA' | translate) + ' ' + (idx + 1)">
             </button>
           }
         </div>
@@ -1015,13 +1020,13 @@
       </svg>
 
       <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-4 text-center sm:text-right">
+        <div class="flex items-center gap-4 text-center sm:text-start">
           <div class="w-14 h-14 rounded-2xl bg-white border border-sky-200 text-[#0284C7] flex items-center justify-center text-2xl shrink-0 shadow-2xs">
             🩺
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-black text-[#0F294A]">جاهز للبدء؟</h2>
-            <p class="text-xs sm:text-sm text-slate-600 mt-1">انضم إلى العيادات والمجمعات التي تدير أعمالها مع طبيب</p>
+            <h2 class="text-xl sm:text-2xl font-black text-[#0F294A]">{{ 'LANDING.CTA.TITLE' | translate }}</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">{{ 'LANDING.CTA.DESC' | translate }}</p>
           </div>
         </div>
 
@@ -1029,14 +1034,13 @@
           href="mailto:support@tabeeb.org"
           class="inline-flex items-center gap-2 bg-[#0284C7] hover:bg-[#0369A1] text-white px-6 py-3 rounded-xl text-sm font-extrabold shadow-sm transition shrink-0">
           <span>✈</span>
-          <span>تواصل معنا الآن</span>
+          <span>{{ 'LANDING.CTA.BTN' | translate }}</span>
         </a>
       </div>
     </div>
   </section>
 
   <!-- 12. Dark Navy Footer -->
- <!-- 12. Dark Navy Footer -->
   <footer class="bg-[#0F294A] text-slate-300 pt-14 pb-7 px-4 sm:px-6 border-t border-sky-950">
     <div class="max-w-7xl mx-auto">
       <div class="grid sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 border-b border-white/10">
@@ -1044,48 +1048,48 @@
         <!-- Brand + Logo -->
         <div class="lg:col-span-4 space-y-3">
           <a href="#hero" class="inline-flex items-center gap-3">
-            <div class="  p-1.5  flex items-center justify-center overflow-hidden shrink-0">
+            <div class="p-1.5 flex items-center justify-center overflow-hidden shrink-0">
               <img
                 src="../../../assets/images/Logo.jpg"
-                alt="Tabeeb Logo"
+                [alt]="'LANDING.LOGO_ALT' | translate"
                 class="w-[95px]">
             </div>
             <div>
-              <div class="text-2xl font-black tracking-tight text-white">Tabeeb</div>
-              <div class="text-[11px] font-bold text-sky-300">منصة الإدارة الطبية الذكية</div>
+              <div class="text-2xl font-black tracking-tight text-white">{{ 'LANDING.BRAND_NAME' | translate }}</div>
+              <div class="text-[11px] font-bold text-sky-300">{{ 'LANDING.FOOTER.SLOGAN' | translate }}</div>
             </div>
           </a>
 
           <p class="text-xs text-slate-400 leading-6 max-w-xs">
-            شريكك الذكي في إدارة العيادات والمجمعات الطبية، تنظيم الحجوزات، متابعة الأطباء، وإدارة الملفات الطبية بكفاءة وأمان.
+            {{ 'LANDING.FOOTER.DESC' | translate }}
           </p>
         </div>
 
         <!-- Quick Links -->
         <div class="lg:col-span-3">
-          <h4 class="text-white font-black text-sm mb-3.5">روابط سريعة</h4>
+          <h4 class="text-white font-black text-sm mb-3.5">{{ 'LANDING.FOOTER.QUICK_LINKS' | translate }}</h4>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="#hero" class="hover:text-sky-300 transition">الرئيسية</a></li>
-            <li><a href="#features" class="hover:text-sky-300 transition">المميزات</a></li>
-            <li><a href="#clinics" class="hover:text-sky-300 transition">العيادات</a></li>
-            <li><a href="#doctors" class="hover:text-sky-300 transition">الأطباء</a></li>
-            <li><a href="#pricing" class="hover:text-sky-300 transition">الباقات</a></li>
+            <li><a href="#hero" class="hover:text-sky-300 transition">{{ 'LANDING.NAV.HOME' | translate }}</a></li>
+            <li><a href="#features" class="hover:text-sky-300 transition">{{ 'LANDING.NAV.FEATURES' | translate }}</a></li>
+            <li><a href="#clinics" class="hover:text-sky-300 transition">{{ 'LANDING.NAV.CLINICS' | translate }}</a></li>
+            <li><a href="#doctors" class="hover:text-sky-300 transition">{{ 'LANDING.NAV.DOCTORS' | translate }}</a></li>
+            <li><a href="#pricing" class="hover:text-sky-300 transition">{{ 'LANDING.NAV.PRICING' | translate }}</a></li>
           </ul>
         </div>
 
         <!-- Help & Support -->
         <div class="lg:col-span-2">
-          <h4 class="text-white font-black text-sm mb-3.5">مساعدة</h4>
+          <h4 class="text-white font-black text-sm mb-3.5">{{ 'LANDING.FOOTER.HELP' | translate }}</h4>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="#pricing" class="hover:text-sky-300 transition">الأسئلة الشائعة</a></li>
-            <li><a href="#contact" class="hover:text-sky-300 transition">الدعم الفني</a></li>
-            <li><a href="mailto:support@tabeeb.org" class="hover:text-sky-300 transition">تواصل معنا</a></li>
+            <li><a href="#pricing" class="hover:text-sky-300 transition">{{ 'LANDING.FOOTER.FAQ' | translate }}</a></li>
+            <li><a href="#contact" class="hover:text-sky-300 transition">{{ 'LANDING.FOOTER.SUPPORT' | translate }}</a></li>
+            <li><a href="mailto:support@tabeeb.org" class="hover:text-sky-300 transition">{{ 'LANDING.FOOTER.CONTACT_US' | translate }}</a></li>
           </ul>
         </div>
 
         <!-- Social & Contact -->
         <div class="lg:col-span-3">
-          <h4 class="text-white font-black text-sm mb-3.5">تابعنا وتواصل معنا</h4>
+          <h4 class="text-white font-black text-sm mb-3.5">{{ 'LANDING.FOOTER.FOLLOW_US' | translate }}</h4>
           <div class="flex items-center gap-2.5">
             <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">f</a>
             <a href="#" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-[#0284C7] text-white flex items-center justify-center text-xs font-bold transition">𝕏</a>
@@ -1100,8 +1104,8 @@
       </div>
 
       <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-        <span>جميع الحقوق محفوظة © 2026 Tabeeb</span>
-        <span>إدارة عيادتك بذكاء واحترافية</span>
+        <span>{{ 'LANDING.FOOTER.COPYRIGHT' | translate }}</span>
+        <span>{{ 'LANDING.FOOTER.TAGLINE' | translate }}</span>
       </div>
     </div>
   </footer>
@@ -1131,13 +1135,13 @@
 
             <div>
               <div class="text-xs font-bold text-sky-200">
-                🏥 {{ selectedDoctor.clinicArName || selectedDoctor.clinicEnName }}
+                🏥 {{TranslateServ.currentLang=="ae" ? selectedDoctor.clinicArName  :selectedDoctor.clinicEnName }}
               </div>
               <h3 class="text-lg sm:text-xl font-black mt-0.5">
-                د. {{ selectedDoctor.arName || selectedDoctor.enName }}
+                {{ 'LANDING.DOCTORS.DR_PREFIX' | translate }} {{ TranslateServ.currentLang=="ae" ? selectedDoctor.arName :selectedDoctor.enName }}
               </h3>
               <div class="text-xs font-bold text-sky-100 mt-0.5">
-                {{ selectedDoctor.specializationArName || selectedDoctor.specializationEnName }}
+                {{ TranslateServ.currentLang=="ae" ?selectedDoctor.specializationArName :selectedDoctor.specializationEnName }}
               </div>
             </div>
           </div>
@@ -1146,7 +1150,7 @@
             type="button"
             (click)="closeWorktimes()"
             class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center font-black transition cursor-pointer shrink-0"
-            aria-label="إغلاق النافذة">
+            [attr.aria-label]="'LANDING.WORKTIME_MODAL.CLOSE_ARIA' | translate">
             ✕
           </button>
         </div>
@@ -1157,30 +1161,30 @@
           <!-- معلومات الكشف السريعة -->
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
-              <div class="text-[11px] font-bold text-slate-500">سعر الكشف</div>
+              <div class="text-[11px] font-bold text-slate-500">{{ 'LANDING.WORKTIME_MODAL.PRICE_LABEL' | translate }}</div>
               <div class="text-base font-black text-[#0284C7] mt-0.5">
-                {{ selectedDoctor.sessionPrice ?? 0 }} ر.س
+                {{ selectedDoctor.sessionPrice ?? 0 }} {{ 'LANDING.WORKTIME_MODAL.CURRENCY' | translate }}
               </div>
             </div>
 
             <div class="bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
-              <div class="text-[11px] font-bold text-slate-500">مدة الجلسة</div>
+              <div class="text-[11px] font-bold text-slate-500">{{ 'LANDING.WORKTIME_MODAL.DURATION_LABEL' | translate }}</div>
               <div class="text-base font-black text-[#0F294A] mt-0.5">
-                {{ selectedDoctor.sessionDuration || 30 }} دقيقة
+                {{ selectedDoctor.sessionDuration || 30 }} {{ 'LANDING.WORKTIME_MODAL.MINUTES' | translate }}
               </div>
             </div>
 
             <div class="col-span-2 sm:col-span-1 bg-[#F4F9FF] border border-sky-100 rounded-2xl p-3 text-center">
-              <div class="text-[11px] font-bold text-slate-500">أيام العمل</div>
+              <div class="text-[11px] font-bold text-slate-500">{{ 'LANDING.WORKTIME_MODAL.WORKDAYS_LABEL' | translate }}</div>
               <div class="text-base font-black text-emerald-700 mt-0.5">
-                {{ getDoctorWorktimes(selectedDoctor).length }} أيام
+                {{ getDoctorWorktimes(selectedDoctor).length }} {{ 'LANDING.WORKTIME_MODAL.DAYS_COUNT' | translate }}
               </div>
             </div>
           </div>
 
-          <!-- جدول أوقات العمل (dayOfWeek, startAt, endAt) -->
+          <!-- جدول أوقات العمل -->
           <div>
-            <div class="text-xs font-extrabold text-slate-500 mb-3">مواعيد العيادة الأسبوعية:</div>
+            <div class="text-xs font-extrabold text-slate-500 mb-3">{{ 'LANDING.WORKTIME_MODAL.SCHEDULE_TITLE' | translate }}</div>
 
             @if (getDoctorWorktimes(selectedDoctor).length > 0) {
               <div class="grid sm:grid-cols-2 gap-3">
@@ -1192,7 +1196,7 @@
                       </div>
                       <div class="text-sm font-black text-[#0F294A] mt-1">
                         {{ formatTime(wt.startAt) }}
-                        <span class="text-slate-400 mx-1">إلى</span>
+                        <span class="text-slate-400 mx-1">{{ 'LANDING.WORKTIME_MODAL.TO' | translate }}</span>
                         {{ formatTime(wt.endAt) }}
                       </div>
                     </div>
@@ -1205,7 +1209,7 @@
               </div>
             } @else {
               <div class="bg-[#F8FBFF] border border-slate-200/80 rounded-2xl p-6 text-center text-xs sm:text-sm font-bold text-slate-500">
-                لا توجد مواعيد عمل مسجلة لهذا الطبيب في هذه العيادة حالياً.
+                {{ 'LANDING.WORKTIME_MODAL.NO_WORKTIMES' | translate }}
               </div>
             }
           </div>
@@ -1215,13 +1219,13 @@
         <!-- Modal Footer -->
         <div class="bg-[#F8FBFF] border-t border-slate-200/70 px-6 py-3.5 flex items-center justify-between gap-3">
           <span class="text-xs font-bold text-slate-500">
-            {{ selectedDoctor.clinicArName || selectedDoctor.clinicEnName }}
+            {{TranslateServ.currentLang=="ae" ? selectedDoctor.clinicArName :selectedDoctor.clinicEnName }}
           </span>
           <button
             type="button"
             (click)="closeWorktimes()"
             class="bg-[#0F294A] hover:bg-[#0284C7] text-white px-5 py-2 rounded-xl text-xs font-extrabold transition cursor-pointer">
-            إغلاق
+            {{ 'LANDING.WORKTIME_MODAL.CLOSE_BTN' | translate }}
           </button>
         </div>
 

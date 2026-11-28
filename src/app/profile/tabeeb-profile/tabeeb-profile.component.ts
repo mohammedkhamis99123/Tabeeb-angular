@@ -13,6 +13,8 @@ import { environment } from 'src/environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { CurrentUserService } from 'src/app/common/services/current-user.service';
 import { LoginService } from 'src/app/auth/login/Services/login.service';
+import { Store } from '@ngrx/store';
+import { AppService } from 'src/app/app.service';
 
 export interface ScreenshotItem {
   id: number;
@@ -33,9 +35,11 @@ export class TabeebProfileComponent implements OnInit {
   private profileService = inject(TabeebProfileService);
   protected TranslateServ=inject(TranslateService)
   private route=inject(Router)
+  private storeData=inject(Store<any>)
   private currentUser=inject(CurrentUserService)
   private loginServ=inject(LoginService)
   private eRef=inject(ElementRef)
+  private appSetting=inject(AppService)
   profile: TabeebProfileDto | null = null;
   mobileMenuOpen = false;
   isLoading = true;
@@ -55,67 +59,143 @@ export class TabeebProfileComponent implements OnInit {
   // فلترة الأطباء حسب العيادة
   selectedDoctorClinicFilter: string = 'ALL';
 
-  screenshots: ScreenshotItem[] = [
-    {
-      id: 1,
-      title: 'لوحة التحكم التحليلية',
-      desc: 'متابعة لحظية للإحصائيات، الإيرادات، ومواعيد اليوم في واجهة واحدة.',
-      tag: 'إحصائيات حية',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 2,
-      title: 'جدولة المواعيد الذكية',
-      desc: 'تنظيم حجوزات المرضى وتنبيهات المواعيد بدون تعارض.',
-      tag: 'حجز سريع',
-      image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=700&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 3,
-      title: 'السجل الطبي والمرضى',
-      desc: 'ملف طبي متكامل لكل مريض يتضمن الزيارات والتشخيصات والوصفات.',
-      tag: 'سجلات آمنة',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 4,
-      title: 'إدارة الفواتير والتقارير',
-      desc: 'إصدار الفواتير ومراجعة تقارير الأداء المالي بضغطة زر.',
-      tag: 'تقارير مالية',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&auto=format&fit=crop&q=80'
-    }
-  ];
+private readonly arabicScreenshots: ScreenshotItem[] = [
+  {
+    id: 1,
+    title: 'لوحة التحكم التحليلية',
+    desc: 'متابعة لحظية للإحصائيات، الإيرادات، ومواعيد اليوم في واجهة واحدة.',
+    tag: 'إحصائيات حية',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 2,
+    title: 'جدولة المواعيد الذكية',
+    desc: 'تنظيم حجوزات المرضى وتنبيهات المواعيد بدون تعارض.',
+    tag: 'حجز سريع',
+    image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 3,
+    title: 'السجل الطبي والمرضى',
+    desc: 'ملف طبي متكامل لكل مريض يتضمن الزيارات والتشخيصات والوصفات.',
+    tag: 'سجلات آمنة',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 4,
+    title: 'إدارة الفواتير والتقارير',
+    desc: 'إصدار الفواتير ومراجعة تقارير الأداء المالي بضغطة زر.',
+    tag: 'تقارير مالية',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&auto=format&fit=crop&q=80'
+  }
+];
 
-  testimonials = [
-    {
-      id: 1,
-      name: 'د. أحمد علي',
-      role: 'مدير عيادة النور',
-      comment: 'منصة رائعة وسهلة الاستخدام، ساعدتنا في تنظيم المواعيد والمرضى بشكل كبير.',
-      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=240&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 2,
-      name: 'د. سارة محمد',
-      role: 'مديرة مجمع الحياة الطبي',
-      comment: 'دعم فني ممتاز وتجربة احترافية بكل المقاييس مع وضوح كامل في التقارير.',
-      image: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=240&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 3,
-      name: 'د. خالد محمود',
-      role: 'استشاري باطنة',
-      comment: 'أفضل نظام لإدارة العيادات، يختصر وقت الاستقبال ويجعل متابعة الحالات أسهل.',
-      image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=240&auto=format&fit=crop&q=80'
-    },
-    {
-      id: 4,
-      name: 'د. نورة العتيبي',
-      role: 'مديرة مركز الابتسامة',
-      comment: 'واجهة عربية أنيقة وسريعة، وفريق العمل تعامل مع النظام من أول يوم.',
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=240&auto=format&fit=crop&q=80'
-    }
-  ];
+private readonly englishScreenshots: ScreenshotItem[] = [
+  {
+    id: 1,
+    title: 'Analytics Dashboard',
+    desc: 'Real-time tracking of stats, revenue, and daily appointments in one interface.',
+    tag: 'Live Stats',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 2,
+    title: 'Smart Appointment Scheduling',
+    desc: 'Organize patient bookings and appointment reminders with zero conflicts.',
+    tag: 'Fast Booking',
+    image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 3,
+    title: 'Medical Records & Patients',
+    desc: 'Complete medical profile for every patient including visits, diagnoses, and prescriptions.',
+    tag: 'Secure Records',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 4,
+    title: 'Invoices & Reports',
+    desc: 'Issue invoices and review financial performance reports in a single click.',
+    tag: 'Financial Reports',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&auto=format&fit=crop&q=80'
+  }
+];
+
+private readonly arabicTestimonials = [
+  {
+    id: 1,
+    name: 'د. أحمد علي',
+    role: 'مدير عيادة النور',
+    comment: 'منصة رائعة وسهلة الاستخدام، ساعدتنا في تنظيم المواعيد والمرضى بشكل كبير.',
+    image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 2,
+    name: 'د. سارة محمد',
+    role: 'مديرة مجمع الحياة الطبي',
+    comment: 'دعم فني ممتاز وتجربة احترافية بكل المقاييس مع وضوح كامل في التقارير.',
+    image: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 3,
+    name: 'د. خالد محمود',
+    role: 'استشاري باطنة',
+    comment: 'أفضل نظام لإدارة العيادات، يختصر وقت الاستقبال ويجعل متابعة الحالات أسهل.',
+    image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 4,
+    name: 'د. نورة العتيبي',
+    role: 'مديرة مركز الابتسامة',
+    comment: 'واجهة عربية أنيقة وسريعة، وفريق العمل تعامل مع النظام من أول يوم.',
+    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=240&auto=format&fit=crop&q=80'
+  }
+];
+
+private readonly englishTestimonials = [
+  {
+    id: 1,
+    name: 'Dr. Ahmed Ali',
+    role: 'Director, Al-Noor Clinic',
+    comment: 'A great, easy-to-use platform that helped us organize appointments and patients significantly.',
+    image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 2,
+    name: 'Dr. Sara Mohamed',
+    role: 'Director, Al-Hayah Medical Complex',
+    comment: 'Excellent technical support and a professional experience across the board with crystal-clear reports.',
+    image: 'https://images.unsplash.com/photo-1594824476967-48c8b964ac31?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 3,
+    name: 'Dr. Khaled Mahmoud',
+    role: 'Internal Medicine Consultant',
+    comment: 'The best clinic management system—it saves reception time and makes patient follow-up much easier.',
+    image: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=240&auto=format&fit=crop&q=80'
+  },
+  {
+    id: 4,
+    name: 'Dr. Nora Al-Otaibi',
+    role: 'Director, Al-Ibtisamah Center',
+    comment: 'A sleek, fast interface, and our team adapted to the system from day one.',
+    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=240&auto=format&fit=crop&q=80'
+  }
+];
+
+get isAe(): boolean {
+  const current = this.TranslateServ.currentLang || this.TranslateServ.getDefaultLang() || 'ae';
+  return current.toLowerCase().startsWith('ae');
+}
+
+get screenshots(): ScreenshotItem[] {
+  return this.isAe ? this.arabicScreenshots : this.englishScreenshots;
+}
+
+get testimonials() {
+  return this.isAe ? this.arabicTestimonials : this.englishTestimonials;
+}
+  store: any;
 
   ngOnInit(): void {
     this.loadProfile();
@@ -235,7 +315,9 @@ export class TabeebProfileComponent implements OnInit {
   }
 
   getDayName(day: number): string {
-    const days = [
+
+    if(this.TranslateServ.currentLang=="ae"){
+ const days = [
       'الأحد',
       'الإثنين',
       'الثلاثاء',
@@ -244,7 +326,24 @@ export class TabeebProfileComponent implements OnInit {
       'الجمعة',
       'السبت'
     ];
+
+
     return days[day] ?? 'غير محدد';
+    }else{
+      const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'wednesday',
+      'Thrusday',
+      'Friday',
+      'Saturday'
+    ];
+
+
+    return days[day] ?? 'غير محدد';
+    }
+   
   }
 
   formatTime(time: string): string {
@@ -408,4 +507,33 @@ export class TabeebProfileComponent implements OnInit {
       this.userMenuOpen = false;
     }
   }
+
+    async initStore() {
+        this.storeData
+            .select((d) => d.index)
+            .subscribe((d) => {
+                this.store = d;
+            });
+
+            console.log(this.store.languageList);
+            
+    }
+    changeLanguage(item: any) {
+        this.TranslateServ.use(item);
+        this.appSetting.toggleLanguage(item);
+        if (this.store.locale?.toLowerCase() === 'ae') {
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'rtl' });
+        } else {
+            this.storeData.dispatch({ type: 'toggleRTL', payload: 'ltr' });
+        }
+        window.location.reload();
+    }
+
+    toggleLanguage(lang:string){
+      if(lang=="ae"){
+        this.TranslateServ.use("en")
+      }else{
+        this.TranslateServ.use("ae")
+      }
+    }
 }

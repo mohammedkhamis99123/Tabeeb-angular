@@ -15,6 +15,9 @@ import { ClinicDoctorDto } from './models/ClinicProfileDto.model';
 import { environment } from 'src/environments/environment.prod';
 import { LoginService } from 'src/app/auth/login/Services/login.service';
 import { CurrentUserService } from 'src/app/common/services/current-user.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { AppService } from 'src/app/app.service';
 
 
 
@@ -55,6 +58,7 @@ export class ClinicProfileComponent implements OnInit {
 
   isMobileMenuOpen = false;
   isUserMenuOpen = false;
+  store: any;
 
 
 
@@ -64,7 +68,10 @@ export class ClinicProfileComponent implements OnInit {
     private router: Router,
     private authService: LoginService,
     private currentUser:CurrentUserService,
-    private eRef: ElementRef
+    protected translate:TranslateService,
+    private eRef: ElementRef,
+    private appSetting:AppService,
+    private storedata:Store<any>
   ) {
 
 actRoute.paramMap.subscribe((result)=>{
@@ -173,6 +180,8 @@ actRoute.paramMap.subscribe((result)=>{
   ngOnInit(): void {
     this.initializePatientForm();
     this.generateBookingDays();
+    this.updateDoctorsPerPage();
+
   }
 
   initializePatientForm(): void {
@@ -378,6 +387,9 @@ onLoginClick() {
 
   toggleLanguage() {
     this.isArabic = !this.isArabic;
+    var currentLang=this.translate.currentLang=="ae" 
+    ?this.translate.use("en")
+    :this.translate.use("ae")
   }
 
   toggleMobileMenu() {
@@ -399,4 +411,84 @@ onLoginClick() {
       this.isUserMenuOpen = false;
     }
   }
+      async initStore() {
+        this.storedata
+            .select((d) => d.index)
+            .subscribe((d) => {
+                this.store = d;
+            });
+
+            console.log(this.store.languageList);
+            
+    }
+    changeLanguage(item: any) {
+        this.translate.use(item);
+        this.appSetting.toggleLanguage(item);
+        if (this.store.locale?.toLowerCase() === 'ae') {
+            this.storedata.dispatch({ type: 'toggleRTL', payload: 'rtl' });
+        } else {
+            this.storedata.dispatch({ type: 'toggleRTL', payload: 'ltr' });
+        }
+        window.location.reload();
+    }
+    doctorSlideIndex = 0;
+doctorsPerPage = 3;
+
+
+
+@HostListener('window:resize')
+onResize(): void {
+  this.updateDoctorsPerPage();
+}
+
+private updateDoctorsPerPage(): void {
+  if (typeof window === 'undefined') return;
+  if (window.innerWidth < 768) {
+    this.doctorsPerPage = 1;
+  } else if (window.innerWidth < 1024) {
+    this.doctorsPerPage = 2;
+  } else {
+    this.doctorsPerPage = 3;
+  }
+  this.clampDoctorSlide();
+}
+
+get visibleDoctors() {
+  if (!this.doctors?.length) return [];
+  const start = this.doctorSlideIndex;
+  const end = Math.min(start + this.doctorsPerPage, this.doctors.length);
+  return this.doctors.slice(start, end);
+}
+
+get doctorSlideDots(): number[] {
+  if (!this.doctors?.length || this.doctors.length <= this.doctorsPerPage) {
+    return [];
+  }
+  const maxStart = this.doctors.length - this.doctorsPerPage;
+  return Array.from({ length: maxStart + 1 }, (_, i) => i);
+}
+
+prevDoctorSlide(): void {
+  if (!this.doctors?.length) return;
+  const maxStart = Math.max(0, this.doctors.length - this.doctorsPerPage);
+  this.doctorSlideIndex = this.doctorSlideIndex > 0 ? this.doctorSlideIndex - 1 : maxStart;
+}
+
+nextDoctorSlide(): void {
+  if (!this.doctors?.length) return;
+  const maxStart = Math.max(0, this.doctors.length - this.doctorsPerPage);
+  this.doctorSlideIndex = this.doctorSlideIndex < maxStart ? this.doctorSlideIndex + 1 : 0;
+}
+
+goToDoctorSlide(index: number): void {
+  const maxStart = Math.max(0, this.doctors.length - this.doctorsPerPage);
+  this.doctorSlideIndex = Math.max(0, Math.min(index, maxStart));
+}
+
+private clampDoctorSlide(): void {
+  const maxStart = Math.max(0, (this.doctors?.length || 0) - this.doctorsPerPage);
+  if (this.doctorSlideIndex > maxStart) {
+    this.doctorSlideIndex = maxStart;
+  }
+}
 }

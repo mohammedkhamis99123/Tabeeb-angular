@@ -2816,3 +2816,39 @@ font-size: 15px;
   position: relative;
   z-index: 1;
 }
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 1023px) {
+  .doctors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .doctors-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1023px) {
+  .doctors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .doctors-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
